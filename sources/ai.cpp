@@ -59,7 +59,7 @@ void easy_ai::tick(int player_id) {
 void medium_ai::tick(int player_id) {
 	irr::core::line3df ray;
 	irr::core::vector3df hit;
-	for (int i = 0; i = 10; ++i) {
+	for (int i = 0; i < 10; ++i) {
 		ray.start = irr::core::vector3df(
 			(float)(rand() % 100) - 50.0f, 
 			(float)(rand() % 100) - 50.0f, 
@@ -86,7 +86,7 @@ void medium_ai::tick(int player_id) {
 void hard_ai::tick(int player_id) {
 	irr::core::line3df ray;
 	irr::core::vector3df hit;
-	for (int i = 0; i = 10; ++i) {
+	for (int i = 0; i < 10; ++i) {
 		ray.start = irr::core::vector3df(
 			(float)(rand() % 100) - 50.0f, 
 			(float)(rand() % 100) - 50.0f, 

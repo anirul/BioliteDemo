@@ -30,22 +30,44 @@
 
 #include <map>
 #include <string>
+
 #ifdef USE_IRRKLANG
 #include <irrKlang.h>
 #endif // USE_IRRKLANG
+
+#ifdef USE_GORILLA
+#include <gorilla/ga.h>
+#include <gorilla/gau.h>
+#endif // USE_GORILLA
+
 #include "parameter_set.h"
 
 class sound : public parameter_set_listener {
-protected :
+protected:
 	static sound* m_instance;
-	sound();
 #ifdef USE_IRRKLANG
 	irrklang::ISoundEngine* m_engine;
 	std::map<std::string, irrklang::ISoundSource*> m_sound_map;
 	irrklang::ISound* m_music;
 #endif // USE_IRRKLANG
+#ifdef USE_GORILLA
+	gau_Manager* m_mgr;
+	ga_Mixer* m_mixer;
+	ga_StreamManager* m_stream_mgr;
+	std::map<std::string, std::string> m_files;
+	std::map<std::string, ga_Memory*> m_memory;
+	std::map<std::string, ga_Handle*> m_buffers;
+#endif // USE_GORILLA
 	std::string m_current_music;
-public :
+private:
+	sound();
+#ifdef USE_GORILLA
+	std::string getExtention(const std::string& file) const;
+	bool isStreamFile(const std::string& file) const;
+	bool isLoaded(const std::string& name);
+	ga_Handle* getHandle(const std::string& name);
+#endif // USE_GORILLA
+public:
 	//! create and release sound instance
 	static sound* instance();
 	static void release();
@@ -61,7 +83,7 @@ public :
 #ifdef USE_IRRKLANG
 	irrklang::ISound* play(const std::string& name, bool loop = false);
 #else
-	void* play(const std::string& name, bool loop = false);
+	void play(const std::string& name, bool loop = false);
 #endif // USE_IRRKLANG
 	//! stop a sound
 	void stop(const std::string& name);
