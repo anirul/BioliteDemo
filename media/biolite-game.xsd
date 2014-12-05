@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3c.org/2001/XMLSchema" elementFormDefault="qualified">
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+			Biolite game description
+			author : Frederic DUBOUCHET
+			e-mail : angel@calodox.org
+			This file can be used as a save game mecanism or as game rule/campaign rule.
+		</xs:documentation>
+	</xs:annotation>
+	
+	<xs:element name="game" type="game-type"/>
+	<xs:element name="plant" type="plant-type"/>
+  <xs:element name="position" type="vector3d-type"/>
+	<xs:element name="vector3d" type="vector3d-type"/>
+	<xs:element name="planet" type="planet-type"/>
+	<xs:element name="location" type="location-type"/>
+	
+	<xs:complexType name="location-type">
+		<xs:restriction base="xs:anyURI"/>
+	</xs:complexType>
+	
+	<!-- PLANET-TYPE -->
+	<xs:complexType name="planet-type">
+		<xs:sequence>
+			<xs:element name="location" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<!-- VECTOR3D-TYPE -->
+	<xs:complexType name="vector3d-type">
+		<xs:attribute name="X" type="xs:float" use="required"/>
+		<xs:attribute name="Y" type="xs:float" use="required"/>
+		<xs:attribute name="Z" type="xs:float" use="required"/>
+	</xs:complexType>
+	
+	<!-- PLANT-TYPE -->
+	<xs:complexType name="plant-type">
+		<xs:sequence>
+			<xs:element name="position" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+		<xs:attribute name="owner" type="xs:string" use="required"/>
+		<xs:attribute name="energy" type="xs:float" use="required"/>
+    <xs:attribute name="hit" type="xs:boolean" use="required"/>
+	</xs:complexType>
+	
+	<!-- GAME-TYPE -->
+  <!-- if player-energy == -1 -> no player -->
+	<xs:complexType name="game">
+		<xs:sequence>
+			<xs:element name="planet" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="plant" minOccurs="0" maxOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="update-freq" type="xs:float" use="required"/>
+  	<xs:attribute name="player0-energy" type="xs:float" use="required"/>
+    <xs:attribute name="player1-energy" type="xs:float" use="required"/>
+    <xs:attribute name="player2-energy" type="xs:float" use="required"/>
+    <xs:attribute name="player3-energy" type="xs:float" use="required"/>
+		<xs:attribute name="plant-speed" type="xs:float" use="required"/>
+		<xs:attribute name="plant-cost" type="xs:float" use="required"/>
+		<xs:attribute name="plant-income" type="xs:float" use="required"/>
+    <xs:attribute name="fruit-cost" type="xs:float" use="required"/>
+    <xs:attribute name="destroy-multiply" type="xs:float" use="required"/>
+	</xs:complexType>
+	
+</xs:schema>

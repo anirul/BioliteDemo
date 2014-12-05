@@ -1,0 +1,1559 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+	BIOLITE MENU CONFIG
+
+  Resolution can be either absolute or relative if absolute then if the user
+  change resolution the objects will be missplaces! Relative positionning and
+  size express in part of fullscreen resolution
+  
+  0.0, 0.0        0.0, 1.0
+            screen
+  1.0, 0.0        1.0, 1.0
+  
+  Don't forget in case you use relative positionning to also specify the size
+  or it won't be correct!
+  
+  FAQ
+    [Position] express the position of the CENTER of the object!
+    [timeout] floating value in second
+	[set-value] is a value that is send to the game engine
+	[linked-to] this value is linked to a value in the game engine
+-->
+<menu xmlns:xs="http://www.w3c.org/2001/XMLSchema" xs:schemaLocation="biolite-menu.xsd">
+
+	<!-- Initial parameters! -->
+	
+	<!-- some rules parameters -->
+	<set-value linked-to="biolite.logic.min-distance" value="0.1"/>
+	<set-value linked-to="biolite.logic.max-distance" value="0.3"/>
+	<set-value linked-to="biolite.logic.grow1" value="2.5"/>
+	<set-value linked-to="biolite.logic.grow2" value="5.0"/>
+	<set-value linked-to="biolite.logic.plant-store" value="10.0"/>
+	
+	<set-value linked-to="biolite.action.type" value="plant"/>
+	<set-value linked-to="biolite.ai.difficulty" value="easy"/>
+	<set-value linked-to="biolite.ai.number" value="1"/>
+	
+	<!-- start and end of the state machine -->
+	<set-value linked-to="biolite.menu.start" value="start"/>
+	<set-value linked-to="biolite.menu.end" value="end"/>
+	<!-- alpha off irr gui items! 0.0 transparent 1.0 full -->
+	<set-value linked-to="biolite.gui.alpha" value="0.75"/>
+	<!-- camera type fixed or arcball -->
+	<set-value linked-to="biolite.camera" value="fixed"/>
+	<!-- witch mouse key is linked to the arcball mouvement (right by default) -->
+	<set-value linked-to="biolite.camera.arcball.mouse" value="right"/>
+  
+	<!-- model loading -->
+	<set-value linked-to="biolite.ghost.mesh.green" value="plantState_grow1.obj"/>
+	<set-value linked-to="biolite.ghost.mesh.red" value="plantState_grow1.obj"/>
+
+	<set-value linked-to="biolite.plant.mesh.grow1" value="plantState_grow0.obj"/>
+	<set-value linked-to="biolite.plant.mesh.grow2" value="plantState_grow1.obj"/>
+	<set-value linked-to="biolite.plant.mesh.grow3" value="plantState_grow2.obj"/>
+
+	<set-value linked-to="biolite.plant.mesh.die1" value="plantState_dead2.obj"/>
+	<set-value linked-to="biolite.plant.mesh.die2" value="plantState_dead1.obj"/>
+	<set-value linked-to="biolite.plant.mesh.die3" value="plantState_dead0.obj"/>
+
+	<set-value linked-to="biolite.fruit.mesh" value="fruitPlant.obj"/>
+  
+	<set-value linked-to="biolite.mama.mesh" value="mamaTree.obj"/>
+
+	<set-value linked-to="biolite.plant.texture.player0" value="plant_texture_green.jpg"/>
+	<set-value linked-to="biolite.plant.texture.player1" value="plant_texture_red.jpg"/>
+	<set-value linked-to="biolite.plant.texture.player2" value="plant_texture_blue.jpg"/>
+	<set-value linked-to="biolite.plant.texture.player3" value="plant_texture_yellow.jpg"/>
+
+	<set-value linked-to="biolite.fruit.texture.player0" value="fruit_texture_green.png"/>
+	<set-value linked-to="biolite.fruit.texture.player1" value="fruit_texture_red.png"/>
+	<set-value linked-to="biolite.fruit.texture.player2" value="fruit_texture_blue.png"/>
+	<set-value linked-to="biolite.fruit.texture.player3" value="fruit_texture_yellow.png"/>
+	
+	<set-value linked-to="biolite.ghost.texture.red" value="texture-red.png"/>
+	<set-value linked-to="biolite.ghost.texture.green" value="texture-green.png"/>
+
+	<set-value linked-to="biolite.plant.mesh.scale.X" value="0.05"/>
+	<set-value linked-to="biolite.plant.mesh.scale.Y" value="0.05"/>
+	<set-value linked-to="biolite.plant.mesh.scale.Z" value="0.05"/>
+	<set-value linked-to="biolite.plant.delta.Y" value="1.0"/>
+
+	<!-- sound loading -->
+	<set-value linked-to="biolite.music.title" value="title-genox.ogg"/>
+	<set-value linked-to="biolite.music.play" value="rnis-oxsa.ogg"/>
+	<set-value linked-to="biolite.music.edit" value="edit-genox.ogg"/>
+  
+	<set-value linked-to="biolite.sound.click" value="click.wav"/>
+	<set-value linked-to="biolite.sound.error" value="error.wav"/>
+	<set-value linked-to="biolite.sound.flyby" value="flyby.wav"/>
+	<set-value linked-to="biolite.sound.wrong" value="wrong.wav"/>
+	<set-value linked-to="biolite.sound.planting" value="planting.wav"/>
+	<set-value linked-to="biolite.sound.flip" value="flip.wav"/>
+	
+	<set-value linked-to="biolite.planet.color.low" value="yellow"/>
+	<set-value linked-to="biolite.planet.color.medium" value="green"/>
+	<set-value linked-to="biolite.planet.color.high" value="white"/>
+	<set-value linked-to="biolite.planet.water" value="50"/>
+
+	<!-- START -->
+	<still-state name="start" goto-state="load" timeout="0.01">
+		<image coordinate="relative">
+			<position hpos="0.85" vpos="0.1"/>
+			<size height="0.125" width="0.25"/>
+			<location>title.png</location>
+		</image>
+		<image coordinate="relative">
+			<position vpos="0.5" hpos="0.5"/>
+			<size height="1.0" width="1.0"/>
+			<location>loading_screen.png</location>
+		</image>
+	</still-state>
+  
+	<!-- LOAD -->
+	<still-state name="load" goto-state="title" timeout="0.01">
+		<image coordinate="relative">
+			<position hpos="0.85" vpos="0.1"/>
+			<size height="0.125" width="0.25"/>
+			<location>title.png</location>
+		</image>
+		<!-- font size : small ]0, 600], medium ]600, 900], large ]900, +oo[ -->
+		<set-value linked-to="biolite.font.small" value="Arial12.xml"/>
+		<set-value linked-to="biolite.font.medium" value="Arial20.xml"/>
+		<set-value linked-to="biolite.font.large" value="Arial36.xml"/>
+		<!-- sky box textures -->
+		<set-value linked-to="biolite.skybox.up" value="purplenebula_up.jpg"/>
+		<set-value linked-to="biolite.skybox.down" value="purplenebula_dn.jpg"/>
+		<set-value linked-to="biolite.skybox.right" value="purplenebula_rt.jpg"/>
+		<set-value linked-to="biolite.skybox.left" value="purplenebula_lf.jpg"/>
+		<set-value linked-to="biolite.skybox.front" value="purplenebula_ft.jpg"/>
+		<set-value linked-to="biolite.skybox.back" value="purplenebula_bk.jpg"/>
+		<!-- sun billboard -->
+		<set-value linked-to="biolite.sun" value="sun.png"/>
+		<!-- this actually start planet creation has to be done last! -->
+		<set-value linked-to="biolite.planet.file" value="default.xml"/>
+		<image coordinate="relative">
+			<position vpos="0.5" hpos="0.5"/>
+			<size height="1.0" width="1.0"/>
+			<location>loading_screen.png</location>
+		</image>
+	</still-state>
+  
+	<!-- TITLE -->
+	<still-state name="title" goto-state="main" timeout="15.0">
+		<set-value linked-to="biolite.music.current" value="title"/>
+		<!-- camera type fixed or arcball -->
+		<set-value linked-to="biolite.camera" value="fixed"/>
+		<!-- witch mouse key is linked to the arcball mouvement (right by default) -->
+		<set-value linked-to="biolite.camera.arcball.mouse" value="right"/>
+		<image coordinate="relative">
+			<position vpos="0.5" hpos="0.5"/>
+			<size height="0.5" width="1.0"/>
+			<location>title.png</location>
+		</image>
+		<image coordinate="relative">
+			<position hpos="0.35" vpos="0.94"/>
+            <size height="0.09" width="0.66"/>
+			<location>foot.png</location>
+		</image>
+	</still-state>
+  
+	<!-- MAIN -->
+	<gui-state name="main" goto-state="credits">
+		<set-value linked-to="biolite.music.current" value="title"/>
+		<!-- camera type fixed or arcball -->
+		<set-value linked-to="biolite.camera" value="fixed"/>
+		<!-- witch mouse key is linked to the arcball mouvement (right by default) -->
+		<set-value linked-to="biolite.camera.arcball.mouse" value="right"/>
+		<image coordinate="relative">
+			<position hpos="0.85" vpos="0.1"/>
+			<size height="0.125" width="0.25"/>
+			<location>title.png</location>
+		</image>
+		<button goto-state="playMenu" coordinate="relative">
+            <position hpos="0.3" vpos="0.3"/>
+            <size height="0.1" width="0.4"/>
+            <image-up>play-up.png</image-up>
+			<image-flyby>play-over.png</image-flyby>
+			<image-down>play-click.png</image-down>
+		</button>
+        <button goto-state="tutorial-1" coordinate="relative">
+            <position hpos="0.3" vpos="0.5"/>
+            <size height="0.1" width="0.4"/>
+			<image-up>tutorial_up.png</image-up>
+			<image-flyby>tutorial_over.png</image-flyby>
+			<image-down>tutorial_click.png</image-down>
+		</button>
+		<button goto-state="credits" coordinate="relative">
+            <position hpos="0.3" vpos="0.7"/>
+            <size height="0.1" width="0.4"/>
+            <image-up>quit-up.png</image-up>
+			<image-flyby>quit-flyby.png</image-flyby>
+			<image-down>quit-down.png</image-down>
+		</button>
+        <image coordinate="relative">
+            <position hpos="0.35" vpos="0.94"/>
+            <size height="0.09" width="0.66"/>
+            <location>foot.png</location>
+        </image>
+	</gui-state>
+
+	<!-- PLAY Menu-->
+	<gui-state name="playMenu" goto-state="main">
+		<set-value linked-to="biolite.music.current" value="title"/>
+		<image coordinate="relative">
+			<position hpos="0.85" vpos="0.1"/>
+			<size height="0.125" width="0.25"/>
+			<location>title.png</location>
+		</image>
+		<!-- camera type fixed or arcball -->
+		<set-value linked-to="biolite.camera" value="fixed"/>
+		<!-- witch mouse key is linked to the arcball mouvement (right by default) -->
+		<set-value linked-to="biolite.camera.arcball.mouse" value="right"/>
+		<!-- AI Level -->
+		<toggle-button linked-to="biolite.ai.difficulty" value="easy" coordinate="relative">
+			<position hpos="0.2" vpos="0.3"/>
+			<size height="0.2" width="0.3"/>
+			<image-up>icon-easy-desel.png</image-up>
+			<image-down>icon-easy-sel.png</image-down>
+			<image-up-flyby>icon-easy-desel-over.png</image-up-flyby>
+			<image-down-flyby>icon-easy-sel-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.ai.difficulty" value="medium" coordinate="relative">
+			<position hpos="0.5" vpos="0.3"/>
+			<size height="0.2" width="0.3"/>
+			<image-up>icon-medium-desel.png</image-up>
+			<image-down>icon-medium-sel.png</image-down>
+			<image-up-flyby>icon-medium-desel-over.png</image-up-flyby>
+			<image-down-flyby>icon-medium-sel-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.ai.difficulty" value="hard" coordinate="relative">
+			<position hpos="0.8" vpos="0.3"/>
+			<size height="0.2" width="0.3"/>
+			<image-up>icon-hard-desel.png</image-up>
+			<image-down>icon-hard-sel.png</image-down>
+			<image-up-flyby>icon-hard-desel-over.png</image-up-flyby>
+			<image-down-flyby>icon-hard-sel-over.png</image-down-flyby>
+		</toggle-button>
+		<!-- AI number -->
+		<toggle-button linked-to="biolite.ai.number" value="1" coordinate="relative">
+			<position hpos="0.2" vpos="0.6"/>
+			<size height="0.2" width="0.15"/>
+			<image-up>icon-one-desel.png</image-up>
+			<image-down>icon-one-sel.png</image-down>
+			<image-up-flyby>icon-one-desel-over.png</image-up-flyby>
+			<image-down-flyby>icon-one-sel-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.ai.number" value="2" coordinate="relative">
+			<position hpos="0.5" vpos="0.6"/>
+			<size height="0.2" width="0.15"/>
+			<image-up>icon-two-desel.png</image-up>
+			<image-down>icon-two-sel.png</image-down>
+			<image-up-flyby>icon-two-desel-over.png</image-up-flyby>
+			<image-down-flyby>icon-two-sel-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.ai.number" value="3" coordinate="relative">
+			<position hpos="0.8" vpos="0.6"/>
+			<size height="0.2" width="0.15"/>
+			<image-up>icon-three-desel.png</image-up>
+			<image-down>icon-three-sel.png</image-down>
+			<image-up-flyby>icon-three-desel-over.png</image-up-flyby>
+			<image-down-flyby>icon-three-sel-over.png</image-down-flyby>
+		</toggle-button>
+		<button goto-state="edit-planet" coordinate="relative">
+			<position hpos="0.5" vpos="0.9"/>
+			<size height="0.1" width="0.22"/>
+			<image-up>edit-up.png</image-up>
+			<image-flyby>edit-over.png</image-flyby>
+			<image-down>edit-click.png</image-down>
+		</button>
+		<button goto-state="main" coordinate="relative">
+			<position hpos="0.1" vpos="0.9"/>
+			<size height="0.1" width="0.2"/>
+			<image-up>back.png</image-up>
+			<image-flyby>back-over.png</image-flyby>
+			<image-down>back-click.png</image-down>
+		</button>
+		<button goto-state="play" coordinate="relative">
+			<position hpos="0.9" vpos="0.9"/>
+			<size height="0.1" width="0.2"/>
+			<image-up>start.png</image-up>
+			<image-flyby>start-over.png</image-flyby>
+			<image-down>start-click.png</image-down>
+		</button>
+		<image coordinate="relative">
+			<position hpos="0.2" vpos="0.97"/>
+			<size height="0.07" width="0.4"/>
+			<location>foot.png</location>
+		</image>
+	</gui-state>
+
+	<!-- EDIT-PLANET -->
+	<gui-state name="edit-planet" goto-state="playMenu">
+		<set-value linked-to="biolite.music.current" value="edit"/>
+		<!-- camera type fixed or arcball -->
+		<set-value linked-to="biolite.camera" value="arcball"/>
+		<!-- witch mouse key is linked to the arcball mouvement (right by default) -->
+		<set-value linked-to="biolite.camera.arcball.mouse" value="right"/>
+		<image coordinate="relative">
+			<position hpos="0.85" vpos="0.1"/>
+			<size height="0.125" width="0.25"/>
+			<location>title.png</location>
+		</image>
+		<image coordinate="relative">
+			<position hpos="0.15" vpos="0.1"/>
+			<size height="0.25" width="0.45"/>
+			<location>text-field.png</location>
+		</image>
+		<irr-text linked-to="biolite.world.seed" coordinate="relative">
+			<position hpos="0.15" vpos="0.1"/>
+			<size height="0.08" width="0.15"/>
+		</irr-text>
+		
+		<!-- low -->
+		<toggle-button linked-to="biolite.planet.color.low" value="white" coordinate="relative">
+			<position hpos="0.02" vpos="0.6"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-white-unsel.png</image-up>
+			<image-down>ball-white.png</image-down>
+			<image-up-flyby>ball-white-unsel-over.png</image-up-flyby>
+			<image-down-flyby>ball-white-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.color.low" value="gray" coordinate="relative">
+			<position hpos="0.04" vpos="0.6"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-gray-unsel.png</image-up>
+			<image-down>ball-gray.png</image-down>
+			<image-up-flyby>ball-gray-unsel-over.png</image-up-flyby>
+			<image-down-flyby>ball-gray-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.color.low" value="black" coordinate="relative">
+			<position hpos="0.06" vpos="0.6"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-black-unsel.png</image-up>
+			<image-down>ball-black.png</image-down>
+			<image-up-flyby>ball-black-unsel-over.png</image-up-flyby>
+			<image-down-flyby>ball-black-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.color.low" value="yellow" coordinate="relative">
+			<position hpos="0.08" vpos="0.6"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-yellow-unsel.png</image-up>
+			<image-down>ball-yellow.png</image-down>
+			<image-up-flyby>ball-yellow-unsel-over.png</image-up-flyby>
+			<image-down-flyby>ball-yellow-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.color.low" value="orange" coordinate="relative">
+			<position hpos="0.10" vpos="0.6"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-orange-unsel.png</image-up>
+			<image-down>ball-orange.png</image-down>
+			<image-up-flyby>ball-orange-unsel-over.png</image-up-flyby>
+			<image-down-flyby>ball-orange-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.color.low" value="red" coordinate="relative">
+			<position hpos="0.12" vpos="0.6"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-red-unsel.png</image-up>
+			<image-down>ball-red.png</image-down>
+			<image-up-flyby>ball-red-unsel-over.png</image-up-flyby>
+			<image-down-flyby>ball-red-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.color.low" value="pink" coordinate="relative">
+			<position hpos="0.14" vpos="0.6"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-pink-unsel.png</image-up>
+			<image-down>ball-pink.png</image-down>
+			<image-up-flyby>ball-pink-unsel-over.png</image-up-flyby>
+			<image-down-flyby>ball-pink-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.color.low" value="purple" coordinate="relative">
+			<position hpos="0.16" vpos="0.6"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-purple-unsel.png</image-up>
+			<image-down>ball-purple.png</image-down>
+			<image-up-flyby>ball-purple-unsel-over.png</image-up-flyby>
+			<image-down-flyby>ball-purple-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.color.low" value="blue" coordinate="relative">
+			<position hpos="0.18" vpos="0.6"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-blue-unsel.png</image-up>
+			<image-down>ball-blue.png</image-down>
+			<image-up-flyby>ball-blue-unsel-over.png</image-up-flyby>
+			<image-down-flyby>ball-blue-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.color.low" value="cyan" coordinate="relative">
+			<position hpos="0.2" vpos="0.6"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-cyan-unsel.png</image-up>
+			<image-down>ball-cyan.png</image-down>
+			<image-up-flyby>ball-cyan-unsel-over.png</image-up-flyby>
+			<image-down-flyby>ball-cyan-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.color.low" value="green" coordinate="relative">
+			<position hpos="0.22" vpos="0.6"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-green-unsel.png</image-up>
+			<image-down>ball-green.png</image-down>
+			<image-up-flyby>ball-green-unsel-over.png</image-up-flyby>
+			<image-down-flyby>ball-green-over.png</image-down-flyby>
+		</toggle-button>
+
+		<!-- medium -->
+		<toggle-button linked-to="biolite.planet.color.medium" value="white" coordinate="relative">
+			<position hpos="0.02" vpos="0.5"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-white-unsel.png</image-up>
+			<image-down>ball-white.png</image-down>
+			<image-up-flyby>ball-white-unsel-over.png</image-up-flyby>
+			<image-down-flyby>ball-white-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.color.medium" value="gray" coordinate="relative">
+			<position hpos="0.04" vpos="0.5"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-gray-unsel.png</image-up>
+			<image-down>ball-gray.png</image-down>
+			<image-up-flyby>ball-gray-unsel-over.png</image-up-flyby>
+			<image-down-flyby>ball-gray-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.color.medium" value="black" coordinate="relative">
+			<position hpos="0.06" vpos="0.5"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-black-unsel.png</image-up>
+			<image-down>ball-black.png</image-down>
+			<image-up-flyby>ball-black-unsel-over.png</image-up-flyby>
+			<image-down-flyby>ball-black-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.color.medium" value="yellow" coordinate="relative">
+			<position hpos="0.08" vpos="0.5"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-yellow-unsel.png</image-up>
+			<image-down>ball-yellow.png</image-down>
+			<image-up-flyby>ball-yellow-unsel-over.png</image-up-flyby>
+			<image-down-flyby>ball-yellow-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.color.medium" value="orange" coordinate="relative">
+			<position hpos="0.10" vpos="0.5"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-orange-unsel.png</image-up>
+			<image-down>ball-orange.png</image-down>
+			<image-up-flyby>ball-orange-unsel-over.png</image-up-flyby>
+			<image-down-flyby>ball-orange-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.color.medium" value="red" coordinate="relative">
+			<position hpos="0.12" vpos="0.5"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-red-unsel.png</image-up>
+			<image-down>ball-red.png</image-down>
+			<image-up-flyby>ball-red-unsel-over.png</image-up-flyby>
+			<image-down-flyby>ball-red-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.color.medium" value="pink" coordinate="relative">
+			<position hpos="0.14" vpos="0.5"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-pink-unsel.png</image-up>
+			<image-down>ball-pink.png</image-down>
+			<image-up-flyby>ball-pink-unsel-over.png</image-up-flyby>
+			<image-down-flyby>ball-pink-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.color.medium" value="purple" coordinate="relative">
+			<position hpos="0.16" vpos="0.5"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-purple-unsel.png</image-up>
+			<image-down>ball-purple.png</image-down>
+			<image-up-flyby>ball-purple-unsel-over.png</image-up-flyby>
+			<image-down-flyby>ball-purple-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.color.medium" value="blue" coordinate="relative">
+			<position hpos="0.18" vpos="0.5"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-blue-unsel.png</image-up>
+			<image-down>ball-blue.png</image-down>
+			<image-up-flyby>ball-blue-unsel-over.png</image-up-flyby>
+			<image-down-flyby>ball-blue-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.color.medium" value="cyan" coordinate="relative">
+			<position hpos="0.2" vpos="0.5"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-cyan-unsel.png</image-up>
+			<image-down>ball-cyan.png</image-down>
+			<image-up-flyby>ball-cyan-unsel-over.png</image-up-flyby>
+			<image-down-flyby>ball-cyan-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.color.medium" value="green" coordinate="relative">
+			<position hpos="0.22" vpos="0.5"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-green-unsel.png</image-up>
+			<image-down>ball-green.png</image-down>
+			<image-up-flyby>ball-green-unsel-over.png</image-up-flyby>
+			<image-down-flyby>ball-green-over.png</image-down-flyby>
+		</toggle-button>
+		
+		<!-- high -->
+		<toggle-button linked-to="biolite.planet.color.high" value="white" coordinate="relative">
+			<position hpos="0.02" vpos="0.4"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-white-unsel.png</image-up>
+			<image-down>ball-white.png</image-down>
+			<image-up-flyby>ball-white-unsel-over.png</image-up-flyby>
+			<image-down-flyby>ball-white-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.color.high" value="gray" coordinate="relative">
+			<position hpos="0.04" vpos="0.4"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-gray-unsel.png</image-up>
+			<image-down>ball-gray.png</image-down>
+			<image-up-flyby>ball-gray-unsel-over.png</image-up-flyby>
+			<image-down-flyby>ball-gray-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.color.high" value="black" coordinate="relative">
+			<position hpos="0.06" vpos="0.4"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-black-unsel.png</image-up>
+			<image-down>ball-black.png</image-down>
+			<image-up-flyby>ball-black-unsel-over.png</image-up-flyby>
+			<image-down-flyby>ball-black-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.color.high" value="yellow" coordinate="relative">
+			<position hpos="0.08" vpos="0.4"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-yellow-unsel.png</image-up>
+			<image-down>ball-yellow.png</image-down>
+			<image-up-flyby>ball-yellow-unsel-over.png</image-up-flyby>
+			<image-down-flyby>ball-yellow-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.color.high" value="orange" coordinate="relative">
+			<position hpos="0.10" vpos="0.4"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-orange-unsel.png</image-up>
+			<image-down>ball-orange.png</image-down>
+			<image-up-flyby>ball-orange-unsel-over.png</image-up-flyby>
+			<image-down-flyby>ball-orange-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.color.high" value="red" coordinate="relative">
+			<position hpos="0.12" vpos="0.4"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-red-unsel.png</image-up>
+			<image-down>ball-red.png</image-down>
+			<image-up-flyby>ball-red-unsel-over.png</image-up-flyby>
+			<image-down-flyby>ball-red-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.color.high" value="pink" coordinate="relative">
+			<position hpos="0.14" vpos="0.4"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-pink-unsel.png</image-up>
+			<image-down>ball-pink.png</image-down>
+			<image-up-flyby>ball-pink-unsel-over.png</image-up-flyby>
+			<image-down-flyby>ball-pink-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.color.high" value="purple" coordinate="relative">
+			<position hpos="0.16" vpos="0.4"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-purple-unsel.png</image-up>
+			<image-down>ball-purple.png</image-down>
+			<image-up-flyby>ball-purple-unsel-over.png</image-up-flyby>
+			<image-down-flyby>ball-purple-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.color.high" value="blue" coordinate="relative">
+			<position hpos="0.18" vpos="0.4"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-blue-unsel.png</image-up>
+			<image-down>ball-blue.png</image-down>
+			<image-up-flyby>ball-blue-unsel-over.png</image-up-flyby>
+			<image-down-flyby>ball-blue-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.color.high" value="cyan" coordinate="relative">
+			<position hpos="0.2" vpos="0.4"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-cyan-unsel.png</image-up>
+			<image-down>ball-cyan.png</image-down>
+			<image-up-flyby>ball-cyan-unsel-over.png</image-up-flyby>
+			<image-down-flyby>ball-cyan-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.color.high" value="green" coordinate="relative">
+			<position hpos="0.22" vpos="0.4"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-green-unsel.png</image-up>
+			<image-down>ball-green.png</image-down>
+			<image-up-flyby>ball-green-unsel-over.png</image-up-flyby>
+			<image-down-flyby>ball-green-over.png</image-down-flyby>
+		</toggle-button>
+
+		<!-- new slider -->
+		<toggle-button linked-to="biolite.planet.water" value="80" coordinate="relative">
+			<position hpos="0.85" vpos="0.2"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-small.png</image-up>
+			<image-down>ball-big.png</image-down>
+			<image-up-flyby>ball-small-over.png</image-up-flyby>
+			<image-down-flyby>ball-big-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.water" value="75" coordinate="relative">
+			<position hpos="0.85" vpos="0.25"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-small.png</image-up>
+			<image-down>ball-big.png</image-down>
+			<image-up-flyby>ball-small-over.png</image-up-flyby>
+			<image-down-flyby>ball-big-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.water" value="70" coordinate="relative">
+			<position hpos="0.85" vpos="0.3"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-small.png</image-up>
+			<image-down>ball-big.png</image-down>
+			<image-up-flyby>ball-small-over.png</image-up-flyby>
+			<image-down-flyby>ball-big-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.water" value="65" coordinate="relative">
+			<position hpos="0.85" vpos="0.35"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-small.png</image-up>
+			<image-down>ball-big.png</image-down>
+			<image-up-flyby>ball-small-over.png</image-up-flyby>
+			<image-down-flyby>ball-big-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.water" value="60" coordinate="relative">
+			<position hpos="0.85" vpos="0.4"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-small.png</image-up>
+			<image-down>ball-big.png</image-down>
+			<image-up-flyby>ball-small-over.png</image-up-flyby>
+			<image-down-flyby>ball-big-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.water" value="55" coordinate="relative">
+			<position hpos="0.85" vpos="0.45"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-small.png</image-up>
+			<image-down>ball-big.png</image-down>
+			<image-up-flyby>ball-small-over.png</image-up-flyby>
+			<image-down-flyby>ball-big-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.water" value="50" coordinate="relative">
+			<position hpos="0.85" vpos="0.5"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-small.png</image-up>
+			<image-down>ball-big.png</image-down>
+			<image-up-flyby>ball-small-over.png</image-up-flyby>
+			<image-down-flyby>ball-big-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.water" value="45" coordinate="relative">
+			<position hpos="0.85" vpos="0.55"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-small.png</image-up>
+			<image-down>ball-big.png</image-down>
+			<image-up-flyby>ball-small-over.png</image-up-flyby>
+			<image-down-flyby>ball-big-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.water" value="40" coordinate="relative">
+			<position hpos="0.85" vpos="0.6"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-small.png</image-up>
+			<image-down>ball-big.png</image-down>
+			<image-up-flyby>ball-small-over.png</image-up-flyby>
+			<image-down-flyby>ball-big-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.water" value="35" coordinate="relative">
+			<position hpos="0.85" vpos="0.65"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-small.png</image-up>
+			<image-down>ball-big.png</image-down>
+			<image-up-flyby>ball-small-over.png</image-up-flyby>
+			<image-down-flyby>ball-big-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.water" value="30" coordinate="relative">
+			<position hpos="0.85" vpos="0.7"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-small.png</image-up>
+			<image-down>ball-big.png</image-down>
+			<image-up-flyby>ball-small-over.png</image-up-flyby>
+			<image-down-flyby>ball-big-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.water" value="25" coordinate="relative">
+			<position hpos="0.85" vpos="0.75"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-small.png</image-up>
+			<image-down>ball-big.png</image-down>
+			<image-up-flyby>ball-small-over.png</image-up-flyby>
+			<image-down-flyby>ball-big-over.png</image-down-flyby>
+		</toggle-button>
+		<toggle-button linked-to="biolite.planet.water" value="20" coordinate="relative">
+			<position hpos="0.85" vpos="0.8"/>
+			<size height="0.04" width="0.03"/>
+			<image-up>ball-small.png</image-up>
+			<image-down>ball-big.png</image-down>
+			<image-up-flyby>ball-small-over.png</image-up-flyby>
+			<image-down-flyby>ball-big-over.png</image-down-flyby>
+		</toggle-button>		
+		<button goto-state="main" coordinate="relative">
+			<position hpos="0.1" vpos="0.9"/>
+			<size height="0.1" width="0.2"/>
+			<image-up>back.png</image-up>
+			<image-flyby>back-over.png</image-flyby>
+			<image-down>back-click.png</image-down>
+		</button>
+		<image coordinate="relative">
+			<position hpos="0.2" vpos="0.97"/>
+            <size height="0.07" width="0.4"/>
+			<location>foot.png</location>
+		</image>
+	</gui-state>
+  
+	<!-- PLAY GAME -->
+	<game-state name="play" 
+		goto-state-victory="score-win" goto-state-defeat="score-lose" 
+		linked-to="biolite.game.end" logic="play.xml" 
+		victory-on="victory" defeat-on="defeat">
+		<set-value linked-to="biolite.music.current" value="play"/>
+		<!-- camera type fixed or arcball -->
+		<set-value linked-to="biolite.camera" value="arcball"/>
+		<!-- witch mouse key is linked to the arcball mouvement (right by default) -->
+		<set-value linked-to="biolite.camera.arcball.mouse" value="right"/>
+		<image coordinate="relative">
+			<position hpos="0.195" vpos="0.295"/>
+			<size height="0.6" width="0.4"/>
+			<location>arc.png</location>
+		</image>
+		<image coordinate="relative">
+			<position hpos="0.236" vpos="0.054"/>
+			<size height="0.075" width="0.05"/>
+			<location>plant-icon-green.png</location>
+		</image>	
+		<irr-label linked-to="biolite.player0.plant.size" coordinate="relative" color="green">
+			<position hpos="0.236" vpos="0.054"/>
+			<size height="0.05" width="0.06"/>
+		</irr-label>
+		<image coordinate="relative">
+			<position hpos="0.05" vpos="0.075"/>
+			<size height="0.15" width="0.10"/>
+			<location>energyred.png</location>
+		</image>    
+		<irr-label linked-to="biolite.player0.energy" coordinate="relative" color="orange">
+			<position hpos="0.09" vpos="0.135"/>
+			<size height="0.15" width="0.10"/>
+		</irr-label>    
+		<image coordinate="relative">
+			<position hpos="0.152" vpos="0.126"/>
+			<size height="0.075" width="0.05"/>
+			<location>plant-icon-red.png</location>
+		</image>
+		<irr-label linked-to="biolite.player1.plant.size" coordinate="relative" color="red">
+			<position hpos="0.152" vpos="0.126"/>
+			<size height="0.05" width="0.06"/>
+		</irr-label>
+		<image coordinate="relative">
+			<position hpos="0.084" vpos="0.228"/>
+			<size height="0.075" width="0.05"/>
+			<location>plant-icon-blue.png</location>
+		</image>
+		<irr-label linked-to="biolite.player2.plant.size" coordinate="relative" color="blue">
+			<position hpos="0.084" vpos="0.228"/>
+			<size height="0.05" width="0.06"/>
+		</irr-label>
+		<image coordinate="relative">
+			<position hpos="0.036" vpos="0.354"/>
+			<size height="0.075" width="0.05"/>
+			<location>plant-icon-yellow.png</location>
+		</image>
+		<irr-label linked-to="biolite.player3.plant.size" coordinate="relative" color="yellow">
+			<position hpos="0.036" vpos="0.354"/>
+			<size height="0.05" width="0.06"/>
+		</irr-label>
+		<image coordinate="relative">
+			<position hpos="0.805" vpos="0.705"/>
+			<size height="0.6" width="0.4"/>
+			<location>arc2.png</location>
+		</image>      
+		<!-- plant -->
+		<toggle-button linked-to="biolite.action.type" value="plant" coordinate="relative">
+			<position hpos="0.88" vpos="0.82"/>
+			<size height="0.15" width="0.10"/>
+			<image-up>plant1_inactive_status.png</image-up>
+			<image-down>plant1_default_status.png</image-down>
+			<image-up-flyby>plant1_inactive_over_status.png</image-up-flyby>
+			<image-down-flyby>plant1_default_over_status.png</image-down-flyby>
+		</toggle-button>
+		<irr-label linked-to="biolite.plant.cost" coordinate="relative" color="yellow">
+			<position hpos="0.9" vpos="0.82"/>
+			<size height="0.05" width="0.06"/>
+		</irr-label>
+		<!-- fruit -->
+		<toggle-button linked-to="biolite.action.type" value="fruit" coordinate="relative">
+			<position hpos="0.96" vpos="0.63"/>
+			<size height="0.15" width="0.10"/>
+			<image-up>fruit1_inactive_status.png</image-up>
+			<image-down>fruit1_default_status.png</image-down>
+			<image-up-flyby>fruit1_inactive_over_status.png</image-up-flyby>
+			<image-down-flyby>fruit1_default_over_status.png</image-down-flyby>
+		</toggle-button>
+		<irr-label linked-to="biolite.fruit.cost" coordinate="relative" color="yellow">
+			<position hpos="0.98" vpos="0.63"/>
+			<size height="0.05" width="0.06"/>
+		</irr-label>
+		<toggle-button linked-to="biolite.action.type" value="destroy" coordinate="relative">
+			<position hpos="0.752" vpos="0.952"/>
+			<size height="0.15" width="0.10"/>
+			<image-up>destroy_inactive_status.png</image-up>
+			<image-down>destroy_default_status.png</image-down>
+			<image-up-flyby>destroy_inactive_over_status.png</image-up-flyby>
+			<image-down-flyby>destroy_default_over_status.png</image-down-flyby>
+		</toggle-button>
+		<irr-label linked-to="biolite.destroy.cost" coordinate="relative" color="yellow">
+			<position hpos="0.752" vpos="0.952"/>
+			<size height="0.05" width="0.06"/>
+		</irr-label>
+		<image coordinate="relative">
+			<position hpos="0.2" vpos="0.97"/>
+            <size height="0.07" width="0.4"/>
+			<location>foot.png</location>
+		</image>
+		<image coordinate="relative">
+			<position hpos="0.85" vpos="0.1"/>
+			<size height="0.125" width="0.25"/>
+			<location>title.png</location>
+		</image>
+	</game-state>
+
+
+  <!-- tutorial -->
+
+  <still-state name="tutorial-1" goto-state="tutorial-2" timeout="15.0">
+    <set-value linked-to="biolite.music.current" value="title"/>
+    <image coordinate="relative">
+      <position hpos="0.85" vpos="0.1"/>
+      <size height="0.125" width="0.25"/>
+      <location>title.png</location>
+    </image>
+	<irr-label text="Welcome to Biolite!" coordinate="relative">
+		<position hpos="0.5" vpos="0.3"/>
+		<size height="0.08" width="0.8"/>
+	</irr-label>
+    <irr-label text="In this game, you're a Mama tree trying to take over the planet." coordinate="relative">
+      <position hpos="0.5" vpos="0.5"/>
+      <size height="0.08" width="0.8"/>
+    </irr-label>
+    <irr-label text="In order to do this, you need to destroy all other Evil Mama Trees." coordinate="relative">
+      <position hpos="0.5" vpos="0.6"/>
+      <size height="0.08" width="0.8"/>
+    </irr-label>
+    <image coordinate="relative">
+      <position hpos="0.35" vpos="0.94"/>
+      <size height="0.09" width="0.66"/>
+      <location>foot.png</location>
+    </image>
+  </still-state>
+
+  <still-state name="tutorial-2" goto-state="tutorial-3" timeout="15.0">
+    <set-value linked-to="biolite.music.current" value="title"/>
+    <image coordinate="relative">
+      <position hpos="0.195" vpos="0.295"/>
+      <size height="0.6" width="0.4"/>
+      <location>arc.png</location>
+    </image>
+    <image coordinate="relative">
+      <position hpos="0.236" vpos="0.054"/>
+      <size height="0.075" width="0.05"/>
+      <location>plant-icon-green.png</location>
+    </image>
+    <image coordinate="relative">
+      <position hpos="0.152" vpos="0.126"/>
+      <size height="0.075" width="0.05"/>
+      <location>plant-icon-red.png</location>
+    </image>
+    <image coordinate="relative">
+      <position hpos="0.084" vpos="0.228"/>
+      <size height="0.075" width="0.05"/>
+      <location>plant-icon-blue.png</location>
+    </image>
+    <image coordinate="relative">
+      <position hpos="0.036" vpos="0.354"/>
+      <size height="0.075" width="0.05"/>
+      <location>plant-icon-yellow.png</location>
+    </image>
+    <irr-label text="Here is how many tree you and the other Mama trees have" coordinate="relative">
+      <position hpos="0.4" vpos="0.3"/>
+      <size height="0.1" width="0.5"/>
+    </irr-label>
+    <image coordinate="relative">
+      <position hpos="0.2" vpos="0.97"/>
+      <size height="0.07" width="0.4"/>
+      <location>foot.png</location>
+    </image>
+    <image coordinate="relative">
+      <position hpos="0.85" vpos="0.1"/>
+      <size height="0.125" width="0.25"/>
+      <location>title.png</location>
+    </image>
+  </still-state>
+  
+  <still-state name="tutorial-3" goto-state="tutorial-4" timeout="15.0">
+    <set-value linked-to="biolite.music.current" value="title"/>
+    <image coordinate="relative">
+      <position hpos="0.195" vpos="0.295"/>
+      <size height="0.6" width="0.4"/>
+      <location>arc.png</location>
+    </image>
+    <image coordinate="relative">
+      <position hpos="0.05" vpos="0.075"/>
+      <size height="0.15" width="0.10"/>
+      <location>energyred.png</location>
+    </image>
+    <irr-label text="10" coordinate="relative" color="orange">
+      <position hpos="0.09" vpos="0.135"/>
+      <size height="0.15" width="0.10"/>
+    </irr-label>    
+    <irr-label text="Here is the energy available." coordinate="relative">
+      <position hpos="0.5" vpos="0.2"/>
+      <size height="0.08" width="0.5"/>
+    </irr-label>
+    <irr-label text="It depends on how many leaf trees you have, how far you are from equator and how many energy you already have" coordinate="relative">
+      <position hpos="0.5" vpos="0.4"/>
+      <size height="0.15" width="0.5"/>
+    </irr-label>
+    <image coordinate="relative">
+      <position hpos="0.2" vpos="0.97"/>
+      <size height="0.07" width="0.4"/>
+      <location>foot.png</location>
+    </image>
+    <image coordinate="relative">
+      <position hpos="0.85" vpos="0.1"/>
+      <size height="0.125" width="0.25"/>
+      <location>title.png</location>
+    </image>
+
+  </still-state>
+
+  <still-state name="tutorial-4" goto-state="tutorial-5" timeout="15.0">
+    <set-value linked-to="biolite.music.current" value="title"/>
+    <image coordinate="relative">
+      <position hpos="0.805" vpos="0.705"/>
+      <size height="0.6" width="0.4"/>
+      <location>arc2.png</location>
+    </image>
+    <image coordinate="relative">
+      <position hpos="0.88" vpos="0.82"/>
+      <size height="0.15" width="0.10"/>
+      <location>plant1_default_over_status.png</location>
+    </image>
+    <irr-label text="Here is a leaf tree" coordinate="relative">
+      <position hpos="0.8" vpos="0.6"/>
+      <size height="0.1" width="1.0"/>
+    </irr-label>
+    <irr-label text="You need them to gather energy" coordinate="relative">
+      <position hpos="0.8" vpos="0.65"/>
+      <size height="0.1" width="1.0"/>
+    </irr-label>
+
+    <image coordinate="relative">
+      <position hpos="0.2" vpos="0.97"/>
+      <size height="0.07" width="0.4"/>
+      <location>foot.png</location>
+    </image>
+    <image coordinate="relative">
+      <position hpos="0.85" vpos="0.1"/>
+      <size height="0.125" width="0.25"/>
+      <location>title.png</location>
+    </image>
+
+  </still-state>
+
+  <game-state name="tutorial-5"
+		goto-state-victory="tutorial-6" goto-state-defeat="score-lose"
+		linked-to="biolite.player0.plant.size" logic="tutorial-plant.xml"
+		victory-on="5" defeat-on="defeat">
+    <set-value linked-to="biolite.music.current" value="play"/>
+    <!-- camera type fixed or arcball -->
+    <set-value linked-to="biolite.camera" value="arcball"/>
+    <!-- witch mouse key is linked to the arcball mouvement (right by default) -->
+    <set-value linked-to="biolite.camera.arcball.mouse" value="right"/>
+    <image coordinate="relative">
+      <position hpos="0.195" vpos="0.295"/>
+      <size height="0.6" width="0.4"/>
+      <location>arc.png</location>
+    </image>
+    <image coordinate="relative">
+      <position hpos="0.236" vpos="0.054"/>
+      <size height="0.075" width="0.05"/>
+      <location>plant-icon-green.png</location>
+    </image>
+    <irr-label linked-to="biolite.player0.plant.size" coordinate="relative" color="green">
+      <position hpos="0.236" vpos="0.054"/>
+      <size height="0.05" width="0.06"/>
+    </irr-label>
+    <image coordinate="relative">
+      <position hpos="0.05" vpos="0.075"/>
+      <size height="0.15" width="0.10"/>
+      <location>energyred.png</location>
+    </image>
+    <irr-label linked-to="biolite.player0.energy" coordinate="relative" color="orange">
+      <position hpos="0.09" vpos="0.135"/>
+      <size height="0.15" width="0.10"/>
+    </irr-label>
+
+    <irr-label text="let's try,seed 5 trees" coordinate="relative">
+      <position hpos="0.2" vpos="0.9"/>
+      <size height="0.08" width="0.3"/>
+    </irr-label>
+
+    <image coordinate="relative">
+      <position hpos="0.152" vpos="0.126"/>
+      <size height="0.075" width="0.05"/>
+      <location>plant-icon-red.png</location>
+    </image>
+    <irr-label linked-to="biolite.player1.plant.size" coordinate="relative" color="red">
+      <position hpos="0.152" vpos="0.126"/>
+      <size height="0.05" width="0.06"/>
+    </irr-label>
+    <image coordinate="relative">
+      <position hpos="0.084" vpos="0.228"/>
+      <size height="0.075" width="0.05"/>
+      <location>plant-icon-blue.png</location>
+    </image>
+    <irr-label linked-to="biolite.player2.plant.size" coordinate="relative" color="blue">
+      <position hpos="0.084" vpos="0.228"/>
+      <size height="0.05" width="0.06"/>
+    </irr-label>
+    <image coordinate="relative">
+      <position hpos="0.036" vpos="0.354"/>
+      <size height="0.075" width="0.05"/>
+      <location>plant-icon-yellow.png</location>
+    </image>
+    <irr-label linked-to="biolite.player3.plant.size" coordinate="relative" color="yellow">
+      <position hpos="0.036" vpos="0.354"/>
+      <size height="0.05" width="0.06"/>
+    </irr-label>
+    <image coordinate="relative">
+      <position hpos="0.805" vpos="0.705"/>
+      <size height="0.6" width="0.4"/>
+      <location>arc2.png</location>
+    </image>
+    <!-- plant -->
+    <toggle-button linked-to="biolite.action.type" value="plant" coordinate="relative">
+      <position hpos="0.88" vpos="0.82"/>
+      <size height="0.15" width="0.10"/>
+      <image-up>plant1_inactive_status.png</image-up>
+      <image-down>plant1_default_status.png</image-down>
+      <image-up-flyby>plant1_inactive_over_status.png</image-up-flyby>
+      <image-down-flyby>plant1_default_over_status.png</image-down-flyby>
+    </toggle-button>
+    <irr-label linked-to="biolite.plant.cost" coordinate="relative" color="yellow">
+      <position hpos="0.9" vpos="0.82"/>
+      <size height="0.05" width="0.06"/>
+    </irr-label>
+    <image coordinate="relative">
+      <position hpos="0.2" vpos="0.97"/>
+      <size height="0.07" width="0.4"/>
+      <location>foot.png</location>
+    </image>
+    <image coordinate="relative">
+      <position hpos="0.85" vpos="0.1"/>
+      <size height="0.125" width="0.25"/>
+      <location>title.png</location>
+    </image>
+  </game-state>
+  
+  <still-state name="tutorial-6" goto-state="tutorial-7" timeout="15.0">
+    <set-value linked-to="biolite.music.current" value="title"/>
+    <image coordinate="relative">
+      <position hpos="0.805" vpos="0.705"/>
+      <size height="0.6" width="0.4"/>
+      <location>arc2.png</location>
+    </image>
+    <image coordinate="relative">
+      <position hpos="0.96" vpos="0.63"/>
+      <size height="0.15" width="0.10"/>
+      <location>fruit1_default_over_status.png</location>
+    </image>
+    <irr-label text="GG! But your Mama tree can only store 10 energy" coordinate="relative">
+      <position hpos="0.5" vpos="0.5"/>
+      <size height="0.1" width="0.5"/>
+    </irr-label>
+    <irr-label text="To store more, you need Fruit Tree. Each stock 10 more energy" coordinate="relative">
+      <position hpos="0.5" vpos="0.65"/>
+      <size height="0.1" width="0.5"/>
+    </irr-label>
+
+    <image coordinate="relative">
+      <position hpos="0.2" vpos="0.97"/>
+      <size height="0.07" width="0.4"/>
+      <location>foot.png</location>
+    </image>
+    <image coordinate="relative">
+      <position hpos="0.85" vpos="0.1"/>
+      <size height="0.125" width="0.25"/>
+      <location>title.png</location>
+    </image>
+
+  </still-state>
+
+
+  <game-state name="tutorial-7"
+		goto-state-victory="tutorial-8" goto-state-defeat="score-lose"
+		linked-to="biolite.player0.energy" logic="tutorial-plant.xml"
+		victory-on="30" defeat-on="defeat">
+    <set-value linked-to="biolite.music.current" value="play"/>
+    <!-- camera type fixed or arcball -->
+    <set-value linked-to="biolite.camera" value="arcball"/>
+    <!-- witch mouse key is linked to the arcball mouvement (right by default) -->
+    <set-value linked-to="biolite.camera.arcball.mouse" value="right"/>
+    <image coordinate="relative">
+      <position hpos="0.195" vpos="0.295"/>
+      <size height="0.6" width="0.4"/>
+      <location>arc.png</location>
+    </image>
+    <image coordinate="relative">
+      <position hpos="0.236" vpos="0.054"/>
+      <size height="0.075" width="0.05"/>
+      <location>plant-icon-green.png</location>
+    </image>
+    <irr-label linked-to="biolite.player0.plant.size" coordinate="relative" color="green">
+      <position hpos="0.236" vpos="0.054"/>
+      <size height="0.05" width="0.06"/>
+    </irr-label>
+    <image coordinate="relative">
+      <position hpos="0.05" vpos="0.075"/>
+      <size height="0.15" width="0.10"/>
+      <location>energyred.png</location>
+    </image>
+    <irr-label linked-to="biolite.player0.energy" coordinate="relative" color="orange">
+      <position hpos="0.09" vpos="0.135"/>
+      <size height="0.15" width="0.10"/>
+    </irr-label>
+    <image coordinate="relative">
+      <position hpos="0.152" vpos="0.126"/>
+      <size height="0.075" width="0.05"/>
+      <location>plant-icon-red.png</location>
+    </image>
+    <irr-label linked-to="biolite.player1.plant.size" coordinate="relative" color="red">
+      <position hpos="0.152" vpos="0.126"/>
+      <size height="0.05" width="0.06"/>
+    </irr-label>
+    <image coordinate="relative">
+      <position hpos="0.084" vpos="0.228"/>
+      <size height="0.075" width="0.05"/>
+      <location>plant-icon-blue.png</location>
+    </image>
+    <irr-label linked-to="biolite.player2.plant.size" coordinate="relative" color="blue">
+      <position hpos="0.084" vpos="0.228"/>
+      <size height="0.05" width="0.06"/>
+    </irr-label>
+    <image coordinate="relative">
+      <position hpos="0.036" vpos="0.354"/>
+      <size height="0.075" width="0.05"/>
+      <location>plant-icon-yellow.png</location>
+    </image>
+    <irr-label linked-to="biolite.player3.plant.size" coordinate="relative" color="yellow">
+      <position hpos="0.036" vpos="0.354"/>
+      <size height="0.05" width="0.06"/>
+    </irr-label>
+    <image coordinate="relative">
+      <position hpos="0.805" vpos="0.705"/>
+      <size height="0.6" width="0.4"/>
+      <location>arc2.png</location>
+    </image>
+    <!-- plant -->
+    <toggle-button linked-to="biolite.action.type" value="plant" coordinate="relative">
+      <position hpos="0.88" vpos="0.82"/>
+      <size height="0.15" width="0.10"/>
+      <image-up>plant1_inactive_status.png</image-up>
+      <image-down>plant1_default_status.png</image-down>
+      <image-up-flyby>plant1_inactive_over_status.png</image-up-flyby>
+      <image-down-flyby>plant1_default_over_status.png</image-down-flyby>
+    </toggle-button>
+    <irr-label linked-to="biolite.plant.cost" coordinate="relative" color="yellow">
+      <position hpos="0.9" vpos="0.82"/>
+      <size height="0.05" width="0.06"/>
+    </irr-label>
+    <!-- fruit -->
+    <toggle-button linked-to="biolite.action.type" value="fruit" coordinate="relative">
+      <position hpos="0.96" vpos="0.63"/>
+      <size height="0.15" width="0.10"/>
+      <image-up>fruit1_inactive_status.png</image-up>
+      <image-down>fruit1_default_status.png</image-down>
+      <image-up-flyby>fruit1_inactive_over_status.png</image-up-flyby>
+      <image-down-flyby>fruit1_default_over_status.png</image-down-flyby>
+    </toggle-button>
+    <irr-label linked-to="biolite.fruit.cost" coordinate="relative" color="yellow">
+      <position hpos="0.98" vpos="0.63"/>
+      <size height="0.05" width="0.06"/>
+    </irr-label>
+    <image coordinate="relative">
+      <position hpos="0.2" vpos="0.97"/>
+      <size height="0.07" width="0.4"/>
+      <location>foot.png</location>
+    </image>
+    <image coordinate="relative">
+      <position hpos="0.85" vpos="0.1"/>
+      <size height="0.125" width="0.25"/>
+      <location>title.png</location>
+    </image>
+
+    <irr-label text="Now, gather 30 energy!" coordinate="relative">
+      <position hpos="0.2" vpos="0.9"/>
+      <size height="0.08" width="0.3"/>
+    </irr-label>
+  </game-state>
+  
+  
+  <still-state name="tutorial-8" goto-state="tutorial-9" timeout="15.0">
+    <set-value linked-to="biolite.music.current" value="title"/>
+    <image coordinate="relative">
+      <position hpos="0.805" vpos="0.705"/>
+      <size height="0.6" width="0.4"/>
+      <location>arc2.png</location>
+    </image>
+    <image coordinate="relative">
+      <position hpos="0.752" vpos="0.952"/>
+      <size height="0.15" width="0.10"/>
+      <location>destroy_default_over_status.png</location>
+    </image>
+    <irr-label text="Good my slave, good... Now i'll teach you how to destroy our enemies" coordinate="relative">
+      <position hpos="0.5" vpos="0.5"/>
+      <size height="0.1" width="0.5"/>
+    </irr-label>
+    <irr-label text="Here is the destroy-other-tree button" coordinate="relative">
+      <position hpos="0.5" vpos="0.65"/>
+      <size height="0.1" width="0.5"/>
+    </irr-label>
+    <irr-label text="the energy cost depends on the energy of the soon-to-be-destroyed tree" coordinate="relative">
+      <position hpos="0.5" vpos="0.8"/>
+      <size height="0.1" width="0.5"/>
+    </irr-label>
+    <image coordinate="relative">
+      <position hpos="0.2" vpos="0.97"/>
+      <size height="0.07" width="0.4"/>
+      <location>foot.png</location>
+    </image>
+    <image coordinate="relative">
+      <position hpos="0.85" vpos="0.1"/>
+      <size height="0.125" width="0.25"/>
+      <location>title.png</location>
+    </image>
+    <set-value linked-to="biolite.game.end" value="null"/>
+  </still-state>
+
+  <game-state name="tutorial-9"
+     goto-state-victory="score-win" goto-state-defeat="score-lose"
+     linked-to="biolite.game.end" logic="tutorial-destroy.xml"
+     victory-on="victory" defeat-on="defeat">
+    <set-value linked-to="biolite.music.current" value="play"/>
+    <!-- camera type fixed or arcball -->
+    <set-value linked-to="biolite.camera" value="arcball"/>
+    <!-- witch mouse key is linked to the arcball mouvement (right by default) -->
+    <set-value linked-to="biolite.camera.arcball.mouse" value="right"/>
+
+    <set-value linked-to="biolite.ai.difficulty" value="easy"/>
+    <set-value linked-to="biolite.ai.number" value="1"/>
+    
+    <image coordinate="relative">
+      <position hpos="0.195" vpos="0.295"/>
+      <size height="0.6" width="0.4"/>
+      <location>arc.png</location>
+    </image>
+    <image coordinate="relative">
+      <position hpos="0.236" vpos="0.054"/>
+      <size height="0.075" width="0.05"/>
+      <location>plant-icon-green.png</location>
+    </image>
+    <irr-label linked-to="biolite.player0.plant.size" coordinate="relative" color="green">
+      <position hpos="0.236" vpos="0.054"/>
+      <size height="0.05" width="0.06"/>
+    </irr-label>
+    <image coordinate="relative">
+      <position hpos="0.05" vpos="0.075"/>
+      <size height="0.15" width="0.10"/>
+      <location>energyred.png</location>
+    </image>
+    <irr-label linked-to="biolite.player0.energy" coordinate="relative" color="orange">
+      <position hpos="0.09" vpos="0.135"/>
+      <size height="0.15" width="0.10"/>
+    </irr-label>
+    <image coordinate="relative">
+      <position hpos="0.152" vpos="0.126"/>
+      <size height="0.075" width="0.05"/>
+      <location>plant-icon-red.png</location>
+    </image>
+    <irr-label linked-to="biolite.player1.plant.size" coordinate="relative" color="red">
+      <position hpos="0.152" vpos="0.126"/>
+      <size height="0.05" width="0.06"/>
+    </irr-label>
+    <image coordinate="relative">
+      <position hpos="0.084" vpos="0.228"/>
+      <size height="0.075" width="0.05"/>
+      <location>plant-icon-blue.png</location>
+    </image>
+    <irr-label linked-to="biolite.player2.plant.size" coordinate="relative" color="blue">
+      <position hpos="0.084" vpos="0.228"/>
+      <size height="0.05" width="0.06"/>
+    </irr-label>
+    <image coordinate="relative">
+      <position hpos="0.036" vpos="0.354"/>
+      <size height="0.075" width="0.05"/>
+      <location>plant-icon-yellow.png</location>
+    </image>
+    <irr-label linked-to="biolite.player3.plant.size" coordinate="relative" color="yellow">
+      <position hpos="0.036" vpos="0.354"/>
+      <size height="0.05" width="0.06"/>
+    </irr-label>
+    <image coordinate="relative">
+      <position hpos="0.805" vpos="0.705"/>
+      <size height="0.6" width="0.4"/>
+      <location>arc2.png</location>
+    </image>
+    <!-- plant -->
+    <toggle-button linked-to="biolite.action.type" value="plant" coordinate="relative">
+      <position hpos="0.88" vpos="0.82"/>
+      <size height="0.15" width="0.10"/>
+      <image-up>plant1_inactive_status.png</image-up>
+      <image-down>plant1_default_status.png</image-down>
+      <image-up-flyby>plant1_inactive_over_status.png</image-up-flyby>
+      <image-down-flyby>plant1_default_over_status.png</image-down-flyby>
+    </toggle-button>
+    <irr-label linked-to="biolite.plant.cost" coordinate="relative" color="yellow">
+      <position hpos="0.9" vpos="0.82"/>
+      <size height="0.05" width="0.06"/>
+    </irr-label>
+    <!-- fruit -->
+    <toggle-button linked-to="biolite.action.type" value="fruit" coordinate="relative">
+      <position hpos="0.96" vpos="0.63"/>
+      <size height="0.15" width="0.10"/>
+      <image-up>fruit1_inactive_status.png</image-up>
+      <image-down>fruit1_default_status.png</image-down>
+      <image-up-flyby>fruit1_inactive_over_status.png</image-up-flyby>
+      <image-down-flyby>fruit1_default_over_status.png</image-down-flyby>
+    </toggle-button>
+    <irr-label linked-to="biolite.fruit.cost" coordinate="relative" color="yellow">
+      <position hpos="0.98" vpos="0.63"/>
+      <size height="0.05" width="0.06"/>
+    </irr-label>
+    <toggle-button linked-to="biolite.action.type" value="destroy" coordinate="relative">
+      <position hpos="0.752" vpos="0.952"/>
+      <size height="0.15" width="0.10"/>
+      <image-up>destroy_inactive_status.png</image-up>
+      <image-down>destroy_default_status.png</image-down>
+      <image-up-flyby>destroy_inactive_over_status.png</image-up-flyby>
+      <image-down-flyby>destroy_default_over_status.png</image-down-flyby>
+    </toggle-button>
+    <irr-label linked-to="biolite.destroy.cost" coordinate="relative" color="yellow">
+      <position hpos="0.752" vpos="0.952"/>
+      <size height="0.05" width="0.06"/>
+    </irr-label>
+    <image coordinate="relative">
+      <position hpos="0.2" vpos="0.97"/>
+      <size height="0.07" width="0.4"/>
+      <location>foot.png</location>
+    </image>
+    <image coordinate="relative">
+      <position hpos="0.85" vpos="0.1"/>
+      <size height="0.125" width="0.25"/>
+      <location>title.png</location>
+    </image>
+
+    <irr-label text="Red Mama Tree dare to challenge you! Destroy it!" coordinate="relative">
+      <position hpos="0.5" vpos="0.9"/>
+      <size height="0.1" width="1.0"/>
+    </irr-label>
+    
+  </game-state>
+  
+	<!-- CREDITS -->
+	<still-state name="credits" goto-state="end" timeout="30.0">
+  		<set-value linked-to="biolite.music.current" value="title"/>
+		<image coordinate="relative">
+			<position hpos="0.85" vpos="0.1"/>
+			<size height="0.125" width="0.25"/>
+			<location>title.png</location>
+		</image>
+		<image coordinate="relative">
+			<position hpos="0.5" vpos="0.5"/>
+			<size height="0.9" width="0.9"/>
+			<location>credits.png</location>
+		</image>
+		<image coordinate="relative">
+			<position hpos="0.35" vpos="0.94"/>
+            <size height="0.09" width="0.66"/>
+			<location>foot.png</location>
+		</image>
+	</still-state>
+ 
+	<!-- SCORE LOOSE -->
+	<still-state name="score-lose" goto-state="playMenu" timeout="30.0">
+		<set-value linked-to="biolite.music.current" value="title"/>
+		<set-value linked-to="biolite.game.end" value="null"/>
+		<image coordinate="relative">
+			<position hpos="0.85" vpos="0.1"/>
+			<size height="0.125" width="0.25"/>
+			<location>title.png</location>
+		</image>
+		<image coordinate="relative">
+			<position hpos="0.35" vpos="0.2"/>
+			<size height="0.3" width="0.6"/>
+			<location>title-lose.png</location>
+		</image>
+		<image coordinate="relative">
+			<position hpos="0.2" vpos="0.4"/>
+			<size height="0.15" width="0.10"/>
+			<location>plant-icon-green.png</location>
+		</image>
+    <image coordinate="relative">
+      <position hpos="0.4" vpos="0.4"/>
+      <size height="0.15" width="0.10"/>
+      <location>energyred.png</location>
+    </image>
+		<irr-label linked-to="biolite.player0.energy" coordinate="relative" color="green">
+			<position hpos="0.55" vpos="0.4"/>
+			<size height="0.05" width="0.2"/>
+		</irr-label>
+		<irr-label linked-to="biolite.player0.plant.size" coordinate="relative" color="green">
+			<position hpos="0.35" vpos="0.4"/>
+			<size height="0.05" width="0.2"/>
+		</irr-label>
+		<image coordinate="relative">
+			<position hpos="0.2" vpos="0.55"/>
+			<size height="0.15" width="0.10"/>
+			<location>plant-icon-red.png</location>
+		</image>
+    <image coordinate="relative">
+      <position hpos="0.4" vpos="0.55"/>
+      <size height="0.15" width="0.10"/>
+      <location>energyred.png</location>
+    </image>
+		<irr-label linked-to="biolite.player1.energy" coordinate="relative" color="red">
+			<position hpos="0.55" vpos="0.55"/>
+			<size height="0.05" width="0.2"/>
+		</irr-label>
+		<irr-label linked-to="biolite.player1.plant.size" coordinate="relative" color="red">
+			<position hpos="0.35" vpos="0.55"/>
+			<size height="0.05" width="0.2"/>
+		</irr-label>
+		<image coordinate="relative">
+			<position hpos="0.2" vpos="0.70"/>
+			<size height="0.15" width="0.10"/>
+			<location>plant-icon-blue.png</location>
+		</image>
+    <image coordinate="relative">
+      <position hpos="0.4" vpos="0.70"/>
+      <size height="0.15" width="0.10"/>
+      <location>energyred.png</location>
+    </image>
+		<irr-label linked-to="biolite.player2.energy" coordinate="relative" color="blue">
+			<position hpos="0.55" vpos="0.70"/>
+			<size height="0.05" width="0.2"/>
+		</irr-label>
+		<irr-label linked-to="biolite.player2.plant.size" coordinate="relative" color="blue">
+			<position hpos="0.35" vpos="0.70"/>
+			<size height="0.05" width="0.2"/>
+		</irr-label>
+		<image coordinate="relative">
+			<position hpos="0.2" vpos="0.85"/>
+			<size height="0.15" width="0.10"/>
+			<location>plant-icon-yellow.png</location>
+		</image>
+    <image coordinate="relative">
+      <position hpos="0.4" vpos="0.85"/>
+      <size height="0.15" width="0.10"/>
+      <location>energyred.png</location>
+    </image>
+		<irr-label linked-to="biolite.player3.energy" coordinate="relative" color="yellow">
+			<position hpos="0.55" vpos="0.85"/>
+			<size height="0.05" width="0.2"/>
+		</irr-label>
+		<irr-label linked-to="biolite.player3.plant.size" coordinate="relative" color="yellow">
+			<position hpos="0.35" vpos="0.85"/>
+			<size height="0.05" width="0.2"/>
+		</irr-label>
+		<image coordinate="relative">
+			<position hpos="0.35" vpos="0.94"/>
+			<size height="0.09" width="0.66"/>
+			<location>foot.png</location>
+		</image>
+	</still-state> 
+
+	<!-- SCORE WIN -->
+	<still-state name="score-win" goto-state="playMenu" timeout="30.0">
+		<set-value linked-to="biolite.music.current" value="title"/>
+		<set-value linked-to="biolite.game.end" value="null"/>
+		<image coordinate="relative">
+			<position hpos="0.35" vpos="0.2"/>
+			<size height="0.15" width="0.4"/>
+			<location>title-win.png</location>
+		</image>
+    <image coordinate="relative">
+      <position hpos="0.2" vpos="0.4"/>
+      <size height="0.15" width="0.10"/>
+      <location>plant-icon-green.png</location>
+    </image>
+    <image coordinate="relative">
+      <position hpos="0.4" vpos="0.4"/>
+      <size height="0.15" width="0.10"/>
+      <location>energyred.png</location>
+    </image>
+    <irr-label linked-to="biolite.player0.energy" coordinate="relative" color="green">
+      <position hpos="0.55" vpos="0.4"/>
+      <size height="0.05" width="0.2"/>
+    </irr-label>
+    <irr-label linked-to="biolite.player0.plant.size" coordinate="relative" color="green">
+      <position hpos="0.35" vpos="0.4"/>
+      <size height="0.05" width="0.2"/>
+    </irr-label>
+    <image coordinate="relative">
+      <position hpos="0.2" vpos="0.55"/>
+      <size height="0.15" width="0.10"/>
+      <location>plant-icon-red.png</location>
+    </image>
+    <image coordinate="relative">
+      <position hpos="0.4" vpos="0.55"/>
+      <size height="0.15" width="0.10"/>
+      <location>energyred.png</location>
+    </image>
+    <irr-label linked-to="biolite.player1.energy" coordinate="relative" color="red">
+      <position hpos="0.55" vpos="0.55"/>
+      <size height="0.05" width="0.2"/>
+    </irr-label>
+    <irr-label linked-to="biolite.player1.plant.size" coordinate="relative" color="red">
+      <position hpos="0.35" vpos="0.55"/>
+      <size height="0.05" width="0.2"/>
+    </irr-label>
+    <image coordinate="relative">
+      <position hpos="0.2" vpos="0.70"/>
+      <size height="0.15" width="0.10"/>
+      <location>plant-icon-blue.png</location>
+    </image>
+    <image coordinate="relative">
+      <position hpos="0.4" vpos="0.70"/>
+      <size height="0.15" width="0.10"/>
+      <location>energyred.png</location>
+    </image>
+    <irr-label linked-to="biolite.player2.energy" coordinate="relative" color="blue">
+      <position hpos="0.55" vpos="0.70"/>
+      <size height="0.05" width="0.2"/>
+    </irr-label>
+    <irr-label linked-to="biolite.player2.plant.size" coordinate="relative" color="blue">
+      <position hpos="0.35" vpos="0.70"/>
+      <size height="0.05" width="0.2"/>
+    </irr-label>
+    <image coordinate="relative">
+      <position hpos="0.2" vpos="0.85"/>
+      <size height="0.15" width="0.10"/>
+      <location>plant-icon-yellow.png</location>
+    </image>
+    <image coordinate="relative">
+      <position hpos="0.4" vpos="0.85"/>
+      <size height="0.15" width="0.10"/>
+      <location>energyred.png</location>
+    </image>
+    <irr-label linked-to="biolite.player3.energy" coordinate="relative" color="yellow">
+      <position hpos="0.55" vpos="0.85"/>
+      <size height="0.05" width="0.2"/>
+    </irr-label>
+    <irr-label linked-to="biolite.player3.plant.size" coordinate="relative" color="yellow">
+      <position hpos="0.35" vpos="0.85"/>
+      <size height="0.05" width="0.2"/>
+    </irr-label>
+    <image coordinate="relative">
+      <position hpos="0.35" vpos="0.94"/>
+      <size height="0.09" width="0.66"/>
+      <location>foot.png</location>
+    </image>
+	</still-state> 
+    
+</menu>

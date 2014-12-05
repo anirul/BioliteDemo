@@ -1,0 +1,88 @@
+
+- Thursday June 24 2010, 14:08 -
+Frederic: je pensais deja des plantes et des humains mais des zombies!
+Frederic: aussi des robots pourquoi pas!
+- 14:18 -
+Frederic: faudrait juste trouver un bon gameplay et l equilibrer un peu
+- 14:30 -
+Frederic: mais je suis en train de faire du code pour pouvoir scripter tout ca en XML
+Frederic: je commence par les menus et apres le gameplay les races les planet l UI tout!
+- 14:41 -
+zergzerg_66@hotmail.com: t'es super motivé
+zergzerg_66@hotmail.com: ben des robot tondeuse a gazon...
+zergzerg_66@hotmail.com: il en y pas une faite par roombat ..
+Frederic: ^^
+Frederic: ba je pense plus faire un truc ou les batiment/unitee ne bougent pas vraiment...
+zergzerg_66@hotmail.com: ah oui...
+Frederic: genre les machine/robots aurait plutot des bobines de tesla un peu comme dans alerte rouge
+zergzerg_66@hotmail.com: ben des pipeline qui deverse du pétrole ?
+Frederic: Oh pas mal ca comme ide
+Frederic: idee!
+zergzerg_66@hotmail.com: :-P
+Frederic: ouais ou des gaz radioactifs!
+zergzerg_66@hotmail.com: c'est poltique
+zergzerg_66@hotmail.com: hehe
+zergzerg_66@hotmail.com: radioactif et communiste
+zergzerg_66@hotmail.com: :-)
+Frederic: ^^
+Frederic: genre les plantes sont dependantes au soleil et a l eau...
+Frederic: les machine sont dependantes a quoi? soleil? petrol?
+Frederic: et les humains?
+zergzerg_66@hotmail.com: au plante et au machine ?
+zergzerg_66@hotmail.com: faut manger et la tech ?
+Frederic: lol pas mal mais pas evident a mettre en place
+- 14:47 -
+Frederic: je sais pas encore si je vais mettre de la tech... ou en tout cas dans un premier temps...
+zergzerg_66@hotmail.com: si tu réussi ton attaque contre les plantes ou la machine
+zergzerg_66@hotmail.com: tu recoit des ressource
+Frederic: le truc c est que j aimerais que les parties soient de 5-15 minutes max
+zergzerg_66@hotmail.com: sacavengenger
+Frederic: ouais pas con
+zergzerg_66@hotmail.com: ben limit de temp... degat qui aucement, pv qui tombe
+Frederic: ca rejoin un peu mes idee de campagnes
+zergzerg_66@hotmail.com: ressource fix..
+zergzerg_66@hotmail.com: ok
+Frederic: nous reste encore tes Zombies!
+Frederic: genre ombre (pas de soleil) et humain -> BRAIN!!!
+zergzerg_66@hotmail.com: oui...
+Frederic: les robots pourraient craindre l eau aussi
+zergzerg_66@hotmail.com: aaa la rouille
+Frederic: c est bien connu ca fait des faux contacte et ca rouille!
+zergzerg_66@hotmail.com: mais l'eau fait poussé le plante
+Frederic: clair
+zergzerg_66@hotmail.com: alors que le sole dur et sec c'est bien pour les robbot
+Frederic: ouais!
+zergzerg_66@hotmail.com: et le soleil pourrait être util a tous le monde (panneau solaire)
+Frederic: non y a plein d idee la...
+zergzerg_66@hotmail.com: sauf au zombie
+Frederic: ouais je me suis dit ca aussi
+zergzerg_66@hotmail.com: c'est intutif
+Frederic: mais pourquoi plus de paneau solaire pour les humain ou pour les robots???
+zergzerg_66@hotmail.com: je pensais panneau solaire c'est pour les robots..
+Frederic: mais j aurais bien vu les humain vivre du petrol!
+zergzerg_66@hotmail.com: lol pas mal oui
+Frederic: oui ca se tiendrait pas mal
+Frederic: genre platformes sur terre + mer
+zergzerg_66@hotmail.com: ou alors du gaz radioactif
+Frederic: pas mal non plus!
+zergzerg_66@hotmail.com: si ça pête ça change les humains en zombie
+Frederic: mais ca donne une ressource fixe et j aime pas trop ce genre style un peu Warcraft ou les mines sont LA ressource
+- 14:52 -
+zergzerg_66@hotmail.com: oui je comprend..
+zergzerg_66@hotmail.com: ben pétrole
+Frederic: pour les zombies je voyais bien des bombes qui rendent les humain zombies!
+zergzerg_66@hotmail.com: si tu dértuit les plantes -> pourrit -> fait du pétrole..
+zergzerg_66@hotmail.com: c'est un poil exagerré...
+Frederic: le concepte de bombe est a creuser avec des specifiques par race!
+Frederic: c est vraiment pas mal genre 3 type de batiments/unitees
+zergzerg_66@hotmail.com: je voyait le joueur zombie posé de mine, très peu visible... et si marche dessous ça fait un zombie..
+zergzerg_66@hotmail.com: plantes/robot/humain/zombie ?
+Frederic: centre de production (feuilles/panneau solaires/raffineries mines)
+Frederic: defence (plantes qui piques/tesla/tourelles)
+Frederic: attaques bombes (nuage de miasme/poison/explosifs)
+Frederic: ca commence a se tenir tout ca!
+zergzerg_66@hotmail.com: oui ça sonne le bon jeux sympa
+Frederic: ca pourrait marcher!
+zergzerg_66@hotmail.com: tu tiens un filon
+zergzerg_66@hotmail.com: copy le chat log dans ton svn :-)
+Frederic: lol tellement!

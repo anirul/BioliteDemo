@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3c.org/2001/XMLSchema" elementFormDefault="qualified">
+
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+			Biolite planet description
+			author : Frederic DUBOUCHET
+			e-mail : angel@calodox.org
+		</xs:documentation>
+	</xs:annotation>
+	
+	<xs:element name="planet" type="planet-type"/>
+	<xs:element name="vertex" type="vertex-type"/>
+	<xs:element name="color" type="color-type"/>
+	<xs:element name="vector3d" type="vector3d-type"/>
+	<xs:element name="vector2d" type="vector2d-type"/>
+	<xs:element name="triangle" type="triangle-type"/>
+	
+	<!-- COLOR-TYPE -->
+	<xs:complexType name="color-type">
+		<xs:attribute name="Red" type="xs:float" use="required"/>
+		<xs:attribute name="Green" type="xs:float" use="required"/>
+		<xs:attribute name="Blue" type="xs:float" use="required"/>
+	</xs:complexType>
+	
+	<!-- VECTOR2D-TYPE -->
+	<xs:complexType name="vector2d-type">
+		<xs:attribute name="X" type="xs:float" use="required"/>
+		<xs:attribute name="Y" type="xs:float" use="required"/>
+	</xs:complexType>
+	
+	<!-- VECTOR3D-TYPE -->
+	<xs:complexType name="vector3d-type">
+		<xs:attribute name="X" type="xs:float" use="required"/>
+		<xs:attribute name="Y" type="xs:float" use="required"/>
+		<xs:attribute name="Z" type="xs:float" use="required"/>
+	</xs:complexType>
+	
+	<!-- TRIANGLE-type -->
+	<xs:complexType name="triangle-type">
+		<xs:attribute name="A" type="xs:short" use="required"/>
+		<xs:attribute name="B" type="xs:short" use="required"/>
+		<xs:attribute name="C" type="xs:short" use="required"/>
+	</xs:complexType>
+	
+	<!-- VERTEX-TYPE -->
+	<xs:complexType name="vertex-type">
+		<xs:sequence>
+			<xs:element name="position" type="vector3d-type" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="normal" type="vector3d-type" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="color" type="color-type" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="texture" type="vector2d-type" minOccurs="0" maxOccurs="1"/>
+		</xs:element>
+	</xs:complexType>
+	
+	<!-- PLANET-TYPE -->
+	<xs:complexType name="planet">
+		<xs:sequence>
+			<xs:element name="vertex" type="vertex-type" minOccurs="0" maxOccurs="0"/>
+			<xs:element name="triangle" type="triangle-type" minOccurs="0" maxOccurs="0"/>
+			<xs:element name="color-low" type="color-type" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="color-medium" type="color-type" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="color-high" type="color-type" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+		<xs:attribute name="seed" type="xs:string" use="required" />
+	</xs:complexType>
+	
+</xs:schema>

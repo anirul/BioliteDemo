@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3c.org/2001/XMLSchema" elementFormDefault="qualified">
+
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+			Biolite menu description
+			author : Frederic DUBOUCHET
+			e-mail : angel@calodox.org
+		</xs:documentation>
+	</xs:annotation>
+	
+	<xs:element name="menu" type="menu-type"/>
+	<xs:element name="still-state" type="still-state-type"/>
+	<xs:element name="gui-state" type="gui-state-type"/>
+	<xs:element name="game-state" type="game-state-type"/>
+	<xs:element name="set-value" type="set-value-type"/>
+	<xs:element name="button" type="button-type"/>
+	<xs:element name="toggle-button" type="toggle-button-type"/>
+	<xs:element name="irr-button" type="irr-button-type"/>
+	<xs:element name="irr-slider" type="irr-slider-type"/>
+	<xs:element name="irr-text" type="irr-text-type"/>
+	<xs:element name="irr-label" type="irr-label-type"/>
+	<xs:element name="irr-combo" type="irr-combo-type"/>
+	<xs:element name="position" type="position-type"/>
+	<xs:element name="size" type="size-type"/>
+	<xs:element name="image" type="image-type"/>
+	<xs:element name="location" type="location-type"/>
+	<xs:element name="note" type="note-type"/>
+	<xs:element name="item" type="item-type"/>
+	<xs:element name="game-logic" type="game-logic-type"/>
+	
+	<xs:simpleType name="note-type">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:complexType name="position-type">
+		<xs:restriction base="xs:string"/>
+		<xs:attribute name="hpos" type="xs:float" use="required"/>
+		<xs:attribute name="vpos" type="xs:float" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="size-type">
+		<xs:restriction base="xs:string"/>
+		<xs:attribute name="height" type="xs:float" use="required"/>
+		<xs:attribure name="width" type="xs:float" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="location-type">
+		<xs:restriction base="xs:anyURI"/>
+	</xs:complexType>
+	<xs:complexType name="item-type">
+		<xs:restriction base="xs:string"/>
+		<xs:attribute name="name" type="xs:string"/>
+		<xs:attribute name="value" type="xs:string"/>
+	</xs:complexType>
+	<xs:complexType name="game-logic-type">
+		<xs:element name="location" type="location-type" use="required"/>
+	</xs:complexType> 
+	
+	<!-- SET-VALUE-TYPE -->
+	<xs:complexType name="set-value">
+		<xs:attribute name="linked-to" type="xs:string" use="required"/>
+		<xs:attribute name="value" type="xs:string" use="required"/>
+	</xs:complexType>
+  
+	<!-- IMAGE-TYPE -->
+	<xs:complexType name="image-type">
+		<xs:sequence>
+			<xs:element name="position" type="position-type" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="size" type="size-type" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="image" type="location-type" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+		<xs:attribute name="coordinate">
+			<xs:simpleType base="xs:string">
+				<xs:enumeration value="absolute"/>
+				<xs:enumeration value="relative"/>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+  
+	<!-- BUTTON-TYPE -->
+	<xs:complexType name="button-type">
+		<xs:sequence>
+			<xs:element name="position" type="position-type" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="size" type="size-type" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="image-up" type="location-type" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="image-flyby" type="location-type" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="image-down" type="location-type" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+		<xs:attribute name="goto-state" type="xs:string" use="required"/>
+		<xs:attribute name="coordinate">
+			<xs:simpleType base="xs:string">
+				<xs:enumeration value="absolute"/>
+				<xs:enumeration value="relative"/>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	
+	<!-- TOGGLE-BUTTON-TYPE-->
+	<xs:complexType name="toggle-button-type">
+		<xs:sequence>
+			<xs:element name="position" type="position-type" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="size" type="size-type" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="image-up" type="location-type" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="image-down" type="location-type" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="image-up-flyby" type="location-type" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="image-down-flyby" type="location-type" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+		<xs:attribute name="linked-to" type="xs:string" use="required"/>
+		<xs:attribute name="value" type="xs:string" use="required"/>
+		<xs:attribute name="coordinate">
+			<xs:simpleType base="xs:string">
+				<xs:enumeration value="absolute"/>
+				<xs:enumeration value="relative"/>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+  
+	<!-- IRR-BUTTON-TYPE -->
+	<xs:complexType name="irr-button-type">
+		<xs:sequence>
+			<xs:element name="position" type="position-type" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="size" type="size-type" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+		<xs:attribute name="text" type="xs:string" use="required"/>
+		<xs:attribute name="tooltip" type="xs:string"/>
+		<xs:attribute name="goto-state" type="xs:string" use="required"/>
+		<xs:attribute name="coordinate">
+			<xs:simpleType base="xs:string">
+				<xs:enumeration value="absolute"/>
+				<xs:enumeration value="relative"/>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+
+	<!-- IRR-TEXT-TYPE -->
+	<xs:complexType name="irr-text-type">
+		<xs:sequence>
+			<xs:element name="position" type="position-type" minOccurs="1" macOccurs="1"/>
+			<xs:element name="size" type="size-type" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+		<xs:attribute name="coordinate">
+			<xs:simpleType base="xs:string">
+				<xs:enumeration value="absolute"/>
+				<xs:enumeration value="relative"/>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="linked-to" type="xs:string" use="required"/>
+		<xs:attribute name="text" type="xs:string"/>
+	</xs:complexType>
+  
+	<!-- IRR-LABEL-TYPE -->
+	<xs:complexType name="irr-label-type">
+		<xs:sequence>
+			<xs:element name="position" type="position-type" minOccurs="1" macOccurs="1"/>
+			<xs:element name="size" type="size-type" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+		<xs:attribute name="coordinate">
+			<xs:simpleType base="xs:string">
+				<xs:enumeration value="absolute"/>
+				<xs:enumeration value="relative"/>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="text" type="xs:string"/>
+		<xs:attribute name="linked-to" type="xs:string"/>
+	</xs:complexType>
+
+	<!-- IRR-SLIDER-TYPE -->
+	<xs:complexType name="irr-slider-type">
+		<xs:sequence>
+			<xs:element name="position" type="position-type" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="size" type="size-type" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+		<xs:attribute name="coordinate">
+			<xs:simpleType base="xs:string">
+				<xs:enumeration value="absolute"/>
+				<xs:enumeration value="relative"/>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="init" type="xs:numeric" use="required"/>
+		<xs:attribute name="linked-to" type="xs:string" use="required"/>
+	</xs:complexType>
+  
+	<!-- IRR-COMBO-TYPE -->
+	<xs:complexType name="irr-combo-type">
+		<xs:sequence>
+			<xs:element name="position" type="position-type" minOccurs="1" macOccurs="1"/>
+			<xs:element name="size" type="size-type" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="item" type="item-type" minOccurs="1" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="coordinate">
+			<xs:simpleType base="xs:string">
+				<xs:enumeration value="absolute"/>
+				<xs:enumeration value="relative"/>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="init" type="xs:string"/>
+		<xs:attribute name="linked-to" type="xs:string" use="required"/>
+	</xs:complexType>
+  
+	<!-- GUI-STATE-TYPE -->
+	<xs:complexType name="gui-state-type">
+		<xs:sequence>
+			<xs:element name="set-value" type="set-value-type" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="image" type="image-type" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="button" type="button-type" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="toggle-button" type="toggle-button-type" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="irr-button" type="irr-button-type" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="irr-text" type="irr-text-type" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="irr-label" type="irr-label-type" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="irr-combo" type="irr-combo-type" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="irr-slider" type="irr-slider-type" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="timeout" type="xs:float"/>
+		<xs:attribute name="goto-state" type="xs:string" use="required"/>
+	</xs:complexType>
+  
+	<!-- STILL-STATE-TYPE -->
+	<xs:complexType name="still-state-type">
+		<xs:sequence>
+			<xs:element name="set-value" type="set-value-type" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="image" type="image-type" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="irr-label" type="irr-label-type" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="timeout" type="xs:float"/>
+		<xs:attribute name="goto-state" type="xs:string" use="required"/>
+	</xs:complexType>
+
+  <!-- GAME-STATE-TYPE -->
+  <xs:complexType name="game-state-type">
+    <xs:sequence>
+      <xs:element name="set-value" type="set-value-type" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="image" type="image-type" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="irr-label" type="irr-label-type" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="button" type="button-type" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="toggle-button" type="toggle-button-type" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+    <xs:attribute name="linked-to" type="xs:string" use="required"/>
+    <xs:attribute name="victory-on" type="xs:string" use="required"/>
+    <xs:attribute name="defeat-on" type="xs:string" use="required"/>
+    <xs:attribute name="goto-state-victory" type="xs:string" use="required"/>
+    <xs:attribute name="goto-state-defeat" type="xs:string" use="required"/>
+    <xs:attribute name="logic" type="xs:string" use="required"/>
+  </xs:complexType>
+  
+	<!-- MENU-TYPE -->
+	<xs:complexType name="menu">
+		<xs:sequence>
+			<xs:element name="set-value" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="gui-state" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="still-state" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="game-state" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<!-- not implemented yet -->
+		<xs:attribute name="skin" type="xs:string"/>
+	</xs:complexType>
+  
+</xs:schema>
