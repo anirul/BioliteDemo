@@ -28,6 +28,8 @@
 #ifndef BIOLITE_SOUND_HEADER_DEFINED
 #define BIOLITE_SOUND_HEADER_DEFINED
 
+#define USE_GORILLA 1
+
 #include <map>
 #include <string>
 
@@ -58,18 +60,18 @@ protected:
 	std::map<std::string, ga_Memory*> m_memory;
 	std::map<std::string, ga_Handle*> m_buffers;
 #endif // USE_GORILLA
+	irr::IrrlichtDevice* m_device;
 	std::string m_current_music;
 private:
-	sound();
+	sound(irr::IrrlichtDevice* device);
 #ifdef USE_GORILLA
 	std::string getExtention(const std::string& file) const;
 	bool isStreamFile(const std::string& file) const;
-	bool isLoaded(const std::string& name);
 	ga_Handle* getHandle(const std::string& name);
 #endif // USE_GORILLA
 public:
 	//! create and release sound instance
-	static sound* instance();
+	static sound* instance(irr::IrrlichtDevice* device = nullptr);
 	static void release();
 	//! dtor
 	virtual ~sound();

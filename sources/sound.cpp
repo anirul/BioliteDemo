@@ -30,17 +30,20 @@
 
 sound* sound::m_instance = NULL;
 
-sound::sound() :
+sound::sound(irr::IrrlichtDevice* device) :
 #ifdef USE_IRRKLANG
-	m_engine(NULL), m_sound_map(), m_music(NULL),
+m_engine(NULL), m_sound_map(), m_music(NULL),
 #endif // USE_IRRKLANG
 #ifdef USE_GORILLA
-	m_mgr(nullptr),
-	m_mixer(nullptr),
-	m_stream_mgr(nullptr),
+m_mgr(nullptr),
+m_mixer(nullptr),
+m_stream_mgr(nullptr),
 #endif // USE_GORILLA
-	m_current_music("")
+m_device(device),
+m_current_music("")
 {
+	if (!m_device)
+		throw std::runtime_error("undefined device!");
 #ifdef USE_IRRKLANG
 	m_engine = irrklang::createIrrKlangDevice();
 #endif // USE_IRRKLANG
@@ -53,9 +56,9 @@ sound::sound() :
 	parameter_set::instance()->addListener(this);
 }
 
-sound* sound::instance() {
+sound* sound::instance(irr::IrrlichtDevice* device) {
 	if (!m_instance)
-		m_instance = new sound();
+		m_instance = new sound(device);
 	return m_instance;
 }
 
@@ -136,7 +139,7 @@ bool sound::isLoaded(const std::string& name) {
 void sound::load(const std::string& file, const std::string& name) {
 #ifdef USE_IRRKLANG
 	irrklang::ISoundSource* source = m_engine->addSoundSourceFromFile(
-		getPathOfMedia(file.c_str()).c_str());
+																	  getPathOfMedia(file.c_str()).c_str());
 	if (source == NULL) {
 		std::string error("ERROR : could not load file : ");
 		error.append(file);
@@ -158,35 +161,35 @@ ga_Handle* sound::getHandle(const std::string& name) {
 		throw std::runtime_error(oss.str());
 	}
 	auto file = it->second;
-	std::string path = getPathOfMedia(file);
+	std::string path = getPathOfMedia(file.c_str());
 	std::string ext = getExtention(path);
 	{
-		if (!m_device->getFileSystem()->existFile(path.c_str()))
+		if (!m_device->getFileSystem()->existFile(path.c_str())) {
 			throw std::runtime_error("file don't exist : " + path);
-			auto* irrfile = m_device->getFileSystem()->createAndOpenFile(path.c_str());
-			std::string temp;
-			temp.resize(irrfile->getSize());
-			irrfile->read(&temp[0], irrfile->getSize());
-			m_memory.insert(std::make_pair(name, ga_memory_create(&temp[0],
-			temp.size())));
 		}
-		ga_Handle* handle = nullptr;
-		ga_DataSource* data_source = gau_data_source_create_memory(m_memory[name]);
-		handle = gau_create_handle_buffered_data(m_mixer,
-		m_stream_mgr,
-		data_source,
-		ext.c_str(),
-		&gau_on_finish_destroy,
-		nullptr,
-		nullptr);
-		if (!handle) {
-			std::stringstream ss("");
-			ss << "unable to load sound : " << path;
-			throw std::runtime_error(ss.str());
-		}
-		m_buffers.insert(std::make_pair(name, handle));
-		return handle;
+		auto* irrfile = m_device->getFileSystem()->createAndOpenFile(path.c_str());
+		std::string temp;
+		temp.resize(irrfile->getSize());
+		irrfile->read(&temp[0], irrfile->getSize());
+		m_memory.insert(std::make_pair(name, ga_memory_create(&temp[0],
+															  temp.size())));
 	}
+	ga_Handle* handle = nullptr;
+	ga_DataSource* data_source = gau_data_source_create_memory(m_memory[name]);
+	handle = gau_create_handle_buffered_data(m_mixer,
+											 m_stream_mgr,
+											 data_source,
+											 ext.c_str(),
+											 &gau_on_finish_destroy,
+											 nullptr,
+											 nullptr);
+	if (!handle) {
+		std::stringstream ss("");
+		ss << "unable to load sound : " << path;
+		throw std::runtime_error(ss.str());
+	}
+	m_buffers.insert(std::make_pair(name, handle));
+	return handle;
 }
 #endif // USE_GORILLA
 

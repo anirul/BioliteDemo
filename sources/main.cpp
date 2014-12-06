@@ -48,6 +48,7 @@ int main(int ac, char** av) {
 	irr::IrrlichtDevice* pdevice = NULL;
 	irr::SIrrlichtCreationParameters params;
 	try {
+#ifdef USE_RESOLUTION_CHOOSER
 		{ // resolution chooser
 			pdevice = irr::createDevice(
 				irr::video::EDT_OPENGL,
@@ -76,14 +77,25 @@ int main(int ac, char** av) {
 			pdevice = NULL;
 			if (!irc.ok()) return 0;
 		}
+#endif // USE_RESOLUTION_CHOOSER
 		{ // start the actual window
 			pdevice =  irr::createDevice(
+#ifdef USE_RESOLUTION_CHOOSER
 				params.DriverType,
 				params.WindowSize,
 				params.Bits,
 				params.Fullscreen,
 				params.Stencilbuffer,
-				params.Vsync);
+				params.Vsync
+#else
+				irr::video::EDT_OPENGL,
+				irr::core::dimension2d<unsigned int>(1280, 720),
+				32,
+				false,
+				false,
+				true
+#endif // USE_RESOLUTION_CHOOSER
+				);
 			if (!pdevice) 
 				throw std::runtime_error(
 					"ERROR : Could not create device (main)");
