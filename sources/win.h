@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006-2010, anirul
+ * Copyright (c) 2006-2014, anirul
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,28 +25,38 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef BIOLITE_WIN_HEADER_DEFINED
-#define BIOLITE_WIN_HEADER_DEFINED
+#ifndef FATTYCURD_WIN_HEADER_DEFINED
+#define FATTYCURD_WIN_HEADER_DEFINED
 
-#include "game.h"
+class game;
+class context;
 
 class irr_win : public irr::IEventReceiver  {
-private :
-	long m_lasttimer;
-	game* m_pgame;
-public :
-	irr_win(irr::IrrlichtDevice* pdevice);
+	public :
+	irr_win(const std::string& xml);
 	virtual ~irr_win();
 	bool runOnce(irr::IrrlichtDevice* pdevice);
 	virtual bool OnEvent(const irr::SEvent& event);
-protected :
+	context* getContext() { return m_context; }
+	protected :
 	bool OnGUIEvent(const irr::SEvent::SGUIEvent& event);
 	bool OnJoystickEvent(const irr::SEvent::SJoystickEvent& event);
 	bool OnKeyInput(const irr::SEvent::SKeyInput& event);
 	bool OnLogEvent(const irr::SEvent::SLogEvent& event);
 	bool OnMouseInput(const irr::SEvent::SMouseInput& event);
 	bool OnUserEvent(const irr::SEvent::SUserEvent& event);
+private:
+	long m_lasttimer;
+	game* m_pgame;
+	context* m_context;
+	irr::s32 m_blurH;
+	irr::s32 m_blurV;
+	irr::s32 m_SSAO;
+	irr::s32 m_SSAOCombine;
+	irr::s32 m_bloomP;
+	irr::s32 m_brightPass;
 };
 
-#endif // BIOLITE_WIN_HEADER_DEFINED
+
+#endif // FATTYCURD_WIN_HEADER_DEFINED
 

@@ -63,6 +63,8 @@ if(WIN32 OR APPLE)
 endif(WIN32 OR APPLE)
 
 add_executable(BioliteDemo MACOSX_BUNDLE ${BUNDLE_RESOURCES}
+	sources/context.h
+	sources/context.cpp
     sources/CGUIColorPickDialog.cpp
     sources/CGUIColorPickDialog.h
     sources/CSceneNodeAnimatorCameraArcball.cpp

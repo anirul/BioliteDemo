@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006-2010, anirul
+ * Copyright (c) 2006-2014, anirul
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,44 +25,70 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "main.h"
+#include "parameter_set.h"
+#include "media_collection.h"
+#include "game.h"
 #include "win.h"
+#include "context.h"
+#include "sound.h"
 
-irr_win::irr_win(irr::IrrlichtDevice* pdevice) {
-	m_pgame = new game(pdevice);
-	m_lasttimer = pdevice->getTimer()->getTime();
+irr_win::irr_win(const std::string& xml) :
+m_lasttimer(0),
+m_pgame(nullptr),
+m_context(new context(this)),
+m_blurH(0),
+m_blurV(0),
+m_SSAO(0),
+m_SSAOCombine(0)
+{
+	// try to load config from XML
+	try {
+		m_context->loadConfigFromFile("./config.xml");
+		m_context->createFromXML();
+	} catch (std::exception& ex) {
+		std::cerr << ex.what() << std::endl;
+		m_context->createDefaultDevice();
+	}
+	m_context->saveConfigToFile("./config.xml");
+	m_lasttimer = m_context->m_device->getTimer()->getTime();
+	std::string media = fattycurd::utils::getPathOfMedia("media.zip");
+	if (m_context->m_device->getFileSystem()->existFile(media.c_str()))
+		if (!m_context->m_device->getFileSystem()->addFileArchive(media.c_str()))
+			throw std::runtime_error("could not open file : " + media);
+	// create the game
+	m_pgame = new game::game(m_context, xml);
 }
 
 irr_win::~irr_win() {
-	if (m_pgame) 
+	if (m_pgame)
 		delete m_pgame;
 	m_pgame = NULL;
 }
 
 bool irr_win::runOnce(irr::IrrlichtDevice* pdevice) {
-	pdevice->setEventReceiver(this);
 	if (pdevice->run()) {
 		irr::video::IVideoDriver* pvideo = pdevice->getVideoDriver();
 		if (pdevice->isWindowActive()) {
-			irr::scene::ISceneManager* pscene = pdevice->getSceneManager();
 			if (pvideo && pvideo->beginScene()) {
-				pscene->drawAll();
-				m_pgame->render(pdevice);
+				pdevice->getSceneManager()->drawAll();
+				// m_context->m_effect->update();
+				m_pgame->render(m_context);
 				pdevice->getGUIEnvironment()->drawAll();
 				pvideo->endScene();
 			}
-		} 
+		}
 		{
 			std::wstringstream wss(L"");
-			wss << L"Biolite - Irrlicht Version - [" 
-				<< pvideo->getName()
-				<< L" FPS:" 
-				<< pvideo->getFPS() 
-				<< L" MTri/sec:" 
-				<< pvideo->getPrimitiveCountDrawn(1) * (1.f / 1000000.f)
-				<< L"]";
+			wss << L"Fatty Curd Client - Irrlicht Version - ["
+			<< pvideo->getName()
+			<< L" FPS:"
+			<< pvideo->getFPS()
+			<< L" MTri/sec:"
+			<< pvideo->getPrimitiveCountDrawn(1) * (1.f / 1000000.f)
+			<< L"]";
 			pdevice->setWindowCaption(wss.str().c_str());
 		}
+		sound::instance(pdevice)->update();
 		pdevice->yield();
 		return true;
 	}
@@ -72,17 +98,10 @@ bool irr_win::runOnce(irr::IrrlichtDevice* pdevice) {
 
 bool irr_win::OnEvent(const irr::SEvent& event) {
 	switch (event.EventType) {
-		case irr::EET_GUI_EVENT :
-		case irr::EET_JOYSTICK_INPUT_EVENT :
-		case irr::EET_KEY_INPUT_EVENT :
-		case irr::EET_MOUSE_INPUT_EVENT :
-			return m_pgame->OnEvent(event);
-		case irr::EET_USER_EVENT :
-			return OnUserEvent(event.UserEvent);
 		case irr::EET_LOG_TEXT_EVENT :
 			return OnLogEvent(event.LogEvent);
 		default :
-			break;
+			return m_pgame->OnEvent(event);
 	}
 	return false;
 }
@@ -106,11 +125,7 @@ bool irr_win::OnLogEvent(const irr::SEvent::SLogEvent& event) {
 			strLevel = "UNKNOWN";
 			break;
 	}
-	std::cout << "LOG[" << strLevel << "] " << event.Text << std::endl;
+	std::cout << "LOG[" << strLevel << "] <" << event.Text << ">" << std::endl;
 	return true;
-}
-
-bool irr_win::OnUserEvent(const irr::SEvent::SUserEvent& event) {
-	return false;
 }
 
