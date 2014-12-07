@@ -165,7 +165,7 @@ irr_resolution_chooser::irr_resolution_chooser(irr::IrrlichtDevice* pdevice)
 #ifdef _IRR_WINDOWS_
 		// set as default the resolution saved in the registry
 		std::wstring savedResolution = L"";
-		savedResolution = persistant_set::instance()->getValue(L"Resolution");
+		savedResolution = persistant_set::instance()->getValue("Resolution");
 
 		int i = 0;
 		for (ite = m_resolutions.rbegin(); ite != m_resolutions.rend(); ++ite)
@@ -187,7 +187,7 @@ irr_resolution_chooser::irr_resolution_chooser(irr::IrrlichtDevice* pdevice)
 #ifdef _IRR_WINDOWS_
 		// set as default the resolution saved in the registry
 		std::wstring savedDepth = L"";
-		savedDepth = persistant_set::instance()->getValue(L"Depth");
+		savedDepth = persistant_set::instance()->getValue("Depth");
 
 		int i = 0;
 		for (ite = m_depths.rbegin(); ite != m_depths.rend(); ++ite)
@@ -210,7 +210,7 @@ irr_resolution_chooser::irr_resolution_chooser(irr::IrrlichtDevice* pdevice)
 #ifdef _IRR_WINDOWS_
 		// set as default the resolution saved in the registry
 		std::wstring savedDriver = L"";
-		savedDriver = persistant_set::instance()->getValue(L"Driver");
+		savedDriver = persistant_set::instance()->getValue("Driver");
 
 		int i = 0;
 		for (ite = m_drivers.begin(); ite != m_drivers.end(); ++ite)
@@ -255,9 +255,9 @@ bool irr_resolution_chooser::OnEvent(const irr::SEvent& event) {
 				std::wstring resolution = m_resolution_gui->getItem(m_resolution_gui->getSelected());
 				std::wstring depth = m_depth_gui->getItem(m_depth_gui->getSelected());
 				std::wstring driver = m_driver_gui->getItem(m_driver_gui->getSelected());
-				persistant_set::instance()->setValue(L"Resolution", resolution);
-				persistant_set::instance()->setValue(L"Depth", depth);
-				persistant_set::instance()->setValue(L"Driver", driver);
+				persistant_set::instance()->setValue("Resolution", std::string(resolution.begin(), resolution.end()));
+				persistant_set::instance()->setValue("Depth", std::string(depth.begin(), depth.end()));
+				persistant_set::instance()->setValue("Driver", std::string(driver.begin(), driver.end()));
 //#endif
 				parameter_set::instance()->setValue(
 					std::string("biolite.device.resolution"),

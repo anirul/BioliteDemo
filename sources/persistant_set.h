@@ -31,8 +31,8 @@
 //! listen for a value
 struct persistant_set_listener {
 	virtual void operator()(
-		const std::wstring& name,
-		const std::wstring& value) = 0;
+		const std::string& name,
+		const std::string& value) = 0;
 };
 
 //! set of persistant with a callback listener is suppose to be replaced by
@@ -48,10 +48,10 @@ public :
 	static persistant_set* instance();
 	static void release();
 	void setValue(
-		const std::wstring& name, 
-		const std::wstring& value);
-	std::wstring getValue(const std::wstring& name);
-	double getValueDouble(const std::wstring& name);
+		const std::string& name, 
+		const std::string& value);
+	std::wstring getValue(const std::string& name);
+	double getValueDouble(const std::string& name);
 	void addListener(persistant_set_listener* psl);
 	void removeListener(persistant_set_listener* psl);
 	void dump(std::ostream& os);

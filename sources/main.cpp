@@ -39,7 +39,9 @@
 
 #ifdef _IRR_WINDOWS_
 	#pragma comment(lib, "Irrlicht.lib")
+#ifdef USE_IRRKLANG
 	#pragma comment(lib, "IrrKlang.lib")
+#endif // USE_IRRKLANG
 	#pragma comment(linker, "/subsystem:windows /ENTRY:mainCRTStartup")
 #endif
 

@@ -112,7 +112,7 @@
 #include "ISceneNodeAnimatorCameraArcball.h"
 
 #ifdef WIN32
-    #define PERSISTANT_SET_SUBKEY L"SoftWare\\Uncultured Games\\Biolite\\Biolite2"
+    #define PERSISTANT_SET_SUBKEY "SoftWare\\Uncultured Games\\Biolite\\BioliteDemo"
 #endif
 
 #endif // BIOLITE_MAIN_HEADER_DEFINED

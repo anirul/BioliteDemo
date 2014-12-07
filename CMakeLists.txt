@@ -172,12 +172,12 @@ endif(APPLE)
 if(WIN32)
     find_library(IRRLICHT_LIBRARY
         Irrlicht
-        ${PROJECT_SOURCE_DIR}/thirdparty/irrlicht-1.8.1/lib/Win64-visualStudio
+        ${PROJECT_SOURCE_DIR}/thirdparty/irrlicht-1.8.1/lib/Win32-visualStudio
     )
 
     find_library(GORILLA_LIBRARY
         gorilla
-        ${PROJECT_SOURCE_DIR}/thirdparty/Gorilla/lib/win32
+        ${PROJECT_SOURCE_DIR}/thirdparty/Gorilla/lib/win32/Release
     )
 
     target_link_libraries(BioliteDemo

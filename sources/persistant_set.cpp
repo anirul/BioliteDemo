@@ -50,8 +50,8 @@ void persistant_set::release() {
 }
 
 void persistant_set::setValue(
-	const std::wstring& name,
-	const std::wstring& value)
+	const std::string& name,
+	const std::string& value)
 {
 #ifdef _IRR_WINDOWS_
 	HKEY hkey;
@@ -72,7 +72,7 @@ void persistant_set::setValue(
 		(*ite)->operator()(name, value);
 }
 
-std::wstring persistant_set::getValue(const std::wstring& name) {
+std::wstring persistant_set::getValue(const std::string& name) {
 	std::wstring value = L"";
 #ifdef _IRR_WINDOWS_
 	HKEY hkey;
@@ -106,7 +106,7 @@ std::wstring persistant_set::getValue(const std::wstring& name) {
 	return std::wstring(value);
 }
 
-double persistant_set::getValueDouble(const std::wstring& name) {
+double persistant_set::getValueDouble(const std::string& name) {
 	double value = 0.0;
 #ifdef _IRR_WINDOWS_
 
