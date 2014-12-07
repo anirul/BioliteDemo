@@ -62,7 +62,7 @@ int main(int ac, char** av) {
 		std::ostringstream oss("");
 		oss << ex.what() << std::endl;
 #ifdef _IRR_WINDOWS_
-		if (ctx->m_device) {
+		if (ctx && ctx->m_device) {
 			auto* video = ctx->m_device->getVideoDriver();
 			hwnd = reinterpret_cast<HWND>(video->getExposedVideoData().OpenGLWin32.HWnd);
 		}

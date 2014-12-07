@@ -36,7 +36,8 @@ game_logic::game_logic(
 	float plant_income,
 	float fruit_cost,
 	float destroy_multiply) 
-	:	m_timer(NULL),
+	:	m_counter(0),
+		m_timer(NULL),
 		m_last_called(0.0f),
 		m_update_freq(update_freq),
 		m_player_energy(player_energy),
@@ -232,6 +233,8 @@ void game_logic::clickDestroy(const click_desc& cd) {
 void game_logic::tickEnd() {
 	int count_player = 0;
 	int count_enemy = 0;
+	if (m_counter++ < 100) 
+		return;
 	std::list<plant>::iterator ite;
 	for (ite = m_plant_list.begin(); ite != m_plant_list.end(); ++ite) {
 		if (ite->m_player_id == 0) {

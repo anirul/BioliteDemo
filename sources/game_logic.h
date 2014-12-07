@@ -44,7 +44,8 @@ struct click_desc {
 };
 
 class game_logic : public parameter_set_listener {
-protected :
+protected:
+	unsigned int m_counter;
 	irr::ITimer* m_timer;
 	float m_last_called;
 	std::list<plant> m_plant_list;
@@ -81,10 +82,10 @@ protected :
 	void tickPlant();
 	void tickDisplay();
 	void tickEnd();
-public :
+public:
 	//! from parameter_set_listener
 	virtual void operator()(const std::string& name, const std::string& value);
-public :
+public:
 	//! ctor dtor
 	game_logic(
 		float update_freq,
@@ -95,7 +96,7 @@ public :
 		float fruit_cost,
 		float destroy_multiply);
 	virtual ~game_logic();
-public :
+public:
 	//! update game logic
 	void tick();
 	//! just to pass event from the game_state_xml_game or AI

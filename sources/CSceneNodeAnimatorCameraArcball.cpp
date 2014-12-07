@@ -129,8 +129,8 @@ void irr::scene::CSceneNodeAnimatorCameraArcball::animateNode(ISceneNode *node, 
 
 	// move the center according to target
 	Camera->setPosition(pos + target);
-	Camera->setUpVector(up);
-	Camera->setFOV(CamFOV * actualZoom);
+//	Camera->setUpVector(up);
+//	Camera->setFOV(CamFOV * actualZoom);
 }
 
 void irr::scene::CSceneNodeAnimatorCameraArcball::captureMouse() {
