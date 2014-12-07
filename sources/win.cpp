@@ -51,7 +51,7 @@ m_SSAOCombine(0)
 	}
 	m_context->saveConfigToFile("./config.xml");
 	m_lasttimer = m_context->m_device->getTimer()->getTime();
-	std::string media = getPathOfMedia("media.zip");
+	std::string media = "./media.zip";
 	if (m_context->m_device->getFileSystem()->existFile(media.c_str()))
 		if (!m_context->m_device->getFileSystem()->addFileArchive(media.c_str()))
 			throw std::runtime_error("could not open file : " + media);

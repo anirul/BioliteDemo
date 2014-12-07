@@ -59,8 +59,8 @@ game::game(irr::IrrlichtDevice* pdevice, const std::string& xmlFile) {
 		pdevice->getFileSystem()->createXMLReaderUTF8(
 			getPathOfMedia(xmlFile.c_str(), "xml").c_str());
 	if (!xml) {
-		std::ostringstream oss;
-		oss << "ERROR : [" << xmlFile << "] not found!";
+		std::ostringstream oss("");
+		oss << "ERROR : [" << getPathOfMedia(xmlFile.c_str()) << "] not found!";
 		throw std::runtime_error(oss.str());
 	}
 	xml_menu xm(xml, pdevice);

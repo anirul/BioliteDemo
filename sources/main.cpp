@@ -62,7 +62,11 @@ int main(int ac, char** av) {
 		std::ostringstream oss("");
 		oss << ex.what() << std::endl;
 #ifdef _IRR_WINDOWS_
-		MessageBoxA(hwnd, oss.str().c_str(), "Exception", MB_ICONEXCLAMATION);
+		if (ctx->m_device) {
+			auto* video = ctx->m_device->getVideoDriver();
+			hwnd = reinterpret_cast<HWND>(video->getExposedVideoData().OpenGLWin32.HWnd);
+		}
+		MessageBox(hwnd, oss.str().c_str(), "Exception", MB_ICONEXCLAMATION);
 #endif
 #ifdef _IRR_OSX_PLATFORM_
 		if (ctx && ctx->m_device && ctx->m_device->isFullscreen()) {
