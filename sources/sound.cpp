@@ -111,7 +111,8 @@ void sound::operator()(const std::string& name, const std::string& value) {
 			m_music = play(value, true);
 #endif // USE_IRRKLANG
 #ifdef USE_GORILLA
-			stop(m_current_music);
+			if (m_current_music != std::string(""))
+				stop(m_current_music);
 			play(value, true);
 #endif // USE_GORILLA
 			m_current_music = value;

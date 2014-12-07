@@ -47,8 +47,7 @@ public :
 	irr::gui::IGUIFont* m_font;
 public :
 	//! init a game on a device with a xml description file
-	game(
-		irr::IrrlichtDevice* pdevice, 
+	game(irr::IrrlichtDevice* pdevice,
 		const std::string& xmlFile = XML_MENU_FILE);
 	virtual ~game();
 public :

@@ -58,7 +58,7 @@ public :
 		const float& value);
 	std::string getValue(const std::string& name);
 	double getValueDouble(const std::string& name);
-	bool getBool(const std::string& name);
+	bool getValueBool(const std::string& name);
 	void addListener(parameter_set_listener* psl);
 	void removeListener(parameter_set_listener* psl);
 	void dump(std::ostream& os);

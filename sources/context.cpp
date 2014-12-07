@@ -157,7 +157,7 @@ void context::loadConfigFromFile(const std::string& name)
 				if (irr::core::stringw(xml->getNodeName()) ==
 					irr::core::stringw("set-value"))
 				{
-					xml_ui::xml_set_value* p = xml_ui::xml_set_value::parseSetValue(xml, m_device);
+					xml_set_value* p = xml_set_value::parseSetValue(xml, m_device);
 					p->applySetValue();
 					delete p;
 				} else {

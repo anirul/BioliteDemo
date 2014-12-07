@@ -34,32 +34,31 @@
 #include "parameter_set.h"
 
 class xml_set_value : public xml_element {
-private :
+private:
 	std::string m_linked_to;
 	std::string m_value;
-public :
-	static xml_set_value* parseSetValue(
-		irr::io::IXMLReaderUTF8* xml, 
-		irr::IrrlichtDevice* pdevice);
-public :
-	xml_set_value(
-		irr::IrrlichtDevice* pdevice,
-		const std::string& tag,
-		const std::string& value);
+public:
+	static xml_set_value* parseSetValue(irr::io::IXMLReader* xml,
+										irr::IrrlichtDevice* pdevice);
+	static xml_set_value* parseSetValue(irr::io::IXMLReaderUTF8* xml,
+										irr::IrrlichtDevice* pdevice);
+public:
+	xml_set_value(irr::IrrlichtDevice* pdevice,
+				  const std::string& tag,
+				  const std::string& value);
 	virtual ~xml_set_value();
-public :
+public:
 	void applySetValue();
-public :
+public:
 	//! from xml_element
 	virtual bool isIn(const irr::core::vector2d<irr::s32>& mouse) const
-		{ return false; }
-	virtual irr::s32 addElement(
-		irr::gui::IGUIEnvironment* penv, 
-		irr::gui::IGUIElement* parent = NULL);
-	virtual xml_misc::element_type getType() const 
-		{ return xml_misc::XML_SET_VALUE; }
-	virtual bool OnEvent(const irr::SEvent& event) 
-		{ return false; }	
+	{ return false; }
+	virtual irr::s32 addElement(irr::gui::IGUIEnvironment* penv,
+								irr::gui::IGUIElement* parent = NULL);
+	virtual xml_misc::element_type getType() const
+	{ return xml_misc::XML_SET_VALUE; }
+	virtual bool OnEvent(const irr::SEvent& event)
+	{ return false; }
 };
 
 #endif // XML_BIOLITE_SET_VALUE_HEADER_DEFINED

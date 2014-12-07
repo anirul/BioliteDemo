@@ -25,9 +25,11 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <thread>
+
 #include "main.h"
 #include "win.h"
-#include "resolution_chooser.h"
+#include "context.h"
 #include "parameter_set.h"
 
 #ifdef _IRR_OSX_PLATFORM_
@@ -45,128 +47,44 @@ int main(int ac, char** av) {
 #ifdef _IRR_WINDOWS_
 	HWND hwnd = NULL;
 #endif
-	irr::IrrlichtDevice* pdevice = NULL;
-	irr::SIrrlichtCreationParameters params;
+	context* ctx = nullptr;
+	irr_win* win = nullptr;
 	try {
-#ifdef USE_RESOLUTION_CHOOSER
-		{ // resolution chooser
-			pdevice = irr::createDevice(
-				irr::video::EDT_OPENGL,
-				irr::core::dimension2d<unsigned int>(320, 200),
-				16,
-				false,
-				false,
-				true);
-			if (!pdevice) 
-				throw std::runtime_error(
-					"ERROR : Could not create device (resolution chooser)");
-#ifdef _IRR_WINDOWS_
-			if (!pdevice->getFileSystem()->addZipFileArchive("media.zip"))
-				throw std::runtime_error("ERROR : cannot open [media.zip]");
-#endif
-			pdevice->setResizable(false);
-			irr_resolution_chooser irc(pdevice);
-			while (irc.runOnce(pdevice))
-#ifndef _IRR_WINDOWS_
-				usleep(1);
-#else
-				Sleep(1);
-#endif
-			params = irc.getParameters();
-			pdevice->drop();
-			pdevice = NULL;
-			if (!irc.ok()) return 0;
-		}
-#endif // USE_RESOLUTION_CHOOSER
-		{ // start the actual window
-			pdevice =  irr::createDevice(
-#ifdef USE_RESOLUTION_CHOOSER
-				params.DriverType,
-				params.WindowSize,
-				params.Bits,
-				params.Fullscreen,
-				params.Stencilbuffer,
-				params.Vsync
-#else
-				irr::video::EDT_OPENGL,
-				irr::core::dimension2d<unsigned int>(1280, 720),
-				32,
-				false,
-				false,
-				true
-#endif // USE_RESOLUTION_CHOOSER
-				);
-			if (!pdevice) 
-				throw std::runtime_error(
-					"ERROR : Could not create device (main)");
-#ifdef _IRR_WINDOWS_
-			if (!pdevice->getFileSystem()->addZipFileArchive("media.zip", true, true))
-				throw std::runtime_error("ERROR : cannot open [media.zip]");
-#endif
-			pdevice->setResizable(false);
-#ifdef _IRR_WINDOWS_
-			irr::video::SExposedVideoData evd = 
-				pdevice->getVideoDriver()->getExposedVideoData();
-			switch (pdevice->getVideoDriver()->getDriverType()) {
-			case irr::video::EDT_DIRECT3D9 :
-				hwnd = (HWND)evd.D3D9.HWnd;
-				break;
-			case irr::video::EDT_DIRECT3D8 :
-				hwnd = (HWND)evd.D3D8.HWnd;
-				break;
-			case irr::video::EDT_OPENGL :
-				hwnd = (HWND)evd.OpenGLWin32.HWnd;
-				break;
-			default :
-				break;
-			}
-#endif
-			pdevice->setWindowCaption(L"Biolite - Irrlicht Version");
-			irr_win main_logic(pdevice);
-			while (main_logic.runOnce(pdevice)) 
-#ifndef _IRR_WINDOWS_
-				usleep(1);
-#else
-				Sleep(1);
-#endif
-		} // end of the main window
+		win = new irr_win(XML_MENU_FILE);
+		ctx = win->getContext();
+		while (win->runOnce(ctx->m_device))
+			std::this_thread::yield();
 	} catch (const std::runtime_error& ex) {
-		parameter_set::instance()->dump(std::cerr);
 		std::cerr << ex.what() << std::endl;
 		// TODO maybe suppress all this as I am displaying a message above
-#ifdef _IRR_WINDOWS_
 		std::ostringstream oss("");
 		oss << ex.what() << std::endl;
-		parameter_set::instance()->dump(std::cerr);
+#ifdef _IRR_WINDOWS_
 		MessageBoxA(hwnd, oss.str().c_str(), "Exception", MB_ICONEXCLAMATION);
 #endif
 #ifdef _IRR_OSX_PLATFORM_
-		if (pdevice && pdevice->isFullscreen()) {
+		if (ctx && ctx->m_device && ctx->m_device->isFullscreen()) {
 			// to avoid popup window hidden behind the game
-			pdevice->closeDevice(); 
+			ctx->m_device->closeDevice();
 		}
-		std::ostringstream oss("");
-		oss << ex.what() << std::endl;
-		parameter_set::instance()->dump(std::cerr);
 		CFOptionFlags responseFlags = 0;
-		CFStringRef errorMsg = CFStringCreateWithCString(
-			kCFAllocatorDefault, 
-			oss.str().c_str(), 
-			kCFStringEncodingASCII);
-		CFUserNotificationDisplayAlert(
-			20.0, 
-			3, 
-			NULL, 
-			NULL, 
-			NULL, 
-			CFSTR("Error"), 
-			errorMsg, 
-			CFSTR("OK"), 
-			NULL, 
-			NULL, 
-			&responseFlags);
+		CFStringRef errorMsg = CFStringCreateWithCString(kCFAllocatorDefault,
+														 oss.str().c_str(),
+														 kCFStringEncodingASCII);
+		CFUserNotificationDisplayAlert(20.0,
+									   3,
+									   NULL,
+									   NULL,
+									   NULL,
+									   CFSTR("Error"),
+									   errorMsg,
+									   CFSTR("OK"),
+									   NULL,
+									   NULL,
+									   &responseFlags);
 #endif
 	}
+	if (win) delete win;
 	return 0;
 }
 

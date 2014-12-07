@@ -71,7 +71,7 @@ std::string parameter_set::getValue(const std::string& name) {
 	return m_parameter_set[name];
 }
 
-bool parameter_set::getBool(const std::string& name) {
+bool parameter_set::getValueBool(const std::string& name) {
 	if (m_parameter_set.find(name) == m_parameter_set.end())
 		return false;
 	return (m_parameter_set[name] == std::string("true"));

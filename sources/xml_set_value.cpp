@@ -27,6 +27,65 @@
 
 #include "xml_set_value.h"
 
+xml_set_value* xml_set_value::parseSetValue(irr::io::IXMLReader* xml,
+											irr::IrrlichtDevice* pdevice)
+{
+	parameter_set* pps = parameter_set::instance();
+	std::wstring linked_to(L"");
+	std::wstring value(L"");
+	if (xml->getAttributeCount() != 2) {
+		std::ostringstream oss("");
+		oss << "XML PARSE ERROR in file (";
+		oss << pps->getValue("fattycurd.xml.file");
+		oss << ") : Number of xml attibutes of set value must ";
+		oss << " be 2 is : ";
+		oss << xml->getAttributeCount();
+		oss << std::endl;
+		for (unsigned int i = 0; i < xml->getAttributeCount(); ++i) {
+			oss << "   [" << xml->getAttributeName(i);
+			oss << ":" << xml->getAttributeValue(i);
+			oss << "]" << std::endl;
+		}
+		throw std::runtime_error(oss.str());
+	}
+	for (unsigned int i = 0; i < xml->getAttributeCount(); ++i) {
+		irr::core::stringw attrib = xml->getAttributeName(i);
+		if (attrib == irr::core::stringw(L"linked-to")) {
+			linked_to = xml->getAttributeValue(i);
+			continue;
+		}
+		if (attrib == irr::core::stringw(L"value")) {
+			value = xml->getAttributeValue(i);
+			continue;
+		}
+		std::ostringstream oss("");
+		oss << "XML PARSE ERROR in file (";
+		oss << pps->getValue("fattycurd.xml.file");
+		oss << ") : Unknown attributes in set value : ";
+		oss << xml->getAttributeName(i);
+		throw std::runtime_error(oss.str().c_str());
+	}
+	if (!linked_to.size()) {
+		std::ostringstream oss("");
+		oss << "XML PARSE ERROR in file (";
+		oss << pps->getValue("fattycurd.xml.file");
+		oss << ") : missing [linked-to] in set value";
+		throw std::runtime_error(oss.str().c_str());
+	}
+	if (!value.size()) {
+		std::ostringstream oss("");
+		oss << "XML PARSE ERROR in file (";
+		oss << pps->getValue("fattycurd.xml.file");
+		oss << ") : missing [value] in set value";
+		throw std::runtime_error(oss.str().c_str());
+	}
+	xml_set_value* set_value = new xml_set_value(pdevice,
+												 std::string(linked_to.begin(), linked_to.end()),
+												 std::string(value.begin(), value.end()));
+	return set_value;
+}
+
+
 xml_set_value* xml_set_value::parseSetValue(
 	irr::io::IXMLReaderUTF8* xml,
 	irr::IrrlichtDevice* pdevice)

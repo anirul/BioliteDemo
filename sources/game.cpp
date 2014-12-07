@@ -47,7 +47,7 @@ game::game(irr::IrrlichtDevice* pdevice, const std::string& xmlFile) {
 	m_pstate = NULL;
 	m_pworld = NULL;
 	m_font = NULL;
-	sound::instance();
+	sound::instance(pdevice);
 	
 	// get screen size
 	irr::video::IVideoDriver* pvideo = pdevice->getVideoDriver();

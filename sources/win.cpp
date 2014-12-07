@@ -51,12 +51,12 @@ m_SSAOCombine(0)
 	}
 	m_context->saveConfigToFile("./config.xml");
 	m_lasttimer = m_context->m_device->getTimer()->getTime();
-	std::string media = fattycurd::utils::getPathOfMedia("media.zip");
+	std::string media = getPathOfMedia("media.zip");
 	if (m_context->m_device->getFileSystem()->existFile(media.c_str()))
 		if (!m_context->m_device->getFileSystem()->addFileArchive(media.c_str()))
 			throw std::runtime_error("could not open file : " + media);
 	// create the game
-	m_pgame = new game::game(m_context, xml);
+	m_pgame = new game(m_context->m_device, xml);
 }
 
 irr_win::~irr_win() {
@@ -72,7 +72,7 @@ bool irr_win::runOnce(irr::IrrlichtDevice* pdevice) {
 			if (pvideo && pvideo->beginScene()) {
 				pdevice->getSceneManager()->drawAll();
 				// m_context->m_effect->update();
-				m_pgame->render(m_context);
+				m_pgame->render(m_context->m_device);
 				pdevice->getGUIEnvironment()->drawAll();
 				pvideo->endScene();
 			}
