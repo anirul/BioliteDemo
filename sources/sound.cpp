@@ -225,11 +225,21 @@ void sound::stop(const std::string& name) {
 		ss << "unknown sound : " << name;
 		throw std::runtime_error(ss.str());
 	}
-	if (ga_handle_stop(it->second) != GC_SUCCESS) {
-		std::ostringstream oss;
-		oss << "error stopping sound : " << name;
-		throw std::runtime_error(oss.str());
+	if (!ga_handle_finished(it->second)) {
+		if (ga_handle_stop(it->second) != GC_SUCCESS) {
+			std::ostringstream oss;
+			oss << "error stopping sound : " << name;
+			throw std::runtime_error(oss.str());
+		}
 	}
+	if (!ga_handle_destroyed(it->second)) {
+		if (ga_handle_destroy(it->second) != GC_SUCCESS) {
+			std::ostringstream oss;
+			oss << "error destroying sound : " << name;
+			throw std::runtime_error(oss.str());
+		}
+	}
+	m_buffers.erase(it);
 #endif // USE_GORILLA
 }
 
