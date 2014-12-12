@@ -35,9 +35,10 @@
 
 struct click_desc {
 	enum click_type {
-		ct_leaf_tree,
-		ct_fruit_tree,
-		ct_destroy
+		ct_dryad,
+		ct_harvester,
+		ct_damager,
+		ct_fetch,
 	} m_click_t;
 	int m_player_id;
 	irr::core::vector3df m_position;
@@ -52,16 +53,18 @@ protected:
 	plant m_plant_flyby;
 	std::list<click_desc> m_player_click_list;
 	std::map<int, int> m_player_plant_map;
-	std::map<int, int> m_player_fruit_map;
 	// parameter from contructor
 	float m_update_freq;
 	std::vector<float> m_player_energy;
-	float m_plant_store;
 	float m_plant_speed;
-	float m_plant_cost;
 	float m_plant_income;
-	float m_fruit_cost;
-	float m_destroy_multiply;
+	float m_dryad_life;
+	float m_dryad_cost;
+	float m_harvester_life;
+	float m_harvester_cost;
+	float m_damager_life;
+	float m_damager_cost;
+	float m_fruit_energy;
 	float m_min_dist;
 	float m_max_dist;
 	float m_nrj_1;
@@ -72,10 +75,12 @@ protected:
 	easy_ai* m_ai_easy;
 	medium_ai* m_ai_medium;
 	hard_ai* m_ai_hard;
-	// click
-	void clickFruit(const click_desc& cd);
-	void clickLeaf(const click_desc& cd);
-	void clickDestroy(const click_desc& cd);
+public:
+	// click actions
+	void clickDryad(const click_desc& cd);
+	void clickHarvester(const click_desc& cd);
+	void clickDamager(const click_desc& cd);
+	void clickFetch(const click_desc& cd);
 	// tick
 	void tickAi();
 	void tickClick();
@@ -91,10 +96,15 @@ public:
 		float update_freq,
 		std::vector<float> player_energy,
 		float plant_speed,
-		float plant_cost,
+		float dryad_life,
+		float dryad_cost,
+		float harvester_life,
+		float harvester_cost,
+	   	float damager_life,
+		float damager_cost,
 		float plant_income,
 		float fruit_cost,
-		float destroy_multiply);
+		float fruit_energy);
 	virtual ~game_logic();
 public:
 	//! update game logic

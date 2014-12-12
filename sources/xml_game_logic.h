@@ -44,10 +44,15 @@ public :
 		float update_freq,
 		std::vector<float> player_energy,
 		float plant_speed,
-		float plant_cost,
 		float plant_income,
+		float dryad_life,
+		float dryad_cost,
+		float harvester_life,
+		float harvester_cost,
+		float damager_life,
+		float damager_cost,
 		float fruit_cost,
-		float destroy_multiply);
+		float fruit_energy);
 	//! destructor
 	virtual ~xml_game_logic();
 };

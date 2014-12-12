@@ -32,30 +32,36 @@ game_logic::game_logic(
 	float update_freq,
 	std::vector<float> player_energy,
 	float plant_speed,
-	float plant_cost,
+	float dryad_life,
+	float dryad_cost,
+	float harvester_life,
+	float harvester_cost,
+	float damager_life,
+	float damager_cost,
 	float plant_income,
 	float fruit_cost,
-	float destroy_multiply) 
+	float fruit_energy)
 	:	m_counter(0),
 		m_timer(NULL),
 		m_last_called(0.0f),
 		m_update_freq(update_freq),
 		m_player_energy(player_energy),
 		m_plant_speed(plant_speed),
-		m_plant_cost(plant_cost),
 		m_plant_income(plant_income),
-		m_fruit_cost(fruit_cost),
-		m_destroy_multiply(destroy_multiply),
+		m_dryad_life(dryad_life),
+		m_dryad_cost(dryad_cost),
+		m_harvester_life(harvester_life),
+		m_harvester_cost(harvester_cost),
+		m_damager_life(damager_life),
+		m_damager_cost(damager_cost),
+		m_fruit_energy(fruit_energy),
 		m_ai_easy(NULL),
 		m_ai_medium(NULL),
 		m_ai_hard(NULL)
 {
-	parameter_set::instance()->setValue(
-		std::string("biolite.plant.cost"),
-		m_plant_cost);
-	parameter_set::instance()->setValue(
-		std::string("biolite.fruit.cost"),
-		m_fruit_cost);
+	parameter_set::instance()->setValue("biolite.dryad.cost", m_dryad_cost);
+	parameter_set::instance()->setValue("biolite.harvester.cost", m_harvester_cost);
+	parameter_set::instance()->setValue("biolite.damager.cost", m_damager_cost);
 	m_min_dist = (float)parameter_set::instance()->getValueDouble(
 		"biolite.logic.min-distance");
 	m_max_dist = (float)parameter_set::instance()->getValueDouble(
@@ -64,25 +70,12 @@ game_logic::game_logic(
 		"biolite.logic.grow1");
 	m_nrj_2 = (float)parameter_set::instance()->getValueDouble(
 		"biolite.logic.grow2");
-	m_plant_store = (float)parameter_set::instance()->getValueDouble(
-		"biolite.logic.plant-store");
-	{
-		std::stringstream ss("");
-		ss << (int)(0.1 * m_destroy_multiply);
-		ss << "-";
-		ss << (int)(m_plant_store * m_destroy_multiply);
-		parameter_set::instance()->setValue(
-			std::string("biolite.destroy.cost"),
-			ss.str());
-	}
 	for (int i = 0; i < MAX_CLIENT; ++i)
 		m_player_plant_map.insert(std::make_pair(i, 0));
-	for (int i = 0; i < MAX_CLIENT; ++i) 
-		m_player_fruit_map.insert(std::make_pair(i, 0));
 	m_plant_flyby.m_player_id = 0;
 	m_plant_flyby.m_energy = 10.0;
 	m_plant_flyby.m_update = true;
-	m_plant_flyby.m_plant_t = plant::leaf;
+	m_plant_flyby.m_plant_t = plant::harvester;
 	parameter_set::instance()->addListener(this);
 }
 
@@ -139,7 +132,7 @@ void game_logic::tickAi() {
 		if (ai_difficulty == std::string("hard")) {
 			if (m_ai_hard) {
 				m_ai_hard->tick(i + 1);
-				// help the AI cheeting a little bit
+				// help the AI cheeting a lot
 				if (m_player_energy.at(i + 1))
 					m_player_energy.at(i + 1) += 5;
 			}
@@ -155,22 +148,109 @@ void game_logic::tickClick() {
 		++ite)
 	{
 		switch (ite->m_click_t) {
-		case click_desc::ct_destroy :
-			clickDestroy((*ite));
-			continue;
-		case click_desc::ct_fruit_tree :
-			clickFruit((*ite));
-			continue;
-		case click_desc::ct_leaf_tree :
-		default :
-			clickLeaf((*ite));
-			continue;
+			case click_desc::ct_dryad :
+				clickDryad((*ite));
+				continue;
+			case click_desc::ct_harvester :
+				clickHarvester((*ite));
+				continue;
+			case click_desc::ct_damager :
+				clickDamager((*ite));
+				continue;
+			case click_desc::ct_fetch :
+				clickFetch((*ite));
+				continue;
+			default:
+				std::cerr << "unknown click type" << std::endl;
+				continue;
 		}
 	}
 	m_player_click_list.clear();
 }
 
-void game_logic::clickDestroy(const click_desc& cd) {
+// plant a dryad into the world!
+void game_logic::clickDryad(const click_desc& cd) {
+	// check if player can buy a plant
+	if (m_player_energy.at(cd.m_player_id) >= m_dryad_cost) {
+		plant p;
+		p.m_plant_t = plant::dryad;
+		p.m_player_id = cd.m_player_id;
+		p.m_plant_mesh_t = plant::null;
+		p.m_energy = 0.1f;
+		p.m_hit = false;
+		p.m_position = cd.m_position;
+		if (addPlant(p)) {
+			// plant added so pay!
+			m_player_energy.at(cd.m_player_id) -= m_dryad_cost;
+			if (cd.m_player_id == 0) {
+				sound::instance()->play("planting");
+				parameter_set::instance()->setValue("biolite.action.type", "fetch");
+			}
+		} else {
+			if (cd.m_player_id == 0)
+				sound::instance()->play("wrong");
+		}
+	} else {
+		if (cd.m_player_id == 0)
+			sound::instance()->play("error");
+	}
+}
+
+void game_logic::clickHarvester(const click_desc& cd) {
+	// check if player can buy a plant
+	if (m_player_energy.at(cd.m_player_id) >= m_harvester_cost) {
+		plant p;
+		p.m_plant_t = plant::harvester;
+		p.m_player_id = cd.m_player_id;
+		p.m_plant_mesh_t = plant::null;
+		p.m_energy = 0.1f;
+		p.m_hit = false;
+		p.m_position = cd.m_position;
+		if (addPlant(p)) {
+			// plant added so pay!
+			m_player_energy.at(cd.m_player_id) -= m_dryad_cost;
+			if (cd.m_player_id == 0) {
+				sound::instance()->play("planting");
+				parameter_set::instance()->setValue("biolite.action.type", "fetch");
+			}
+		} else {
+			if (cd.m_player_id == 0)
+				sound::instance()->play("wrong");
+		}
+	} else {
+		if (cd.m_player_id == 0)
+			sound::instance()->play("error");
+	}
+}
+
+void game_logic::clickDamager(const click_desc& cd) {
+	// check if player can buy a plant
+	if (m_player_energy.at(cd.m_player_id) >= m_damager_cost) {
+		plant p;
+		p.m_plant_t = plant::damager;
+		p.m_player_id = cd.m_player_id;
+		p.m_plant_mesh_t = plant::null;
+		p.m_energy = 0.1f;
+		p.m_hit = false;
+		p.m_position = cd.m_position;
+		if (addPlant(p)) {
+			// plant added so pay!
+			m_player_energy.at(cd.m_player_id) -= m_dryad_cost;
+			if (cd.m_player_id == 0) {
+				sound::instance()->play("planting");
+				parameter_set::instance()->setValue("biolite.action.type", "fetch");
+			}
+		} else {
+			if (cd.m_player_id == 0)
+				sound::instance()->play("wrong");
+		}
+	} else {
+		if (cd.m_player_id == 0)
+			sound::instance()->play("error");
+	}
+}
+
+void game_logic::clickFetch(const click_desc& cd) {
 	{ // check distance
 		if (cd.m_position.getLength() <= 1.0f) {
 			if (cd.m_player_id == 0)
@@ -180,7 +260,6 @@ void game_logic::clickDestroy(const click_desc& cd) {
 		std::list<plant>::iterator ite;
 		irr::core::vector3df tp = cd.m_position;
 		float closest_mine = 1.0f;
-		int current_count = 0;
 		// check distance
 		for (ite = m_plant_list.begin(); ite != m_plant_list.end(); ++ite) {
 			irr::core::vector3df pos = ite->m_position;
@@ -190,122 +269,27 @@ void game_logic::clickDestroy(const click_desc& cd) {
 					closest_mine = distance;
 		}
 		// check if the current player has any plant nearby
-		// check also that this is not a player plant
-		if ((closest_mine > m_max_dist) || (closest_mine < m_min_dist)) {
-			if (cd.m_player_id == 0)
+		// check also that this is a player plant
+		if (closest_mine < m_min_dist) {
+			if (cd.m_player_id != 0)
 				sound::instance()->play("error");
 			return;
 		}
 	}
-	{ // destroy
-		std::list<plant>::iterator ite;
-		for (ite = m_plant_list.begin(); ite != m_plant_list.end(); ++ite) {
-			if (ite->m_player_id == cd.m_player_id) continue;
-			irr::core::vector3df distance = ite->m_position - cd.m_position;
+	{ // gather
+		for (auto& p : m_plant_list) {
+			// can only gather on own plants
+			if (p.m_player_id != cd.m_player_id) continue;
+			if (p.m_plant_t != plant::harvester) continue;
+			irr::core::vector3df distance = p.m_position - cd.m_position;
 			// check distance
 			if (distance.getLength() < m_min_dist) {
-				// check energy
-				if (m_player_energy.at(cd.m_player_id) > 
-					ite->m_energy * m_destroy_multiply) 
-				{
-					// pay
-					m_player_energy.at(cd.m_player_id) -=
-						ite->m_energy * m_destroy_multiply;
-					// this tree was hit
-					ite->m_hit = true;
-					// if this was a mamatree then take over
-					if (ite->m_plant_mesh_t == plant::mama_tree)
-						takeOverPlayer(ite->m_player_id, cd.m_player_id);
-					if (cd.m_player_id == 0)
-						sound::instance()->play("planting");
-					if (ite->m_player_id == 0)
-						sound::instance()->play("wrong");
-					return;
-				} else {
-					if (cd.m_player_id == 0)
-						sound::instance()->play("wrong");
-				}
+				// check if plant can be harvested
+				if (!p.m_fruit) continue;
+				p.m_fruit = false;
+				m_player_energy.at(cd.m_player_id) += m_fruit_energy;
 			}
 		}
-	}
-}
-
-void game_logic::tickEnd() {
-	int count_player = 0;
-	int count_enemy = 0;
-	if (m_counter++ < 100) 
-		return;
-	std::list<plant>::iterator ite;
-	for (ite = m_plant_list.begin(); ite != m_plant_list.end(); ++ite) {
-		if (ite->m_player_id == 0) {
-			count_player++;
-		} else {
-			count_enemy++;
-		}
-	}
-	const float nrj_player = m_player_energy.at(0);
-	float nrj_enemy = 0.0f;
-	for (int i = 1; i < MAX_CLIENT; ++i) {
-		nrj_enemy += m_player_energy.at(i);
-	}
-	if (count_player == 0 && nrj_player == 0.0f)
-		parameter_set::instance()->setValue(
-											std::string("biolite.game.end"), 
-											std::string("defeat"));
-	if (static_cast<float> (count_enemy) * nrj_enemy == 0.0f)
-		parameter_set::instance()->setValue(
-											std::string("biolite.game.end"),
-											std::string("victory"));
-}
-
-void game_logic::clickFruit(const click_desc& cd) {
-	// check if player can buy a plant
-	if (m_player_energy.at(cd.m_player_id) >= m_fruit_cost) {
-		plant p;
-		p.m_plant_t = plant::fruit;
-		p.m_player_id = cd.m_player_id;
-		p.m_plant_mesh_t = plant::null;
-		p.m_energy = 0.1f;
-		p.m_hit = false;
-		p.m_position = cd.m_position;
-		if (addPlant(p)) {
-			// plant added so pay!
-			m_player_energy.at(cd.m_player_id) -= m_fruit_cost;
-			if (cd.m_player_id == 0)
-				sound::instance()->play("planting");
-		} else {
-			if (cd.m_player_id == 0)
-				sound::instance()->play("wrong");
-		}
-	} else {
-		if (cd.m_player_id == 0)
-			sound::instance()->play("error");
-	}
-
-}
-		
-void game_logic::clickLeaf(const click_desc& cd) {
-	// check if player can buy a plant
-	if (m_player_energy.at(cd.m_player_id) >= m_plant_cost) {
-		plant p;
-		p.m_plant_t = plant::leaf;
-		p.m_player_id = cd.m_player_id;
-		p.m_plant_mesh_t = plant::null;
-		p.m_energy = 0.1f;
-		p.m_hit = false;
-		p.m_position = cd.m_position;
-		if (addPlant(p)) {
-			// plant added so pay!
-			m_player_energy.at(cd.m_player_id) -= m_plant_cost;
-			if (cd.m_player_id == 0)
-				sound::instance()->play("planting");
-		} else {
-			if (cd.m_player_id == 0)
-				sound::instance()->play("wrong");
-		}
-	} else {
-		if (cd.m_player_id == 0)
-			sound::instance()->play("error");
 	}
 }
 
@@ -321,7 +305,6 @@ void game_logic::tickPlant() {
 		sun.normalize();
 		float exposure = n.dotProduct(sun);
 		int nb_plant = m_player_plant_map[p.m_player_id];
-		int nb_fruit = m_player_fruit_map[p.m_player_id];
 		// skip ghost plant
 		if ((p.m_plant_mesh_t == plant::ghost_red) || 
 			(p.m_plant_mesh_t == plant::ghost_green))
@@ -337,12 +320,12 @@ void game_logic::tickPlant() {
 		}
 		// first plant of current player (mama_tree)
 		if (nb_plant == 0) {
-			p.m_energy = m_plant_store;
+			p.m_energy = m_dryad_life;
 			p.add(plant::mama_tree, m_parent, m_mgr);
 			continue;
 		}
 		if ((!p.m_hit) && (p.m_plant_mesh_t == plant::mama_tree)) {
-			p.m_energy = m_plant_store;
+			p.m_energy = m_dryad_life;
 			p.add(plant::mama_tree, m_parent, m_mgr);
 			// mama tree also increase energy
 			float& player_nrj = m_player_energy.at(p.m_player_id);
@@ -370,7 +353,7 @@ void game_logic::tickPlant() {
 				p.add(plant::plant_die_3, m_parent, m_mgr);
 				continue;
 			}
-			if (p.m_plant_t == plant::fruit) {
+			if (p.m_plant_t == plant::harvester) {
 				p.add(plant::fruit_tree, m_parent, m_mgr);
 				continue;
 			}
@@ -395,10 +378,7 @@ void game_logic::tickDisplay() {
 			std::string value;
 			{
 				float& energy = m_player_energy.at(i);
-				int nb_fruit = m_player_fruit_map[i];
-				if (energy > m_plant_store * (nb_fruit + 1))
-					energy = m_plant_store * (nb_fruit + 1);
-				if (energy < 0.0f) 
+				if (energy < 0.0f)
 					energy = 0.0f;
 				std::stringstream ss("");
 				ss << (int)energy;
@@ -426,7 +406,7 @@ void game_logic::tickDisplay() {
 				{
 					if (ite->m_player_id == i) {
 						nb_plant++;
-						if (ite->m_plant_t == plant::fruit) {
+						if (ite->m_plant_t == plant::harvester) {
 							nb_fruit++;
 						}
 					}
@@ -434,7 +414,6 @@ void game_logic::tickDisplay() {
 				std::stringstream ss("");
 				ss << nb_plant;
 				m_player_plant_map[i] = nb_plant;
-				m_player_fruit_map[i] = nb_fruit;
 				value = ss.str();
 			}
 			{
@@ -448,6 +427,33 @@ void game_logic::tickDisplay() {
 		}
 	}
 }
+
+void game_logic::tickEnd() {
+	int count_player = 0;
+	int count_enemy = 0;
+	if (m_counter++ < 100)
+		return;
+	std::list<plant>::iterator ite;
+	for (ite = m_plant_list.begin(); ite != m_plant_list.end(); ++ite) {
+		if (ite->m_player_id == 0) {
+			count_player++;
+		} else {
+			count_enemy++;
+		}
+	}
+	const float nrj_player = m_player_energy.at(0);
+	float nrj_enemy = 0.0f;
+	for (int i = 1; i < MAX_CLIENT; ++i) {
+		nrj_enemy += m_player_energy.at(i);
+	}
+	if (count_player == 0 && nrj_player == 0.0f)
+		parameter_set::instance()->setValue(std::string("biolite.game.end"),
+											std::string("defeat"));
+	if (static_cast<float> (count_enemy) * nrj_enemy == 0.0f)
+		parameter_set::instance()->setValue(std::string("biolite.game.end"),
+											std::string("victory"));
+}
+
 
 void game_logic::render(game* pg, irr::IrrlichtDevice* pdevice) {
 	// init AIs
@@ -536,7 +542,7 @@ void game_logic::setPlanetName(const std::string& file) {
 }
 
 void game_logic::takeOverPlayer(int player_lose, int player_win) {
-	m_player_energy.at(player_win) =+ m_player_energy.at(player_lose);
+	m_player_energy.at(player_win) += m_player_energy.at(player_lose);
 	m_player_energy.at(player_lose) = 0;
 	std::list<plant>::iterator ite;
 	for (ite = m_plant_list.begin();

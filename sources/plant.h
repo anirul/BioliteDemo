@@ -56,9 +56,9 @@ public :
 		mama_tree = 42
 	};
 	enum plant_type {
-		leaf = 0,
-		fruit = 20,
-		mama = 40
+		dryad = 0,
+		harvester = 20,
+		damager = 40
 	};
 protected :
 	irr::scene::IAnimatedMeshSceneNode* m_plant_node;
@@ -90,7 +90,9 @@ public :
 	//! load the mesh
 	static void init(irr::IrrlichtDevice* pdevice);
 public :
-	plant() : m_plant_node(NULL), m_plant_mesh_t(null), m_plant_t(leaf) {}
+	plant() :
+	m_plant_node(NULL), m_fruit(false), m_plant_mesh_t(null), m_plant_t(dryad)
+	{}
 	virtual ~plant();
 public :
 	void remove();
@@ -103,6 +105,7 @@ public :
 	float m_energy;
 	bool m_hit;
 	bool m_update;
+	bool m_fruit;
 	int m_player_id;
 	plant_mesh_type m_plant_mesh_t;
 	plant_type m_plant_t;

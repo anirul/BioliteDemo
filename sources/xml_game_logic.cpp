@@ -33,9 +33,9 @@
 std::string xml_game_logic::parseGameLogic(irr::io::IXMLReaderUTF8* xml) {
 	bool fault = true;
 	std::string file("");
-	if (xml->getAttributeCount() > 0) 
+	if (xml->getAttributeCount() > 0)
 		throw std::runtime_error(
-			"XML PARSE ERROR : there is no attributes in game");
+								 "XML PARSE ERROR : there is no attributes in game");
 	do {
 		if (xml->getNodeType() == irr::io::EXN_ELEMENT_END)
 			throw std::runtime_error("XML PARSE ERROR : this node has no text");
@@ -43,25 +43,25 @@ std::string xml_game_logic::parseGameLogic(irr::io::IXMLReaderUTF8* xml) {
 			file = xml->getNodeData();
 			if (!file.size())
 				throw std::runtime_error(
-					"XML PARSE ERROR : game cannot be empty");
+										 "XML PARSE ERROR : game cannot be empty");
 			fault = false;
 			break;
 		}
 	} while (xml->read());
 	if (fault)
 		throw std::runtime_error(
-			"XML PARSE ERROR : unexpected end of file in game");
+								 "XML PARSE ERROR : unexpected end of file in game");
 	return file;
 }
 
 xml_game_logic* xml_game_logic::parseGameLogic(
-	const std::string& file, 
-	irr::io::IFileSystem* fs) 
+											   const std::string& file,
+											   irr::io::IFileSystem* fs)
 {
 	// game XML loading
-	irr::io::IXMLReaderUTF8* xml = 
-		fs->createXMLReaderUTF8(
-			getPathOfMedia(file.c_str(), "xml").c_str());
+	irr::io::IXMLReaderUTF8* xml =
+	fs->createXMLReaderUTF8(
+							getPathOfMedia(file.c_str(), "xml").c_str());
 	if (!xml) {
 		std::ostringstream oss("");
 		oss << "ERROR : [" << file << "] not found!";
@@ -71,10 +71,15 @@ xml_game_logic* xml_game_logic::parseGameLogic(
 	float update_freq;
 	std::vector<float> player_energy(4);
 	float plant_speed;
-	float plant_cost;
+	float dryad_life;
+	float dryad_cost;
+	float harvester_life;
+	float harvester_cost;
+	float damager_life;
+	float damager_cost;
 	float plant_income;
 	float fruit_cost;
-	float destroy_multiply;
+	float fruit_energy;
 	std::string planet_name("");
 	std::list<plant> plant_list;
 	// parse the game file
@@ -82,8 +87,8 @@ xml_game_logic* xml_game_logic::parseGameLogic(
 		if (xml->getNodeType() == irr::io::EXN_ELEMENT) {
 			std::string elementName = xml->getNodeName();
 			if (elementName == std::string("game")) {
-				if (xml->getAttributeCount() != 10) throw std::runtime_error(
-					"XML PARSE ERROR : game must have 10 attributes");
+				if (xml->getAttributeCount() != 15)
+					throw std::runtime_error("XML PARSE ERROR : game must have 15 attributes");
 				for (unsigned int i = 0; i < xml->getAttributeCount(); ++i) {
 					std::string attrib = xml->getAttributeName(i);
 					if (attrib == std::string("update-freq")) continue;
@@ -92,10 +97,15 @@ xml_game_logic* xml_game_logic::parseGameLogic(
 					if (attrib == std::string("player2-energy")) continue;
 					if (attrib == std::string("player3-energy")) continue;
 					if (attrib == std::string("plant-speed")) continue;
-					if (attrib == std::string("plant-cost")) continue;
 					if (attrib == std::string("plant-income")) continue;
+					if (attrib == std::string("dryad-life")) continue;
+					if (attrib == std::string("dryad-cost")) continue;
+					if (attrib == std::string("harvester-life")) continue;
+					if (attrib == std::string("harvester-cost")) continue;
+					if (attrib == std::string("damager-life")) continue;
+					if (attrib == std::string("damager-cost")) continue;
 					if (attrib == std::string("fruit-cost")) continue;
-					if (attrib == std::string("destroy-multiply")) continue;
+					if (attrib == std::string("fruit-energy")) continue;
 					{
 						std::stringstream ss("");
 						ss << "XML PARSER ERROR : unknown attribute in game : ";
@@ -104,28 +114,31 @@ xml_game_logic* xml_game_logic::parseGameLogic(
 					}
 				}
 				update_freq = xml->getAttributeValueAsFloat("update-freq");
-				player_energy.at(0) = 
-					xml->getAttributeValueAsFloat("player0-energy");
-				player_energy.at(1) = 
-					xml->getAttributeValueAsFloat("player1-energy");
-				player_energy.at(2) = 
-					xml->getAttributeValueAsFloat("player2-energy");
-				player_energy.at(3) = 
-					xml->getAttributeValueAsFloat("player3-energy");
+				player_energy.at(0) =
+				xml->getAttributeValueAsFloat("player0-energy");
+				player_energy.at(1) =
+				xml->getAttributeValueAsFloat("player1-energy");
+				player_energy.at(2) =
+				xml->getAttributeValueAsFloat("player2-energy");
+				player_energy.at(3) =
+				xml->getAttributeValueAsFloat("player3-energy");
 				plant_speed = xml->getAttributeValueAsFloat("plant-speed");
-				plant_cost = xml->getAttributeValueAsFloat("plant-cost");
+				dryad_life = xml->getAttributeValueAsFloat("dryad-life");
+				dryad_cost = xml->getAttributeValueAsFloat("dryad-cost");
+				harvester_life = xml->getAttributeValueAsFloat("harvester-life");
+				harvester_cost = xml->getAttributeValueAsFloat("harvester-cost");
+				damager_life = xml->getAttributeValueAsFloat("damager-life");
+				damager_cost = xml->getAttributeValueAsFloat("damager-cost");
 				plant_income = xml->getAttributeValueAsFloat("plant-income");
 				fruit_cost = xml->getAttributeValueAsFloat("fruit-cost");
-				destroy_multiply = xml->getAttributeValueAsFloat(
-					"destroy-multiply");
+				fruit_energy = xml->getAttributeValueAsFloat("fruit-energy");
 			}
 			// found a planet
 			if (elementName == std::string("planet")) {
 				if (planet_name != std::string("")) {
 					planet_name = xml_planet::parsePlanet(xml);
 				} else {
-					throw std::runtime_error(
-						"XML PARSE ERROR : only one planet per game");
+					throw std::runtime_error("XML PARSE ERROR : only one planet per game");
 				}
 			}
 			if (elementName == std::string("plant"))
@@ -135,14 +148,18 @@ xml_game_logic* xml_game_logic::parseGameLogic(
 		if ((xml->getNodeType() == irr::io::EXN_ELEMENT_END) &&
 			(std::string(xml->getNodeName()) == std::string("game")))
 		{
-			xml_game_logic* xgl = new xml_game_logic(
-				update_freq,
-				player_energy,
-				plant_speed,
-				plant_cost,
-				plant_income,
-				fruit_cost,
-				destroy_multiply);
+			xml_game_logic* xgl = new xml_game_logic(update_freq,
+													 player_energy,
+													 plant_speed,
+													 dryad_life,
+													 dryad_cost,
+													 harvester_life,
+													 harvester_cost,
+													 damager_life,
+													 damager_cost,
+													 plant_income,
+													 fruit_cost,
+													 fruit_energy);
 			if (planet_name.size())
 				xgl->setPlanetName(planet_name);
 			else
@@ -156,21 +173,29 @@ xml_game_logic* xml_game_logic::parseGameLogic(
 	return NULL;
 }
 
-xml_game_logic::xml_game_logic(
-	float update_freq,
-	std::vector<float> player_energy,
-	float plant_speed,
-	float plant_cost,
-	float plant_income,
-	float fruit_cost,
-	float destroy_multiply)
-	:	game_logic(
-			update_freq, 
-			player_energy, 
-			plant_speed, 
-			plant_cost, 
-			plant_income,
-			fruit_cost,
-			destroy_multiply) {}
-	
+xml_game_logic::xml_game_logic(float update_freq,
+							   std::vector<float> player_energy,
+							   float plant_speed,
+							   float plant_income,
+							   float dryad_life,
+							   float dryad_cost,
+							   float harvester_life,
+							   float harvester_cost,
+							   float damager_life,
+							   float damager_cost,
+							   float fruit_cost,
+							   float fruit_energy) :
+game_logic(update_freq,
+		   player_energy,
+		   plant_speed,
+		   dryad_life,
+		   dryad_cost,
+		   harvester_life,
+		   harvester_cost,
+		   damager_life,
+		   damager_cost,
+		   plant_income,
+		   fruit_cost,
+		   fruit_energy) {}
+
 xml_game_logic::~xml_game_logic() {}

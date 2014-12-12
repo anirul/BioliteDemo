@@ -38,24 +38,28 @@ protected :
 	game_logic* m_gl;
 public :
 	ai(game_logic* gl, world* pw) : m_pw(pw), m_gl(gl) {}
+	virtual ~ai() {}
 	virtual void tick(int player_id) = 0;
 };
 
 class easy_ai : public ai {
 public :
 	easy_ai(game_logic* gl, world* pw) : ai(gl, pw) {}
+	virtual ~easy_ai() {}
 	virtual void tick(int player_id);
 };
 
 class medium_ai : public ai {
 public :
 	medium_ai(game_logic* gl, world* pw) : ai(gl, pw) {}
+	virtual ~medium_ai() {}
 	virtual void tick(int player_id);
 };
 
 class hard_ai : public ai {
 public :
 	hard_ai(game_logic* gl, world* pw) : ai(gl, pw) {}
+	virtual ~hard_ai() {}
 	virtual void tick(int player_id);
 };
 

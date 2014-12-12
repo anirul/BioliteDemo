@@ -43,13 +43,15 @@ void easy_ai::tick(int player_id) {
 		click_desc cd;
 		cd.m_position = hit;
 		cd.m_player_id = player_id;
-		static bool tree_kind = true;
-		if (rand() % 2)
-			cd.m_click_t = click_desc::ct_leaf_tree;
-		else 
-			cd.m_click_t = click_desc::ct_fruit_tree;
+		auto val = rand() % 10;
+		if (val < 6)
+			cd.m_click_t = click_desc::ct_harvester;
+		if (val < 9)
+			cd.m_click_t = click_desc::ct_damager;
+		if (val == 9)
+			cd.m_click_t = click_desc::ct_dryad;
 		m_gl->planetClick(cd);
-		cd.m_click_t = click_desc::ct_destroy;
+		cd.m_click_t = click_desc::ct_fetch;
 		m_gl->planetClick(cd);
 	}
 }
@@ -59,7 +61,7 @@ void easy_ai::tick(int player_id) {
 void medium_ai::tick(int player_id) {
 	irr::core::line3df ray;
 	irr::core::vector3df hit;
-	for (int i = 0; i < 10; ++i) {
+	for (int i = 0; i < 5; ++i) {
 		ray.start = irr::core::vector3df(
 			(float)(rand() % 100) - 50.0f, 
 			(float)(rand() % 100) - 50.0f, 
@@ -71,12 +73,15 @@ void medium_ai::tick(int player_id) {
 	click_desc cd;
 	cd.m_position = hit;
 	cd.m_player_id = player_id;
-	if (rand() % 2)
-		cd.m_click_t = click_desc::ct_leaf_tree;
-	else 
-		cd.m_click_t = click_desc::ct_fruit_tree;
+	auto val = rand() % 10;
+	if (val < 6)
+		cd.m_click_t = click_desc::ct_harvester;
+	if (val < 9)
+		cd.m_click_t = click_desc::ct_damager;
+	if (val == 9)
+		cd.m_click_t = click_desc::ct_dryad;
 	m_gl->planetClick(cd);
-	cd.m_click_t = click_desc::ct_destroy;
+	cd.m_click_t = click_desc::ct_fetch;
 	m_gl->planetClick(cd);
 }
 
@@ -98,22 +103,14 @@ void hard_ai::tick(int player_id) {
 	click_desc cd;
 	cd.m_position = hit;
 	cd.m_player_id = player_id;
-	if (rand() % 2)
-		cd.m_click_t = click_desc::ct_leaf_tree;
-	else 
-		cd.m_click_t = click_desc::ct_fruit_tree;
+	auto val = rand() % 10;
+	if (val < 6)
+		cd.m_click_t = click_desc::ct_harvester;
+	if (val < 9)
+		cd.m_click_t = click_desc::ct_damager;
+	if (val == 9)
+		cd.m_click_t = click_desc::ct_dryad;
 	m_gl->planetClick(cd);
-	cd.m_click_t = click_desc::ct_destroy;
+	cd.m_click_t = click_desc::ct_fetch;
 	m_gl->planetClick(cd);
-	// check for a mamatree and click for death
-	std::list<plant>::const_iterator ite;
-	for (ite = m_gl->getPlantList().begin();
-		ite != m_gl->getPlantList().end();
-		++ite)
-	{
-		if (ite->m_plant_mesh_t == plant::mama_tree) {
-			cd.m_position = ite->m_position;
-			m_gl->planetClick(cd);
-		}
-	}
 }

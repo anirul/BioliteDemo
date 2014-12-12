@@ -103,7 +103,6 @@ irr::video::ITexture* plant::addTexture(
 void plant::init(irr::IrrlichtDevice* pdevice) {
 	parameter_set* ps = parameter_set::instance();
 	irr::scene::ISceneManager* mgr = pdevice->getSceneManager();
-	irr::video::IVideoDriver* pvideo = pdevice->getVideoDriver();
 	// load plant meshes
 	plant::addMesh(
 		mgr,

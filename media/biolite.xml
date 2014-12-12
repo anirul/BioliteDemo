@@ -28,7 +28,6 @@
 	<set-value linked-to="biolite.logic.max-distance" value="0.3"/>
 	<set-value linked-to="biolite.logic.grow1" value="2.5"/>
 	<set-value linked-to="biolite.logic.grow2" value="5.0"/>
-	<set-value linked-to="biolite.logic.plant-store" value="10.0"/>
 	
 	<set-value linked-to="biolite.action.type" value="plant"/>
 	<set-value linked-to="biolite.ai.difficulty" value="easy"/>
