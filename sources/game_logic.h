@@ -39,6 +39,7 @@ struct click_desc {
 		ct_harvester,
 		ct_damager,
 		ct_fetch,
+		ct_first,
 	} m_click_t;
 	int m_player_id;
 	irr::core::vector3df m_position;

@@ -32,6 +32,7 @@
 
 class xml_element {
 public :
+	virtual ~xml_element() {}
 	virtual xml_misc::element_type getType() const = 0;
 	virtual bool OnEvent(const irr::SEvent& event) = 0;
 	virtual irr::s32 addElement(

@@ -239,13 +239,15 @@ bool game_state_xml_game::OnEvent(game* pg, const irr::SEvent& event) {
 				std::string type = parameter_set::instance()->getValue(
 					"biolite.action.type");
 				click_desc cd;
-				cd.m_click_t = click_desc::ct_fetch;
+				cd.m_click_t = click_desc::ct_harvester;
 				if (type == std::string("dryad"))
 					cd.m_click_t = click_desc::ct_dryad;
 				if (type == std::string("harvester"))
 					cd.m_click_t = click_desc::ct_harvester;
 				if (type == std::string("damager"))
 					cd.m_click_t = click_desc::ct_damager;
+				if (type == std::string("fetch"))
+					cd.m_click_t = click_desc::ct_fetch;
 				cd.m_position = hit;
 				cd.m_player_id = 0;
 				if (m_logic) m_logic->planetClick(cd);

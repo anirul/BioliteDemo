@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <game 
 	update-freq="10.0"
-	player0-energy="10.0"
-	player1-energy="10.0"
-	player2-energy="10.0"
-	player3-energy="10.0"
+	player0-energy="20.0"
+	player1-energy="20.0"
+	player2-energy="20.0"
+	player3-energy="20.0"
 	plant-speed="0.1"
 	dryad-life="20.0"
 	dryad-cost="10.0"

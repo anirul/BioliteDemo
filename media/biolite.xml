@@ -761,34 +761,9 @@
 			<position hpos="0.805" vpos="0.705"/>
 			<size height="0.6" width="0.4"/>
 			<location>arc2.png</location>
-		</image>      
-		<!-- plant -->
-		<toggle-button linked-to="biolite.action.type" value="plant" coordinate="relative">
-			<position hpos="0.88" vpos="0.82"/>
-			<size height="0.15" width="0.10"/>
-			<image-up>plant1_inactive_status.png</image-up>
-			<image-down>plant1_default_status.png</image-down>
-			<image-up-flyby>plant1_inactive_over_status.png</image-up-flyby>
-			<image-down-flyby>plant1_default_over_status.png</image-down-flyby>
-		</toggle-button>
-		<irr-label linked-to="biolite.plant.cost" coordinate="relative" color="yellow">
-			<position hpos="0.9" vpos="0.82"/>
-			<size height="0.05" width="0.06"/>
-		</irr-label>
-		<!-- fruit -->
-		<toggle-button linked-to="biolite.action.type" value="fruit" coordinate="relative">
-			<position hpos="0.96" vpos="0.63"/>
-			<size height="0.15" width="0.10"/>
-			<image-up>fruit1_inactive_status.png</image-up>
-			<image-down>fruit1_default_status.png</image-down>
-			<image-up-flyby>fruit1_inactive_over_status.png</image-up-flyby>
-			<image-down-flyby>fruit1_default_over_status.png</image-down-flyby>
-		</toggle-button>
-		<irr-label linked-to="biolite.fruit.cost" coordinate="relative" color="yellow">
-			<position hpos="0.98" vpos="0.63"/>
-			<size height="0.05" width="0.06"/>
-		</irr-label>
-		<toggle-button linked-to="biolite.action.type" value="destroy" coordinate="relative">
+		</image>
+		
+		<toggle-button linked-to="biolite.action.type" value="damager" coordinate="relative">
 			<position hpos="0.752" vpos="0.952"/>
 			<size height="0.15" width="0.10"/>
 			<image-up>destroy_inactive_status.png</image-up>
@@ -796,10 +771,39 @@
 			<image-up-flyby>destroy_inactive_over_status.png</image-up-flyby>
 			<image-down-flyby>destroy_default_over_status.png</image-down-flyby>
 		</toggle-button>
-		<irr-label linked-to="biolite.destroy.cost" coordinate="relative" color="yellow">
+		<irr-label linked-to="biolite.damager.cost" coordinate="relative" color="yellow">
 			<position hpos="0.752" vpos="0.952"/>
 			<size height="0.05" width="0.06"/>
 		</irr-label>
+		
+		<!-- plant -->
+		<toggle-button linked-to="biolite.action.type" value="harvester" coordinate="relative">
+			<position hpos="0.88" vpos="0.82"/>
+			<size height="0.15" width="0.10"/>
+			<image-up>plant1_inactive_status.png</image-up>
+			<image-down>plant1_default_status.png</image-down>
+			<image-up-flyby>plant1_inactive_over_status.png</image-up-flyby>
+			<image-down-flyby>plant1_default_over_status.png</image-down-flyby>
+		</toggle-button>
+		<irr-label linked-to="biolite.harvester.cost" coordinate="relative" color="yellow">
+			<position hpos="0.9" vpos="0.82"/>
+			<size height="0.05" width="0.06"/>
+		</irr-label>
+		
+		<!-- fruit -->
+		<toggle-button linked-to="biolite.action.type" value="dryad" coordinate="relative">
+			<position hpos="0.96" vpos="0.63"/>
+			<size height="0.15" width="0.10"/>
+			<image-up>fruit1_inactive_status.png</image-up>
+			<image-down>fruit1_default_status.png</image-down>
+			<image-up-flyby>fruit1_inactive_over_status.png</image-up-flyby>
+			<image-down-flyby>fruit1_default_over_status.png</image-down-flyby>
+		</toggle-button>
+		<irr-label linked-to="biolite.dryad.cost" coordinate="relative" color="yellow">
+			<position hpos="0.98" vpos="0.63"/>
+			<size height="0.05" width="0.06"/>
+		</irr-label>
+		
 		<image coordinate="relative">
 			<position hpos="0.2" vpos="0.97"/>
             <size height="0.07" width="0.4"/>

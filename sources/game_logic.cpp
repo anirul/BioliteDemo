@@ -126,7 +126,7 @@ void game_logic::tickAi() {
 				m_ai_medium->tick(i + 1);
 				// help the AI cheeting a little bit
 				if (m_player_energy.at(i + 1))
-					m_player_energy.at(i + 1) += 0.5;
+					m_player_energy.at(i + 1) += 0.01;
 			}
 		}
 		if (ai_difficulty == std::string("hard")) {
@@ -134,7 +134,7 @@ void game_logic::tickAi() {
 				m_ai_hard->tick(i + 1);
 				// help the AI cheeting a lot
 				if (m_player_energy.at(i + 1))
-					m_player_energy.at(i + 1) += 5;
+					m_player_energy.at(i + 1) += 0.1;
 			}
 		}
 	}
@@ -184,7 +184,6 @@ void game_logic::clickDryad(const click_desc& cd) {
 			m_player_energy.at(cd.m_player_id) -= m_dryad_cost;
 			if (cd.m_player_id == 0) {
 				sound::instance()->play("planting");
-				parameter_set::instance()->setValue("biolite.action.type", "fetch");
 			}
 		} else {
 			if (cd.m_player_id == 0)
@@ -194,6 +193,8 @@ void game_logic::clickDryad(const click_desc& cd) {
 		if (cd.m_player_id == 0)
 			sound::instance()->play("error");
 	}
+	if (cd.m_player_id == 0)
+		parameter_set::instance()->setValue("biolite.action.type", "fetch");
 }
 
 void game_logic::clickHarvester(const click_desc& cd) {
@@ -211,7 +212,6 @@ void game_logic::clickHarvester(const click_desc& cd) {
 			m_player_energy.at(cd.m_player_id) -= m_dryad_cost;
 			if (cd.m_player_id == 0) {
 				sound::instance()->play("planting");
-				parameter_set::instance()->setValue("biolite.action.type", "fetch");
 			}
 		} else {
 			if (cd.m_player_id == 0)
@@ -221,6 +221,8 @@ void game_logic::clickHarvester(const click_desc& cd) {
 		if (cd.m_player_id == 0)
 			sound::instance()->play("error");
 	}
+	if (cd.m_player_id == 0)
+		parameter_set::instance()->setValue("biolite.action.type", "fetch");
 }
 
 void game_logic::clickDamager(const click_desc& cd) {
@@ -238,7 +240,6 @@ void game_logic::clickDamager(const click_desc& cd) {
 			m_player_energy.at(cd.m_player_id) -= m_dryad_cost;
 			if (cd.m_player_id == 0) {
 				sound::instance()->play("planting");
-				parameter_set::instance()->setValue("biolite.action.type", "fetch");
 			}
 		} else {
 			if (cd.m_player_id == 0)
@@ -248,6 +249,8 @@ void game_logic::clickDamager(const click_desc& cd) {
 		if (cd.m_player_id == 0)
 			sound::instance()->play("error");
 	}
+	if (cd.m_player_id == 0)
+		parameter_set::instance()->setValue("biolite.action.type", "fetch");
 }
 
 void game_logic::clickFetch(const click_desc& cd) {
@@ -270,8 +273,8 @@ void game_logic::clickFetch(const click_desc& cd) {
 		}
 		// check if the current player has any plant nearby
 		// check also that this is a player plant
-		if (closest_mine < m_min_dist) {
-			if (cd.m_player_id != 0)
+		if (closest_mine > m_min_dist) {
+			if (cd.m_player_id == 0)
 				sound::instance()->play("error");
 			return;
 		}
@@ -287,6 +290,7 @@ void game_logic::clickFetch(const click_desc& cd) {
 				// check if plant can be harvested
 				if (!p.m_fruit) continue;
 				p.m_fruit = false;
+				p.m_energy = m_nrj_1;
 				m_player_energy.at(cd.m_player_id) += m_fruit_energy;
 			}
 		}
@@ -328,8 +332,7 @@ void game_logic::tickPlant() {
 			p.m_energy = m_dryad_life;
 			p.add(plant::mama_tree, m_parent, m_mgr);
 			// mama tree also increase energy
-			float& player_nrj = m_player_energy.at(p.m_player_id);
-			if (exposure > 0.0f) player_nrj += exposure * m_plant_income;
+			m_player_energy.at(p.m_player_id) += 0.01;
 			continue;
 		}
 		if ((exposure > 0.0f) && (!p.m_hit)) // grow during day
@@ -348,20 +351,38 @@ void game_logic::tickPlant() {
 		}
 		// in case max size
 		if (p.m_energy >= m_nrj_2) {
-			p.m_energy = m_nrj_2;
 			if (p.m_hit) {
 				p.add(plant::plant_die_3, m_parent, m_mgr);
 				continue;
 			}
-			if (p.m_plant_t == plant::harvester) {
-				p.add(plant::fruit_tree, m_parent, m_mgr);
-				continue;
+			switch (p.m_plant_t) {
+				case plant::harvester:
+				{
+					float factor = log(m_player_plant_map[p.m_player_id]);
+					if (p.m_player_id == 0)
+						std::cout << p.m_energy << ' ' << factor << std::endl;
+					if ((p.m_plant_t == plant::harvester) &&
+						((p.m_energy >= m_nrj_2 * factor) ||
+						p.m_fruit))
+					{
+						p.m_fruit = true;
+						p.add(plant::fruit_tree, m_parent, m_mgr);
+					}
+					break;
+				}
+				case plant::dryad:
+				{
+					p.m_energy = m_nrj_2;
+					p.add(plant::mama_tree, m_parent, m_mgr);
+					break;
+				}
+				case plant::damager:
+				{
+					p.m_energy = m_nrj_2;
+					p.add(plant::plant_grow_3, m_parent, m_mgr);
+					break;
+				}
 			}
-			p.add(plant::plant_grow_3, m_parent, m_mgr);
-			// income time!
-			float& player_nrj = m_player_energy.at(p.m_player_id);
-			float calc_income = ((player_nrj + 10) / 500) * m_plant_income;
-			if (exposure > 0.0f) player_nrj += exposure * calc_income;
 		}
 	}
 	std::list<std::list<plant>::iterator>::iterator rmite;
@@ -371,7 +392,7 @@ void game_logic::tickPlant() {
 }
 
 void game_logic::tickDisplay() {
-	// update display
+	// update display (UI)
 	for (unsigned int i = 0; i < MAX_CLIENT; ++i) {
 		{ // energy per player
 			std::string name;
