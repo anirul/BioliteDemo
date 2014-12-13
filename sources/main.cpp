@@ -54,8 +54,9 @@ int main(int ac, char** av) {
 	try {
 		win = new irr_win(XML_MENU_FILE);
 		ctx = win->getContext();
-		while (win->runOnce(ctx->m_device))
-			std::this_thread::yield();
+		while (win->runOnce(ctx->m_device)) {
+		 	std::this_thread::yield();
+		}
 	} catch (const std::runtime_error& ex) {
 		std::cerr << ex.what() << std::endl;
 		// TODO maybe suppress all this as I am displaying a message above
