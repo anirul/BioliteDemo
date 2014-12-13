@@ -359,8 +359,6 @@ void game_logic::tickPlant() {
 				case plant::harvester:
 				{
 					float factor = log(m_player_plant_map[p.m_player_id]);
-					if (p.m_player_id == 0)
-						std::cout << p.m_energy << ' ' << factor << std::endl;
 					if ((p.m_plant_t == plant::harvester) &&
 						((p.m_energy >= m_nrj_2 * factor) ||
 						p.m_fruit))
@@ -514,10 +512,29 @@ bool game_logic::planetFlyby(const irr::core::vector3df& hit) {
 		return false;
 	}
 	m_plant_flyby.m_position = hit;
-	if (checkPlant(hit)) {
-		m_plant_flyby.add(plant::ghost_green, m_parent, m_mgr);
-	} else {
-		m_plant_flyby.add(plant::ghost_red, m_parent, m_mgr);
+	std::string mode = parameter_set::instance()->getValue("biolite.action.type");
+	if ((mode == std::string("dryad")) || (mode == std::string("harvester"))) {
+		if (checkPlant(hit)) {
+			m_plant_flyby.add(plant::ghost_green, m_parent, m_mgr);
+		} else {
+			m_plant_flyby.add(plant::ghost_red, m_parent, m_mgr);
+		}
+	}
+	if (mode == std::string("fetch")) {
+		// put a green tiny sphere on the location if ok
+		if (checkFruit(hit)) {
+			m_plant_flyby.add(plant::sphere_green, m_parent, m_mgr);
+		} else {
+			m_plant_flyby.add(plant::sphere_red, m_parent, m_mgr);
+		}
+	}
+	if (mode == std::string("damager")) {
+		// put a green sphere on the location if ok
+		if (checkEnemy(hit)) {
+			m_plant_flyby.add(plant::big_sphere_green, m_parent, m_mgr);
+		} else {
+			m_plant_flyby.add(plant::big_sphere_red, m_parent, m_mgr);
+		}
 	}
 	return true;
 }
@@ -547,6 +564,76 @@ bool game_logic::checkPlant(const irr::core::vector3df& hit, int player_id) {
 			return false;
 	if (closest < m_min_dist) return false;
 	return true;
+}
+
+bool game_logic::checkEnemy(const irr::core::vector3df& hit, int player_id) {
+	float closest = 1.0f;
+	float closest_mine = 1.0f;
+	int current_count = 0;
+	// check you are in range of one of your dryad
+	if (!checkDryad(hit, player_id)) return false;
+	// check distance
+	for (const auto& p : m_plant_list) {
+		auto pos = p.m_position;
+		float distance = (hit - pos).getLength();
+		if (distance < closest) {
+			closest = distance;
+			if (p.m_player_id != player_id)
+				closest_mine = distance;
+		}
+		if (p.m_player_id != player_id) current_count++;
+	}
+	if (current_count)
+		if (closest_mine < m_max_dist)
+			return true;
+	return false;
+}
+
+bool game_logic::checkDryad(const irr::core::vector3df& hit, int player_id) {
+	float closest = 1.0f;
+	float closest_mine = 1.0f;
+	int current_count = 0;
+	// check distance
+	for (const auto& p : m_plant_list) {
+		auto pos = p.m_position;
+		float distance = (hit - pos).getLength();
+		if (distance < closest) {
+			closest = distance;
+			if (p.m_player_id == player_id)
+				if (p.m_plant_mesh_t == plant::mama_tree)
+					closest_mine = distance;
+		}
+		if (p.m_player_id == player_id) current_count++;
+	}
+	// check if current player has any plant
+	if (current_count)
+		if (closest_mine > m_max_dist)
+			return false;
+	if (closest < m_min_dist) return false;
+	return true;
+}
+
+bool game_logic::checkFruit(const irr::core::vector3df& hit, int player_id) {
+	float closest = 1.0f;
+	float closest_mine = 1.0f;
+	int current_count = 0;
+	// check distance
+	for (const auto& p : m_plant_list) {
+		auto pos = p.m_position;
+		float distance = (hit - pos).getLength();
+		if (distance < closest) {
+			closest = distance;
+			if (p.m_player_id == player_id)
+				if (p.m_plant_mesh_t == plant::fruit_tree)
+					closest_mine = distance;
+		}
+		if (p.m_player_id == player_id) current_count++;
+	}
+	// check if current player has any plant
+	if (current_count)
+		if (closest_mine < m_min_dist)
+			return true;
+	return false;
 }
 
 bool game_logic::addPlant(const plant& pl) {

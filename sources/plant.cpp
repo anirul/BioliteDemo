@@ -30,8 +30,7 @@
 #include "parameter_set.h"
 #include "media_collection.h"
 
-std::map<plant::plant_mesh_type, irr::scene::IAnimatedMesh*> 
-	plant::s_plant_mesh;
+std::map<plant::plant_mesh_type, irr::scene::IMesh*> plant::s_plant_mesh;
 
 std::map<int, irr::video::ITexture*> plant::s_texture_plant_map;
 std::map<int, irr::video::ITexture*> plant::s_texture_fruit_map;
@@ -51,6 +50,20 @@ void plant::addMesh(
 		throw std::runtime_error(error);
 	}
 	s_plant_mesh.insert(std::make_pair(pmt,	mesh));
+}
+
+void plant::addSphere(
+	irr::scene::ISceneManager* smgr,
+	plant_mesh_type pmt,
+	float radius)
+{
+	auto* geometry = smgr->getGeometryCreator();
+	auto* mesh = geometry->createSphereMesh(radius);
+	if (!mesh) {
+		std::string error("PLANT ERROR : cannot create sphere mesh.");
+		throw std::runtime_error(error);
+	}
+	s_plant_mesh.insert(std::make_pair(pmt, mesh));
 }
 
 void plant::addPlantTexture(
@@ -103,6 +116,11 @@ irr::video::ITexture* plant::addTexture(
 void plant::init(irr::IrrlichtDevice* pdevice) {
 	parameter_set* ps = parameter_set::instance();
 	irr::scene::ISceneManager* mgr = pdevice->getSceneManager();
+	// load sphere meshes
+	plant::addSphere(mgr, plant::sphere_red, 1.0);
+	plant::addSphere(mgr, plant::sphere_green, 1.0);
+	plant::addSphere(mgr, plant::big_sphere_red, 5.0);
+	plant::addSphere(mgr, plant::big_sphere_green, 5.0);
 	// load plant meshes
 	plant::addMesh(
 		mgr,
@@ -206,12 +224,16 @@ void plant::add(
 {
 	if ((m_plant_mesh_t == pmt) &&
 		(m_plant_mesh_t != ghost_red) &&
-		(m_plant_mesh_t != ghost_green))
+		(m_plant_mesh_t != ghost_green) &&
+		(m_plant_mesh_t != sphere_red) &&
+		(m_plant_mesh_t != sphere_green) &&
+		(m_plant_mesh_t != big_sphere_red) &&
+		(m_plant_mesh_t != big_sphere_green))
 		return;
 	m_plant_mesh_t = pmt;
 	// remove the old one from the tree (if any)
 	remove();
-	m_plant_node = mgr->addAnimatedMeshSceneNode(
+	m_plant_node = mgr->addMeshSceneNode(
 		s_plant_mesh[pmt],
 		parent);
 	float deltaY = (float)parameter_set::instance()->getValueDouble(
@@ -236,13 +258,19 @@ void plant::add(
 	mat.buildRotateFromTo(from, to);
 	m_plant_node->setRotation(mat.getRotationDegrees());
 	m_plant_node->setPosition((m_position * deltaY));
-	if (m_plant_mesh_t == ghost_red) {
+	if ((m_plant_mesh_t == ghost_red) ||
+		(m_plant_mesh_t == sphere_red) ||
+		(m_plant_mesh_t == big_sphere_red))
+	{
 		m_plant_node->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 		m_plant_node->setMaterialType(irr::video::EMT_TRANSPARENT_ALPHA_CHANNEL);
 		m_plant_node->setMaterialTexture(0, s_texture_red);
 		return;
 	}
-	if (m_plant_mesh_t == ghost_green) {
+	if ((m_plant_mesh_t == ghost_green) ||
+		(m_plant_mesh_t == sphere_green) ||
+		(m_plant_mesh_t == big_sphere_green))
+	{
 		m_plant_node->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 		m_plant_node->setMaterialType(irr::video::EMT_TRANSPARENT_ALPHA_CHANNEL);
 		m_plant_node->setMaterialTexture(0, s_texture_green);

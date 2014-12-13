@@ -118,6 +118,12 @@ public:
 	void render(game* pg, irr::IrrlichtDevice* pdevice);
 	//! check plant location (mostly distance)
 	bool checkPlant(const irr::core::vector3df& hit, int player_id = 0);
+	//! check if inside Dryad range
+	bool checkDryad(const irr::core::vector3df& hit, int player_id = 0);
+	//! check if a fruit is in range
+	bool checkFruit(const irr::core::vector3df& hit, int player_id = 0);
+	//! check if an enemy is in range
+	bool checkEnemy(const irr::core::vector3df& hit, int player_id = 0);
 	//! add a plant to the plant list
 	bool addPlant(const plant& pl);
 	//! associated planet

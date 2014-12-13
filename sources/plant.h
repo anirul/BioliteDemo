@@ -43,7 +43,11 @@
 class plant {
 public :
 	enum plant_mesh_type {
+		big_sphere_green = -12,
+		sphere_green = -11,
 		ghost_green = -10,
+		big_sphere_red = -22,
+		sphere_red = -21,
 		ghost_red = -20,
 		null = -1,
 		plant_grow_1 = 0,
@@ -61,12 +65,16 @@ public :
 		damager = 40
 	};
 protected :
-	irr::scene::IAnimatedMeshSceneNode* m_plant_node;
+	irr::scene::IMeshSceneNode* m_plant_node;
 protected :
 	static void addMesh(
 		irr::scene::ISceneManager* smgr,
 		plant_mesh_type pmt, 
 		const std::string& file);
+	static void addSphere(
+		irr::scene::ISceneManager* smgr,
+		plant_mesh_type pmt,
+		float radius);
 	static void addPlantTexture(
 		irr::IrrlichtDevice* pdevice,
 		int player,
@@ -80,7 +88,7 @@ protected :
 		const std::string& file);
 public :
 	//! mesh store
-	static std::map<plant_mesh_type, irr::scene::IAnimatedMesh*> 
+	static std::map<plant_mesh_type, irr::scene::IMesh*>
 		s_plant_mesh;
 	//! alternate texture 1 map (per player)
 	static std::map<int, irr::video::ITexture*> s_texture_plant_map;
