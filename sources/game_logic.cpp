@@ -228,18 +228,16 @@ void game_logic::clickHarvester(const click_desc& cd) {
 void game_logic::clickDamager(const click_desc& cd) {
 	// check if player can buy a plant
 	if (m_player_energy.at(cd.m_player_id) >= m_damager_cost) {
-		plant p;
-		p.m_plant_t = plant::damager;
-		p.m_player_id = cd.m_player_id;
-		p.m_plant_mesh_t = plant::null;
-		p.m_energy = 0.1f;
-		p.m_hit = false;
-		p.m_position = cd.m_position;
-		if (addPlant(p)) {
+		if (checkEnemy(cd.m_position, cd.m_player_id)) {
 			// plant added so pay!
 			m_player_energy.at(cd.m_player_id) -= m_damager_cost;
 			if (cd.m_player_id == 0) {
 				sound::instance()->play("planting");
+			}
+			for (auto& p : m_plant_list) {
+				float d = (p.m_position - cd.m_position).getLength();
+				if ((d < m_max_dist) && (p.m_player_id != cd.m_player_id))
+					p.m_hit = true;
 			}
 		} else {
 			if (cd.m_player_id == 0)
@@ -292,6 +290,7 @@ void game_logic::clickFetch(const click_desc& cd) {
 				p.m_fruit = false;
 				p.m_energy = m_nrj_1;
 				m_player_energy.at(cd.m_player_id) += m_fruit_energy;
+				sound::instance()->play("planting");
 			}
 		}
 	}
