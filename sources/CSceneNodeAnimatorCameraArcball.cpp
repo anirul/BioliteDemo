@@ -90,45 +90,28 @@ void irr::scene::CSceneNodeAnimatorCameraArcball::animateNode(ISceneNode *node, 
 		return;
 
 	core::vector3df target = Camera->getTarget();
-	core::vector3df pos; // = Camera->getPosition() - target;
-	core::vector3df up; // = Camera->getUpVector();
-	core::quaternion quat;
-	quat.makeIdentity();
-
+	core::vector3df pos = Camera->getPosition() - target;
+	
+	core::position2df CursorPos = CursorControl->getRelativePosition();
+	const float deg2rad = 57.2957795f;
+	float dh = 0.0f;
 	// compute the new quaternion
-	if (CursorControl && mouseDrag) {
-		core::position2df CursorPos = CursorControl->getRelativePosition();
-		core::vector3df from = position2vector(CursorDown);
-		core::vector3df to = position2vector(CursorPos);
-		quat.rotationFromTo(from, to);
+	if (CursorControl && mouseDrag)
+	{
+		pos.rotateXZBy((CursorPos.X - CursorDown.X) * -deg2rad * 2.0f);
+		dh = (CursorPos.Y - CursorDown.Y) * 2.0f;
 		CursorDown = CursorPos;
 	}
 
-	// should solve some camera miss placement effect
-	core::vector3df begin(0, 0, -1);
-	core::quaternion quatAxe;
-	quatAxe.rotationFromTo(CamOri, begin);
-
-	// increment the movement quaternion
-	QuatOri = quat * QuatOri;
-
-	// move position into the origine Axes
-	pos = quatAxe * CamOri;
-	up = quatAxe * CamUp;
-
-	// move position with the incremented quaternion
-	pos = QuatOri * pos;
-	up = QuatOri * up;
-
-	// inverte the quatAxe
-	quatAxe.makeInverse();
-
-	// put it back into the position coordinates
-	pos = quatAxe * pos;
-	up = quatAxe * up;
-
 	// move the center according to target
-	Camera->setPosition(pos + target);
+	const float len = (pos + target).getLength();
+	irr::core::vector3df norm_pos = pos + target;
+	norm_pos.normalize();
+	if (((norm_pos.Y < 0.7f) && (dh > 0.0f)) ||
+		((norm_pos.Y > -0.7f) && (dh < 0.0f)))
+		norm_pos.Y += dh;
+	norm_pos.normalize();
+	Camera->setPosition(norm_pos * len);
 //	Camera->setUpVector(up);
 //	Camera->setFOV(CamFOV * actualZoom);
 }

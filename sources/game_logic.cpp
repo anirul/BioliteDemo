@@ -237,7 +237,7 @@ void game_logic::clickDamager(const click_desc& cd) {
 		p.m_position = cd.m_position;
 		if (addPlant(p)) {
 			// plant added so pay!
-			m_player_energy.at(cd.m_player_id) -= m_dryad_cost;
+			m_player_energy.at(cd.m_player_id) -= m_damager_cost;
 			if (cd.m_player_id == 0) {
 				sound::instance()->play("planting");
 			}
