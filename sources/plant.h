@@ -43,6 +43,12 @@
 class plant {
 public :
 	enum plant_mesh_type {
+		big_sphere_blue = -42,
+		sphere_blue = -41,
+		ghost_blue = -40,
+		big_sphere_yellow = -32,
+		sphere_yellow = -31,
+		ghost_yellow = -30,
 		big_sphere_green = -12,
 		sphere_green = -11,
 		ghost_green = -10,
@@ -95,6 +101,8 @@ public :
 	static std::map<int, irr::video::ITexture*> s_texture_fruit_map;
 	static irr::video::ITexture* s_texture_red;
 	static irr::video::ITexture* s_texture_green;
+	static irr::video::ITexture* s_texture_yellow;
+	static irr::video::ITexture* s_texture_blue;
 	//! load the mesh
 	static void init(irr::IrrlichtDevice* pdevice);
 public :

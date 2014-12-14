@@ -209,7 +209,7 @@ void game_logic::clickHarvester(const click_desc& cd) {
 		p.m_position = cd.m_position;
 		if (addPlant(p)) {
 			// plant added so pay!
-			m_player_energy.at(cd.m_player_id) -= m_dryad_cost;
+			m_player_energy.at(cd.m_player_id) -= m_harvester_cost;
 			if (cd.m_player_id == 0) {
 				sound::instance()->play("planting");
 			}
@@ -231,9 +231,7 @@ void game_logic::clickDamager(const click_desc& cd) {
 		if (checkEnemy(cd.m_position, cd.m_player_id)) {
 			// plant added so pay!
 			m_player_energy.at(cd.m_player_id) -= m_damager_cost;
-			if (cd.m_player_id == 0) {
-				sound::instance()->play("planting");
-			}
+			sound::instance()->play("planting");
 			for (auto& p : m_plant_list) {
 				float d = (p.m_position - cd.m_position).getLength();
 				if ((d < m_max_dist) && (p.m_player_id != cd.m_player_id))
@@ -512,12 +510,26 @@ bool game_logic::planetFlyby(const irr::core::vector3df& hit) {
 	}
 	m_plant_flyby.m_position = hit;
 	std::string mode = parameter_set::instance()->getValue("biolite.action.type");
-	if ((mode == std::string("dryad")) || (mode == std::string("harvester"))) {
+	std::cout << mode << std::endl;
+	if ((mode == std::string("dryad")) || (mode == std::string("plant"))) {
 		if (checkPlant(hit)) {
 			m_plant_flyby.add(plant::ghost_green, m_parent, m_mgr);
 		} else {
 			m_plant_flyby.add(plant::ghost_red, m_parent, m_mgr);
 		}
+		return true;
+	}
+	if (mode == std::string("harvester")) {
+		bool dryad = checkDryad(hit);
+		bool plant = checkPlant(hit);
+		if (dryad && plant) {
+			m_plant_flyby.add(plant::ghost_green, m_parent, m_mgr);
+		} else if (dryad) {
+			m_plant_flyby.add(plant::ghost_yellow, m_parent, m_mgr);
+		} else {
+			m_plant_flyby.add(plant::ghost_red, m_parent, m_mgr);
+		}
+		return true;
 	}
 	if (mode == std::string("fetch")) {
 		// put a green tiny sphere on the location if ok
@@ -526,14 +538,20 @@ bool game_logic::planetFlyby(const irr::core::vector3df& hit) {
 		} else {
 			m_plant_flyby.add(plant::sphere_red, m_parent, m_mgr);
 		}
+		return true;
 	}
 	if (mode == std::string("damager")) {
 		// put a green sphere on the location if ok
-		if (checkEnemy(hit)) {
+		bool dryad = checkDryad(hit);
+		bool enemy = checkEnemy(hit);
+		if (dryad && enemy) {
 			m_plant_flyby.add(plant::big_sphere_green, m_parent, m_mgr);
+		} else if (dryad || enemy) {
+			m_plant_flyby.add(plant::big_sphere_yellow, m_parent, m_mgr);
 		} else {
 			m_plant_flyby.add(plant::big_sphere_red, m_parent, m_mgr);
 		}
+		return true;
 	}
 	return true;
 }
@@ -605,11 +623,15 @@ bool game_logic::checkDryad(const irr::core::vector3df& hit, int player_id) {
 		if (p.m_player_id == player_id) current_count++;
 	}
 	// check if current player has any plant
-	if (current_count)
-		if (closest_mine > m_max_dist)
-			return false;
-	if (closest < m_min_dist) return false;
-	return true;
+	if (current_count) {
+		// too far from dryad
+		if (closest_mine > m_max_dist) return false;
+		// too close from any plant
+		if (closest < m_min_dist) return false;
+		return true;
+	} else {
+		return false;
+	}
 }
 
 bool game_logic::checkFruit(const irr::core::vector3df& hit, int player_id) {

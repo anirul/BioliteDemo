@@ -34,8 +34,10 @@ std::map<plant::plant_mesh_type, irr::scene::IMesh*> plant::s_plant_mesh;
 
 std::map<int, irr::video::ITexture*> plant::s_texture_plant_map;
 std::map<int, irr::video::ITexture*> plant::s_texture_fruit_map;
-irr::video::ITexture* plant::s_texture_red = NULL;
-irr::video::ITexture* plant::s_texture_green = NULL;
+irr::video::ITexture* plant::s_texture_red = nullptr;
+irr::video::ITexture* plant::s_texture_green = nullptr;
+irr::video::ITexture* plant::s_texture_yellow = nullptr;
+irr::video::ITexture* plant::s_texture_blue = nullptr;
 
 void plant::addMesh(
 	irr::scene::ISceneManager* smgr,
@@ -117,10 +119,14 @@ void plant::init(irr::IrrlichtDevice* pdevice) {
 	parameter_set* ps = parameter_set::instance();
 	irr::scene::ISceneManager* mgr = pdevice->getSceneManager();
 	// load sphere meshes
-	plant::addSphere(mgr, plant::sphere_red, 1.0);
-	plant::addSphere(mgr, plant::sphere_green, 1.0);
-	plant::addSphere(mgr, plant::big_sphere_red, 5.0);
-	plant::addSphere(mgr, plant::big_sphere_green, 5.0);
+	plant::addSphere(mgr, plant::sphere_red, 1.0f);
+	plant::addSphere(mgr, plant::sphere_yellow, 1.0f);
+	plant::addSphere(mgr, plant::sphere_green, 1.0f);
+	plant::addSphere(mgr, plant::sphere_blue, 1.0f);
+	plant::addSphere(mgr, plant::big_sphere_red, 5.0f);
+	plant::addSphere(mgr, plant::big_sphere_yellow, 5.0f);
+	plant::addSphere(mgr, plant::big_sphere_green, 5.0f);
+	plant::addSphere(mgr, plant::big_sphere_blue, 5.0f);
 	// load plant meshes
 	plant::addMesh(
 		mgr,
@@ -130,6 +136,14 @@ void plant::init(irr::IrrlichtDevice* pdevice) {
 		mgr,
 		plant::ghost_green,
 		ps->getValue(std::string("biolite.ghost.mesh.green")));
+	plant::addMesh(
+		mgr,
+		plant::ghost_yellow,
+		ps->getValue(std::string("biolite.ghost.mesh.yellow")));
+	plant::addMesh(
+		mgr,
+		plant::ghost_blue,
+		ps->getValue(std::string("biolite.ghost.mesh.blue")));
 	plant::addMesh(
 		mgr, 
 		plant::plant_grow_1, 
@@ -204,6 +218,12 @@ void plant::init(irr::IrrlichtDevice* pdevice) {
 	s_texture_green = plant::addTexture(
 		pdevice, 
 		ps->getValue(std::string("biolite.ghost.texture.green")));
+	s_texture_yellow = plant::addTexture(
+		pdevice,
+		ps->getValue(std::string("biolite.ghost.texture.yellow")));
+	s_texture_blue = plant::addTexture(
+		pdevice,
+		ps->getValue(std::string("biolite.ghost.texture.blue")));
 }
 
 plant::~plant() {
@@ -225,10 +245,17 @@ void plant::add(
 	if ((m_plant_mesh_t == pmt) &&
 		(m_plant_mesh_t != ghost_red) &&
 		(m_plant_mesh_t != ghost_green) &&
+		(m_plant_mesh_t != ghost_yellow) &&
+		(m_plant_mesh_t != ghost_blue) &&
 		(m_plant_mesh_t != sphere_red) &&
 		(m_plant_mesh_t != sphere_green) &&
+		(m_plant_mesh_t != sphere_yellow) &&
+		(m_plant_mesh_t != sphere_blue) &&
 		(m_plant_mesh_t != big_sphere_red) &&
-		(m_plant_mesh_t != big_sphere_green))
+		(m_plant_mesh_t != big_sphere_green) &&
+		(m_plant_mesh_t != big_sphere_yellow) &&
+		(m_plant_mesh_t != big_sphere_blue)
+		)
 		return;
 	m_plant_mesh_t = pmt;
 	// remove the old one from the tree (if any)
@@ -275,6 +302,23 @@ void plant::add(
 		m_plant_node->setMaterialType(irr::video::EMT_TRANSPARENT_ALPHA_CHANNEL);
 		m_plant_node->setMaterialTexture(0, s_texture_green);
 		return;
+	}
+	if ((m_plant_mesh_t == ghost_yellow) ||
+		(m_plant_mesh_t == sphere_yellow) ||
+		(m_plant_mesh_t == big_sphere_yellow))
+	{
+		m_plant_node->setMaterialFlag(irr::video::EMF_LIGHTING, false);
+		m_plant_node->setMaterialType(irr::video::EMT_TRANSPARENT_ALPHA_CHANNEL);
+		m_plant_node->setMaterialTexture(0, s_texture_yellow);
+		return;
+	}
+	if ((m_plant_mesh_t == ghost_blue) ||
+		(m_plant_mesh_t == sphere_blue) ||
+		(m_plant_mesh_t == big_sphere_blue))
+	{
+		m_plant_node->setMaterialFlag(irr::video::EMF_LIGHTING, false);
+		m_plant_node->setMaterialType(irr::video::EMT_TRANSPARENT_ALPHA_CHANNEL);
+		m_plant_node->setMaterialTexture(0, s_texture_blue);
 	}
 	if (m_plant_mesh_t == fruit_tree) {
 		m_plant_node->setMaterialTexture(0, s_texture_fruit_map[m_player_id]);

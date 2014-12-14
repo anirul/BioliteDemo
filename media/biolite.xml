@@ -29,7 +29,7 @@
 	<set-value linked-to="biolite.logic.grow1" value="2.5"/>
 	<set-value linked-to="biolite.logic.grow2" value="5.0"/>
 	
-	<set-value linked-to="biolite.action.type" value="plant"/>
+	<set-value linked-to="biolite.action.type" value="dryad"/>
 	<set-value linked-to="biolite.ai.difficulty" value="easy"/>
 	<set-value linked-to="biolite.ai.number" value="1"/>
 	
@@ -46,6 +46,8 @@
 	<!-- model loading -->
 	<set-value linked-to="biolite.ghost.mesh.green" value="plantState_grow1.obj"/>
 	<set-value linked-to="biolite.ghost.mesh.red" value="plantState_grow1.obj"/>
+	<set-value linked-to="biolite.ghost.mesh.yellow" value="plantState_grow1.obj"/>
+	<set-value linked-to="biolite.ghost.mesh.blue" value="plantState_grow1.obj"/>
 
 	<set-value linked-to="biolite.plant.mesh.grow1" value="plantState_grow0.obj"/>
 	<set-value linked-to="biolite.plant.mesh.grow2" value="plantState_grow1.obj"/>
@@ -71,6 +73,8 @@
 	
 	<set-value linked-to="biolite.ghost.texture.red" value="texture-red.png"/>
 	<set-value linked-to="biolite.ghost.texture.green" value="texture-green.png"/>
+	<set-value linked-to="biolite.ghost.texture.blue" value="texture-blue.png"/>
+	<set-value linked-to="biolite.ghost.texture.yellow" value="texture-yellow.png"/>
 
 	<set-value linked-to="biolite.plant.mesh.scale.X" value="0.05"/>
 	<set-value linked-to="biolite.plant.mesh.scale.Y" value="0.05"/>
