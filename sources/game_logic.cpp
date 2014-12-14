@@ -55,9 +55,10 @@ game_logic::game_logic(
 		m_damager_life(damager_life),
 		m_damager_cost(damager_cost),
 		m_fruit_energy(fruit_energy),
-		m_ai_easy(NULL),
-		m_ai_medium(NULL),
-		m_ai_hard(NULL)
+		m_ai_easy(nullptr),
+		m_ai_medium(nullptr),
+		m_ai_hard(nullptr),
+		m_fence_mode(false)
 {
 	parameter_set::instance()->setValue("biolite.dryad.cost", m_dryad_cost);
 	parameter_set::instance()->setValue("biolite.harvester.cost", m_harvester_cost);
@@ -377,6 +378,8 @@ void game_logic::tickPlant() {
 					p.add(plant::plant_grow_3, m_parent, m_mgr);
 					break;
 				}
+				default:
+					break;
 			}
 		}
 	}
@@ -509,9 +512,9 @@ bool game_logic::planetFlyby(const irr::core::vector3df& hit) {
 		return false;
 	}
 	m_plant_flyby.m_position = hit;
-	std::string mode = parameter_set::instance()->getValue("biolite.action.type");
-	std::cout << mode << std::endl;
-	if ((mode == std::string("dryad")) || (mode == std::string("plant"))) {
+	auto* ps = parameter_set::instance();
+	std::string mode = ps->getValue("biolite.action.type");
+	if (mode == std::string("dryad")) {
 		if (checkPlant(hit)) {
 			m_plant_flyby.add(plant::ghost_green, m_parent, m_mgr);
 		} else {

@@ -76,6 +76,7 @@ protected:
 	easy_ai* m_ai_easy;
 	medium_ai* m_ai_medium;
 	hard_ai* m_ai_hard;
+	bool m_fence_mode;
 public:
 	// click actions
 	void clickDryad(const click_desc& cd);

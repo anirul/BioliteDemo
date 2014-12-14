@@ -168,6 +168,16 @@ void planet::operator()(
 	// TODO
 }
 
+void planet::set_textures(const std::string& t0, const std::string& t1) {
+	auto* ps = parameter_set::instance();
+	auto* video = SceneManager->getVideoDriver();
+	auto* texture0 = video->getTexture(ps->getValue(std::string(t0)).c_str());
+	auto* texture1 = video->getTexture(ps->getValue(std::string(t1)).c_str());
+	setMaterialTexture(0, texture0);
+	setMaterialTexture(1, texture1);
+	setMaterialType(irr::video::EMT_REFLECTION_2_LAYER);
+}
+
 unsigned short planet::addvertex(unsigned short i1, unsigned short i2) {
 	assert(i1 != i2);
 	for (unsigned int i = 0; i < m_vpm.size(); i += 3)
@@ -181,7 +191,8 @@ unsigned short planet::addvertex(unsigned short i1, unsigned short i2) {
 	norm_vert.Normal = m_vvert[i1].Normal + m_vvert[i2].Normal;
 	norm_vert.Normal.normalize();
 	norm_vert.Color = m_ground;
-	norm_vert.TCoords = irr::core::vector2df(0.0f, 0.0f);
+	norm_vert.TCoords.Y = (float)(asinf(norm_vert.Normal.Y) / M_PI) + 0.5f;
+	norm_vert.TCoords.X = (float)(asinf(norm_vert.Normal.X) / M_PI) + 0.5f;
 	unsigned short temp = addvertex(norm_vert);
 	m_vpm.push_back(temp);
 	return m_vpm[m_vpm.size() - 1];

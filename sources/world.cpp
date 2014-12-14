@@ -91,6 +91,7 @@ world::world(irr::IrrlichtDevice* pdevice, const std::string& planet_file) {
 		pdevice->getSceneManager(), 
 		std::string("water"),
 		irr::video::SColor(0x7f00007f)); // blue
+	auto* ps = parameter_set::instance();
 	m_pwater->remove();
 	for (int i = 0; i < NBSUB; ++i) 
 		m_pwater->subdivide();
@@ -186,11 +187,11 @@ bool world::render_state(irr::IrrlichtDevice* pdevice) {
 				parameter_set::instance()->getValue(
 					std::string("biolite.menu.current"));
 			if (current == "edit-planet") {
-//				std::string file = m_planet->m_seed;
-//				file.append(".xml");
-//				std::ofstream ofs(file.c_str());
-//				xml_planet::savePlanet(ofs, *m_planet);
-//				ofs.close();
+				std::string file = m_planet->m_seed;
+				file.append(".xml");
+				std::ofstream ofs(file.c_str());
+				xml_planet::savePlanet(ofs, *m_planet);
+				ofs.close();
 			}
 		}
 		return true;

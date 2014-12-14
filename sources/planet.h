@@ -100,7 +100,7 @@ public:
 	virtual irr::u32 getMaterialCount() const { return 1; }
 	//! from ISceneNode : get a material from index (only 1 here so always the same)
 	virtual irr::video::SMaterial& getMaterial(irr::u32 i) { return Material; }
-	protected :
+protected:
 	//! get the list of vertices (is it still in use?)
 	std::vector<irr::video::S3DVertex>& get_vert() { return m_vvert;	}
 	//! get the list of indexes (is it still in use?)
@@ -126,6 +126,8 @@ public:
 	float get_ground_average() const;
 	//! return the mesh with the planet (if calcul is finished)
 	irr::scene::IMesh* get_mesh();
+	//! set the textures
+	void set_textures(const std::string& t0, const std::string& t1);
 };
 
 #endif

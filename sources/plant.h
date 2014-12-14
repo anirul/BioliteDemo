@@ -43,6 +43,10 @@
 class plant {
 public :
 	enum plant_mesh_type {
+		fence_red = -50,
+		fence_green = -51,
+		fence_blue = -52,
+		fence_yellow = -53,
 		big_sphere_blue = -42,
 		sphere_blue = -41,
 		ghost_blue = -40,
@@ -66,6 +70,7 @@ public :
 		mama_tree = 42
 	};
 	enum plant_type {
+		fence = -10,
 		dryad = 0,
 		harvester = 20,
 		damager = 40
@@ -81,6 +86,11 @@ protected :
 		irr::scene::ISceneManager* smgr,
 		plant_mesh_type pmt,
 		float radius);
+	static void addCylinder(
+		irr::scene::ISceneManager* smgr,
+		plant_mesh_type pmt,
+		float radius,
+		float length);
 	static void addPlantTexture(
 		irr::IrrlichtDevice* pdevice,
 		int player,

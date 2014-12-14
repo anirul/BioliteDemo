@@ -60,6 +60,7 @@
 	<set-value linked-to="biolite.fruit.mesh" value="fruitPlant.obj"/>
   
 	<set-value linked-to="biolite.mama.mesh" value="mamaTree.obj"/>
+	
 
 	<set-value linked-to="biolite.plant.texture.player0" value="plant_texture_green.jpg"/>
 	<set-value linked-to="biolite.plant.texture.player1" value="plant_texture_red.jpg"/>
@@ -97,6 +98,11 @@
 	<set-value linked-to="biolite.planet.color.medium" value="green"/>
 	<set-value linked-to="biolite.planet.color.high" value="white"/>
 	<set-value linked-to="biolite.planet.water" value="50"/>
+
+	<set-value linked-to="biolite.water.texture0" value="Water01.jpg"/>
+	<set-value linked-to="biolite.water.texture1" value="Water02.jpg"/>
+	<set-value linked-to="biolite.planet.texture0" value="texture-planet0.png"/>
+	<set-value linked-to="biolite.planet.texture1" value="texture-planet1.png"/>
 
 	<!-- START -->
 	<still-state name="start" goto-state="load" timeout="0.01">

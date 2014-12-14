@@ -68,6 +68,27 @@ void plant::addSphere(
 	s_plant_mesh.insert(std::make_pair(pmt, mesh));
 }
 
+void plant::addCylinder(
+	irr::scene::ISceneManager* smgr,
+	plant_mesh_type pmt,
+	float radius,
+	float length)
+{
+	auto* geometry = smgr->getGeometryCreator();
+	auto* mesh = geometry->createCylinderMesh(
+		radius,
+		length,
+		32,
+		irr::video::SColor(0xffffffff),
+		false);
+	if (!mesh) {
+		std::string error("PLANT ERROR : cannot create cylinder mesh.");
+		throw std::runtime_error(error);
+	}
+	s_plant_mesh.insert(std::make_pair(pmt, mesh));
+}
+
+
 void plant::addPlantTexture(
 	irr::IrrlichtDevice* pdevice,
 	int player,
@@ -127,6 +148,10 @@ void plant::init(irr::IrrlichtDevice* pdevice) {
 	plant::addSphere(mgr, plant::big_sphere_yellow, 5.0f);
 	plant::addSphere(mgr, plant::big_sphere_green, 5.0f);
 	plant::addSphere(mgr, plant::big_sphere_blue, 5.0f);
+	plant::addCylinder(mgr, plant::fence_red, 5.0f, 2.0f);
+	plant::addCylinder(mgr, plant::fence_yellow, 5.0f, 2.0f);
+	plant::addCylinder(mgr, plant::fence_green, 5.0f, 2.0f);
+	plant::addCylinder(mgr, plant::fence_blue, 5.0f, 2.0f);
 	// load plant meshes
 	plant::addMesh(
 		mgr,
@@ -233,7 +258,7 @@ plant::~plant() {
 void plant::remove() {
 	if (m_plant_node) {
 		m_plant_node->remove();
-		m_plant_node = NULL;
+		m_plant_node = nullptr;
 	}
 }
 
@@ -254,7 +279,11 @@ void plant::add(
 		(m_plant_mesh_t != big_sphere_red) &&
 		(m_plant_mesh_t != big_sphere_green) &&
 		(m_plant_mesh_t != big_sphere_yellow) &&
-		(m_plant_mesh_t != big_sphere_blue)
+		(m_plant_mesh_t != big_sphere_blue) &&
+		(m_plant_mesh_t != fence_red) &&
+		(m_plant_mesh_t != fence_green) &&
+		(m_plant_mesh_t != fence_yellow) &&
+		(m_plant_mesh_t != fence_blue)
 		)
 		return;
 	m_plant_mesh_t = pmt;
@@ -287,7 +316,9 @@ void plant::add(
 	m_plant_node->setPosition((m_position * deltaY));
 	if ((m_plant_mesh_t == ghost_red) ||
 		(m_plant_mesh_t == sphere_red) ||
-		(m_plant_mesh_t == big_sphere_red))
+		(m_plant_mesh_t == big_sphere_red) ||
+		(m_plant_mesh_t == fence_red)
+		)
 	{
 		m_plant_node->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 		m_plant_node->setMaterialType(irr::video::EMT_TRANSPARENT_ALPHA_CHANNEL);
@@ -296,7 +327,9 @@ void plant::add(
 	}
 	if ((m_plant_mesh_t == ghost_green) ||
 		(m_plant_mesh_t == sphere_green) ||
-		(m_plant_mesh_t == big_sphere_green))
+		(m_plant_mesh_t == big_sphere_green) ||
+		(m_plant_mesh_t == fence_green)
+		)
 	{
 		m_plant_node->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 		m_plant_node->setMaterialType(irr::video::EMT_TRANSPARENT_ALPHA_CHANNEL);
@@ -305,7 +338,9 @@ void plant::add(
 	}
 	if ((m_plant_mesh_t == ghost_yellow) ||
 		(m_plant_mesh_t == sphere_yellow) ||
-		(m_plant_mesh_t == big_sphere_yellow))
+		(m_plant_mesh_t == big_sphere_yellow) ||
+		(m_plant_mesh_t == fence_yellow)
+		)
 	{
 		m_plant_node->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 		m_plant_node->setMaterialType(irr::video::EMT_TRANSPARENT_ALPHA_CHANNEL);
@@ -314,7 +349,9 @@ void plant::add(
 	}
 	if ((m_plant_mesh_t == ghost_blue) ||
 		(m_plant_mesh_t == sphere_blue) ||
-		(m_plant_mesh_t == big_sphere_blue))
+		(m_plant_mesh_t == big_sphere_blue) ||
+		(m_plant_mesh_t == fence_blue)
+		)
 	{
 		m_plant_node->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 		m_plant_node->setMaterialType(irr::video::EMT_TRANSPARENT_ALPHA_CHANNEL);
