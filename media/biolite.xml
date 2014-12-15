@@ -99,11 +99,6 @@
 	<set-value linked-to="biolite.planet.color.high" value="white"/>
 	<set-value linked-to="biolite.planet.water" value="50"/>
 
-	<set-value linked-to="biolite.water.texture0" value="Water01.jpg"/>
-	<set-value linked-to="biolite.water.texture1" value="Water02.jpg"/>
-	<set-value linked-to="biolite.planet.texture0" value="texture-planet0.png"/>
-	<set-value linked-to="biolite.planet.texture1" value="texture-planet1.png"/>
-
 	<!-- START -->
 	<still-state name="start" goto-state="load" timeout="0.01">
 
@@ -118,9 +113,15 @@
 	<still-state name="load" goto-state="title" timeout="0.01">
 
 		<!-- font size : small ]0, 600], medium ]600, 900], large ]900, +oo[ -->
+<!--
 		<set-value linked-to="biolite.font.small" value="Arial12.xml"/>
 		<set-value linked-to="biolite.font.medium" value="Arial20.xml"/>
 		<set-value linked-to="biolite.font.large" value="Arial36.xml"/>
+-->
+		<set-value linked-to="biolite.font.small" value="young12.xml"/>
+		<set-value linked-to="biolite.font.medium" value="young20.xml"/>
+		<set-value linked-to="biolite.font.large" value="young36.xml"/>
+
 		<!-- sky box textures -->
 		<set-value linked-to="biolite.skybox.up" value="purplenebula_up.jpg"/>
 		<set-value linked-to="biolite.skybox.down" value="purplenebula_dn.jpg"/>
