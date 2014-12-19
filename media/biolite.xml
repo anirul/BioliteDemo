@@ -172,6 +172,11 @@
 			<location>Filter_MenuBackground.png</location>
 		</image>	
 		<image coordinate="relative">
+			<position hpos="0.5" vpos="0.5"/>
+            <size height="1" width="1"/>
+			<location>DryadeBG.png</location>
+		</image>
+		<image coordinate="relative">
 			<position hpos="0.25" vpos="0.27"/>
 			<size height="0.125" width="0.5"/>
 			<location>Menu_Title.png</location>
@@ -719,100 +724,68 @@
 		<set-value linked-to="biolite.camera" value="arcball"/>
 		<!-- witch mouse key is linked to the arcball mouvement (right by default) -->
 		<set-value linked-to="biolite.camera.arcball.mouse" value="right"/>
+
+
 		<image coordinate="relative">
-			<position hpos="0.195" vpos="0.295"/>
-			<size height="0.6" width="0.4"/>
-			<location>arc.png</location>
-		</image>
-		<image coordinate="relative">
-			<position hpos="0.236" vpos="0.054"/>
-			<size height="0.075" width="0.05"/>
-			<location>plant-icon-green.png</location>
-		</image>	
-		<irr-label linked-to="biolite.player0.plant.size" coordinate="relative" color="green">
-			<position hpos="0.236" vpos="0.054"/>
-			<size height="0.05" width="0.06"/>
-		</irr-label>
-		<image coordinate="relative">
-			<position hpos="0.05" vpos="0.075"/>
-			<size height="0.15" width="0.10"/>
-			<location>energyred.png</location>
+			<position hpos="0.037" vpos="0.042"/>
+			<size height="0.084" width="0.074"/>
+			<location>RessourcePlayer.png</location>
 		</image>    
-		<irr-label linked-to="biolite.player0.energy" coordinate="relative" color="orange">
-			<position hpos="0.09" vpos="0.135"/>
-			<size height="0.15" width="0.10"/>
-		</irr-label>    
+		<irr-label linked-to="biolite.player0.energy" coordinate="relative" color="green">
+			<position hpos="0.116" vpos="0.06"/>
+			<size height="0.084" width="0.10"/>
+		</irr-label>		
 		<image coordinate="relative">
-			<position hpos="0.152" vpos="0.126"/>
-			<size height="0.075" width="0.05"/>
-			<location>plant-icon-red.png</location>
-		</image>
-		<irr-label linked-to="biolite.player1.plant.size" coordinate="relative" color="red">
-			<position hpos="0.152" vpos="0.126"/>
-			<size height="0.05" width="0.06"/>
-		</irr-label>
-		<image coordinate="relative">
-			<position hpos="0.084" vpos="0.228"/>
-			<size height="0.075" width="0.05"/>
-			<location>plant-icon-blue.png</location>
-		</image>
-		<irr-label linked-to="biolite.player2.plant.size" coordinate="relative" color="blue">
-			<position hpos="0.084" vpos="0.228"/>
-			<size height="0.05" width="0.06"/>
-		</irr-label>
-		<image coordinate="relative">
-			<position hpos="0.036" vpos="0.354"/>
-			<size height="0.075" width="0.05"/>
-			<location>plant-icon-yellow.png</location>
-		</image>
-		<irr-label linked-to="biolite.player3.plant.size" coordinate="relative" color="yellow">
-			<position hpos="0.036" vpos="0.354"/>
-			<size height="0.05" width="0.06"/>
-		</irr-label>
-		<image coordinate="relative">
-			<position hpos="0.805" vpos="0.705"/>
-			<size height="0.6" width="0.4"/>
-			<location>arc2.png</location>
-		</image>
+			<position hpos="0.07" vpos="0.195"/>
+			<size height="0.22" width="0.14"/>
+			<location>Portrait.png</location>
+		</image>  
 		
+		<image coordinate="relative">
+			<position hpos="0.014" vpos="0.559"/>
+			<size height="0.381" width="0.028"/>
+			<location>DeckSolidPart.png</location>
+		</image>  
+
+
 		<toggle-button linked-to="biolite.action.type" value="damager" coordinate="relative">
-			<position hpos="0.752" vpos="0.952"/>
-			<size height="0.15" width="0.10"/>
-			<image-up>destroy_inactive_status.png</image-up>
-			<image-down>destroy_default_status.png</image-down>
-			<image-up-flyby>destroy_inactive_over_status.png</image-up-flyby>
-			<image-down-flyby>destroy_default_over_status.png</image-down-flyby>
+			<position hpos="0.035" vpos="0.653"/>
+			<size height="0.092" width="0.074"/>
+			<image-up>BoomseedComp_Unsel.png</image-up>
+			<image-down>BoomseedComp_Sel.png</image-down>
+			<image-up-flyby>BoomseedComp_Unsel_Over.png</image-up-flyby>
+			<image-down-flyby>BoomseedComp_Sel.png</image-down-flyby>
 		</toggle-button>
-		<irr-label linked-to="biolite.damager.cost" coordinate="relative" color="yellow">
-			<position hpos="0.752" vpos="0.952"/>
+		<irr-label linked-to="biolite.damager.cost" coordinate="relative" color="green">
+			<position hpos="0.035" vpos="0.68"/>
 			<size height="0.05" width="0.06"/>
 		</irr-label>
 		
 		<!-- plant -->
 		<toggle-button linked-to="biolite.action.type" value="harvester" coordinate="relative">
-			<position hpos="0.88" vpos="0.82"/>
-			<size height="0.15" width="0.10"/>
-			<image-up>plant1_inactive_status.png</image-up>
-			<image-down>plant1_default_status.png</image-down>
-			<image-up-flyby>plant1_inactive_over_status.png</image-up-flyby>
-			<image-down-flyby>plant1_default_over_status.png</image-down-flyby>
+			<position hpos="0.035" vpos="0.559"/>
+			<size height="0.092" width="0.074"/>
+			<image-up>HarvesterComp_Unsel.png</image-up>
+			<image-down>HarvesterComp_Sel.png</image-down>
+			<image-up-flyby>HarvesterComp_Unsel_Over.png</image-up-flyby>
+			<image-down-flyby>HarvesterComp_Sel.png</image-down-flyby>
 		</toggle-button>
-		<irr-label linked-to="biolite.harvester.cost" coordinate="relative" color="yellow">
-			<position hpos="0.9" vpos="0.82"/>
+		<irr-label linked-to="biolite.harvester.cost" coordinate="relative" color="green">
+			<position hpos="0.035" vpos="0.586"/>
 			<size height="0.05" width="0.06"/>
 		</irr-label>
 		
 		<!-- fruit -->
 		<toggle-button linked-to="biolite.action.type" value="dryad" coordinate="relative">
-			<position hpos="0.96" vpos="0.63"/>
-			<size height="0.15" width="0.10"/>
-			<image-up>fruit1_inactive_status.png</image-up>
-			<image-down>fruit1_default_status.png</image-down>
-			<image-up-flyby>fruit1_inactive_over_status.png</image-up-flyby>
-			<image-down-flyby>fruit1_default_over_status.png</image-down-flyby>
+			<position hpos="0.035" vpos="0.465"/>
+			<size height="0.092" width="0.074"/>
+			<image-up>DryadeComp_Unsel.png</image-up>
+			<image-down>DryadeComp_Sel.png</image-down>
+			<image-up-flyby>DryadeComp_Unsel_Over.png</image-up-flyby>
+			<image-down-flyby>DryadeComp_Sel.png</image-down-flyby>
 		</toggle-button>
-		<irr-label linked-to="biolite.dryad.cost" coordinate="relative" color="yellow">
-			<position hpos="0.98" vpos="0.63"/>
+		<irr-label linked-to="biolite.dryad.cost" coordinate="relative" color="green">
+			<position hpos="0.035" vpos="0.492"/>
 			<size height="0.05" width="0.06"/>
 		</irr-label>
 		
@@ -821,471 +794,29 @@
 
   <!-- tutorial -->
 
-  <still-state name="tutorial-1" goto-state="tutorial-2" timeout="15.0">
+  <still-state name="tutorial-1" goto-state="playMenu" timeout="60.0">
     <set-value linked-to="biolite.music.current" value="title"/>
 
-	<irr-label text="Welcome to Biolite!" coordinate="relative">
-		<position hpos="0.5" vpos="0.3"/>
-		<size height="0.08" width="0.8"/>
-	</irr-label>
-    <irr-label text="In this game, you're a Mama tree trying to take over the planet." coordinate="relative">
-      <position hpos="0.5" vpos="0.5"/>
-      <size height="0.08" width="0.8"/>
-    </irr-label>
-    <irr-label text="In order to do this, you need to destroy all other Evil Mama Trees." coordinate="relative">
-      <position hpos="0.5" vpos="0.6"/>
-      <size height="0.08" width="0.8"/>
-    </irr-label>
+    	<image coordinate="relative">
+			<position hpos="0.5" vpos="0.5"/>
+            <size height="1" width="1"/>
+			<location>Filter_Background.png</location>
+		</image>
+
+		<image coordinate="relative">
+			<position hpos="0.5" vpos="0.5"/>
+            <size height="1" width="1"/>
+			<location>DryadeBG.png</location>
+		</image>
+
+		<image coordinate="relative">
+			<position hpos="0.325" vpos="0.5"/>
+            <size height="1" width="0.65"/>
+			<location>Bulle.png</location>
+		</image>
 
   </still-state>
 
-  <still-state name="tutorial-2" goto-state="tutorial-3" timeout="15.0">
-    <set-value linked-to="biolite.music.current" value="title"/>
-    <image coordinate="relative">
-      <position hpos="0.195" vpos="0.295"/>
-      <size height="0.6" width="0.4"/>
-      <location>arc.png</location>
-    </image>
-    <image coordinate="relative">
-      <position hpos="0.236" vpos="0.054"/>
-      <size height="0.075" width="0.05"/>
-      <location>plant-icon-green.png</location>
-    </image>
-    <image coordinate="relative">
-      <position hpos="0.152" vpos="0.126"/>
-      <size height="0.075" width="0.05"/>
-      <location>plant-icon-red.png</location>
-    </image>
-    <image coordinate="relative">
-      <position hpos="0.084" vpos="0.228"/>
-      <size height="0.075" width="0.05"/>
-      <location>plant-icon-blue.png</location>
-    </image>
-    <image coordinate="relative">
-      <position hpos="0.036" vpos="0.354"/>
-      <size height="0.075" width="0.05"/>
-      <location>plant-icon-yellow.png</location>
-    </image>
-    <irr-label text="Here is how many tree you and the other Mama trees have" coordinate="relative">
-      <position hpos="0.4" vpos="0.3"/>
-      <size height="0.1" width="0.5"/>
-    </irr-label>
-
-
-  </still-state>
-  
-  <still-state name="tutorial-3" goto-state="tutorial-4" timeout="15.0">
-    <set-value linked-to="biolite.music.current" value="title"/>
-    <image coordinate="relative">
-      <position hpos="0.195" vpos="0.295"/>
-      <size height="0.6" width="0.4"/>
-      <location>arc.png</location>
-    </image>
-    <image coordinate="relative">
-      <position hpos="0.05" vpos="0.075"/>
-      <size height="0.15" width="0.10"/>
-      <location>energyred.png</location>
-    </image>
-    <irr-label text="10" coordinate="relative" color="orange">
-      <position hpos="0.09" vpos="0.135"/>
-      <size height="0.15" width="0.10"/>
-    </irr-label>    
-    <irr-label text="Here is the energy available." coordinate="relative">
-      <position hpos="0.5" vpos="0.2"/>
-      <size height="0.08" width="0.5"/>
-    </irr-label>
-    <irr-label text="It depends on how many leaf trees you have, how far you are from equator and how many energy you already have" coordinate="relative">
-      <position hpos="0.5" vpos="0.4"/>
-      <size height="0.15" width="0.5"/>
-    </irr-label>
-
-
-
-  </still-state>
-
-  <still-state name="tutorial-4" goto-state="tutorial-5" timeout="15.0">
-    <set-value linked-to="biolite.music.current" value="title"/>
-    <image coordinate="relative">
-      <position hpos="0.805" vpos="0.705"/>
-      <size height="0.6" width="0.4"/>
-      <location>arc2.png</location>
-    </image>
-    <image coordinate="relative">
-      <position hpos="0.88" vpos="0.82"/>
-      <size height="0.15" width="0.10"/>
-      <location>plant1_default_over_status.png</location>
-    </image>
-    <irr-label text="Here is a leaf tree" coordinate="relative">
-      <position hpos="0.8" vpos="0.6"/>
-      <size height="0.1" width="1.0"/>
-    </irr-label>
-    <irr-label text="You need them to gather energy" coordinate="relative">
-      <position hpos="0.8" vpos="0.65"/>
-      <size height="0.1" width="1.0"/>
-    </irr-label>
-
-
-
-
-  </still-state>
-
-  <game-state name="tutorial-5"
-		goto-state-victory="tutorial-6" goto-state-defeat="score-lose"
-		linked-to="biolite.player0.plant.size" logic="tutorial-plant.xml"
-		victory-on="5" defeat-on="defeat">
-    <set-value linked-to="biolite.music.current" value="play"/>
-    <!-- camera type fixed or arcball -->
-    <set-value linked-to="biolite.camera" value="arcball"/>
-    <!-- witch mouse key is linked to the arcball mouvement (right by default) -->
-    <set-value linked-to="biolite.camera.arcball.mouse" value="right"/>
-    <image coordinate="relative">
-      <position hpos="0.195" vpos="0.295"/>
-      <size height="0.6" width="0.4"/>
-      <location>arc.png</location>
-    </image>
-    <image coordinate="relative">
-      <position hpos="0.236" vpos="0.054"/>
-      <size height="0.075" width="0.05"/>
-      <location>plant-icon-green.png</location>
-    </image>
-    <irr-label linked-to="biolite.player0.plant.size" coordinate="relative" color="green">
-      <position hpos="0.236" vpos="0.054"/>
-      <size height="0.05" width="0.06"/>
-    </irr-label>
-    <image coordinate="relative">
-      <position hpos="0.05" vpos="0.075"/>
-      <size height="0.15" width="0.10"/>
-      <location>energyred.png</location>
-    </image>
-    <irr-label linked-to="biolite.player0.energy" coordinate="relative" color="orange">
-      <position hpos="0.09" vpos="0.135"/>
-      <size height="0.15" width="0.10"/>
-    </irr-label>
-
-    <irr-label text="let's try,seed 5 trees" coordinate="relative">
-      <position hpos="0.2" vpos="0.9"/>
-      <size height="0.08" width="0.3"/>
-    </irr-label>
-
-    <image coordinate="relative">
-      <position hpos="0.152" vpos="0.126"/>
-      <size height="0.075" width="0.05"/>
-      <location>plant-icon-red.png</location>
-    </image>
-    <irr-label linked-to="biolite.player1.plant.size" coordinate="relative" color="red">
-      <position hpos="0.152" vpos="0.126"/>
-      <size height="0.05" width="0.06"/>
-    </irr-label>
-    <image coordinate="relative">
-      <position hpos="0.084" vpos="0.228"/>
-      <size height="0.075" width="0.05"/>
-      <location>plant-icon-blue.png</location>
-    </image>
-    <irr-label linked-to="biolite.player2.plant.size" coordinate="relative" color="blue">
-      <position hpos="0.084" vpos="0.228"/>
-      <size height="0.05" width="0.06"/>
-    </irr-label>
-    <image coordinate="relative">
-      <position hpos="0.036" vpos="0.354"/>
-      <size height="0.075" width="0.05"/>
-      <location>plant-icon-yellow.png</location>
-    </image>
-    <irr-label linked-to="biolite.player3.plant.size" coordinate="relative" color="yellow">
-      <position hpos="0.036" vpos="0.354"/>
-      <size height="0.05" width="0.06"/>
-    </irr-label>
-    <image coordinate="relative">
-      <position hpos="0.805" vpos="0.705"/>
-      <size height="0.6" width="0.4"/>
-      <location>arc2.png</location>
-    </image>
-    <!-- plant -->
-    <toggle-button linked-to="biolite.action.type" value="plant" coordinate="relative">
-      <position hpos="0.88" vpos="0.82"/>
-      <size height="0.15" width="0.10"/>
-      <image-up>plant1_inactive_status.png</image-up>
-      <image-down>plant1_default_status.png</image-down>
-      <image-up-flyby>plant1_inactive_over_status.png</image-up-flyby>
-      <image-down-flyby>plant1_default_over_status.png</image-down-flyby>
-    </toggle-button>
-    <irr-label linked-to="biolite.plant.cost" coordinate="relative" color="yellow">
-      <position hpos="0.9" vpos="0.82"/>
-      <size height="0.05" width="0.06"/>
-    </irr-label>
-
-
-  </game-state>
-  
-  <still-state name="tutorial-6" goto-state="tutorial-7" timeout="15.0">
-    <set-value linked-to="biolite.music.current" value="title"/>
-    <image coordinate="relative">
-      <position hpos="0.805" vpos="0.705"/>
-      <size height="0.6" width="0.4"/>
-      <location>arc2.png</location>
-    </image>
-    <image coordinate="relative">
-      <position hpos="0.96" vpos="0.63"/>
-      <size height="0.15" width="0.10"/>
-      <location>fruit1_default_over_status.png</location>
-    </image>
-    <irr-label text="GG! But your Mama tree can only store 10 energy" coordinate="relative">
-      <position hpos="0.5" vpos="0.5"/>
-      <size height="0.1" width="0.5"/>
-    </irr-label>
-    <irr-label text="To store more, you need Fruit Tree. Each stock 10 more energy" coordinate="relative">
-      <position hpos="0.5" vpos="0.65"/>
-      <size height="0.1" width="0.5"/>
-    </irr-label>
-
-
-
-  </still-state>
-
-
-  <game-state name="tutorial-7"
-		goto-state-victory="tutorial-8" goto-state-defeat="score-lose"
-		linked-to="biolite.player0.energy" logic="tutorial-plant.xml"
-		victory-on="30" defeat-on="defeat">
-    <set-value linked-to="biolite.music.current" value="play"/>
-    <!-- camera type fixed or arcball -->
-    <set-value linked-to="biolite.camera" value="arcball"/>
-    <!-- witch mouse key is linked to the arcball mouvement (right by default) -->
-    <set-value linked-to="biolite.camera.arcball.mouse" value="right"/>
-    <image coordinate="relative">
-      <position hpos="0.195" vpos="0.295"/>
-      <size height="0.6" width="0.4"/>
-      <location>arc.png</location>
-    </image>
-    <image coordinate="relative">
-      <position hpos="0.236" vpos="0.054"/>
-      <size height="0.075" width="0.05"/>
-      <location>plant-icon-green.png</location>
-    </image>
-    <irr-label linked-to="biolite.player0.plant.size" coordinate="relative" color="green">
-      <position hpos="0.236" vpos="0.054"/>
-      <size height="0.05" width="0.06"/>
-    </irr-label>
-    <image coordinate="relative">
-      <position hpos="0.05" vpos="0.075"/>
-      <size height="0.15" width="0.10"/>
-      <location>energyred.png</location>
-    </image>
-    <irr-label linked-to="biolite.player0.energy" coordinate="relative" color="orange">
-      <position hpos="0.09" vpos="0.135"/>
-      <size height="0.15" width="0.10"/>
-    </irr-label>
-    <image coordinate="relative">
-      <position hpos="0.152" vpos="0.126"/>
-      <size height="0.075" width="0.05"/>
-      <location>plant-icon-red.png</location>
-    </image>
-    <irr-label linked-to="biolite.player1.plant.size" coordinate="relative" color="red">
-      <position hpos="0.152" vpos="0.126"/>
-      <size height="0.05" width="0.06"/>
-    </irr-label>
-    <image coordinate="relative">
-      <position hpos="0.084" vpos="0.228"/>
-      <size height="0.075" width="0.05"/>
-      <location>plant-icon-blue.png</location>
-    </image>
-    <irr-label linked-to="biolite.player2.plant.size" coordinate="relative" color="blue">
-      <position hpos="0.084" vpos="0.228"/>
-      <size height="0.05" width="0.06"/>
-    </irr-label>
-    <image coordinate="relative">
-      <position hpos="0.036" vpos="0.354"/>
-      <size height="0.075" width="0.05"/>
-      <location>plant-icon-yellow.png</location>
-    </image>
-    <irr-label linked-to="biolite.player3.plant.size" coordinate="relative" color="yellow">
-      <position hpos="0.036" vpos="0.354"/>
-      <size height="0.05" width="0.06"/>
-    </irr-label>
-    <image coordinate="relative">
-      <position hpos="0.805" vpos="0.705"/>
-      <size height="0.6" width="0.4"/>
-      <location>arc2.png</location>
-    </image>
-    <!-- plant -->
-    <toggle-button linked-to="biolite.action.type" value="plant" coordinate="relative">
-      <position hpos="0.88" vpos="0.82"/>
-      <size height="0.15" width="0.10"/>
-      <image-up>plant1_inactive_status.png</image-up>
-      <image-down>plant1_default_status.png</image-down>
-      <image-up-flyby>plant1_inactive_over_status.png</image-up-flyby>
-      <image-down-flyby>plant1_default_over_status.png</image-down-flyby>
-    </toggle-button>
-    <irr-label linked-to="biolite.plant.cost" coordinate="relative" color="yellow">
-      <position hpos="0.9" vpos="0.82"/>
-      <size height="0.05" width="0.06"/>
-    </irr-label>
-    <!-- fruit -->
-    <toggle-button linked-to="biolite.action.type" value="fruit" coordinate="relative">
-      <position hpos="0.96" vpos="0.63"/>
-      <size height="0.15" width="0.10"/>
-      <image-up>fruit1_inactive_status.png</image-up>
-      <image-down>fruit1_default_status.png</image-down>
-      <image-up-flyby>fruit1_inactive_over_status.png</image-up-flyby>
-      <image-down-flyby>fruit1_default_over_status.png</image-down-flyby>
-    </toggle-button>
-    <irr-label linked-to="biolite.fruit.cost" coordinate="relative" color="yellow">
-      <position hpos="0.98" vpos="0.63"/>
-      <size height="0.05" width="0.06"/>
-    </irr-label>
-
-
-
-    <irr-label text="Now, gather 30 energy!" coordinate="relative">
-      <position hpos="0.2" vpos="0.9"/>
-      <size height="0.08" width="0.3"/>
-    </irr-label>
-  </game-state>
-  
-  
-  <still-state name="tutorial-8" goto-state="tutorial-9" timeout="15.0">
-    <set-value linked-to="biolite.music.current" value="title"/>
-    <image coordinate="relative">
-      <position hpos="0.805" vpos="0.705"/>
-      <size height="0.6" width="0.4"/>
-      <location>arc2.png</location>
-    </image>
-    <image coordinate="relative">
-      <position hpos="0.752" vpos="0.952"/>
-      <size height="0.15" width="0.10"/>
-      <location>destroy_default_over_status.png</location>
-    </image>
-    <irr-label text="Good my slave, good... Now i'll teach you how to destroy our enemies" coordinate="relative">
-      <position hpos="0.5" vpos="0.5"/>
-      <size height="0.1" width="0.5"/>
-    </irr-label>
-    <irr-label text="Here is the destroy-other-tree button" coordinate="relative">
-      <position hpos="0.5" vpos="0.65"/>
-      <size height="0.1" width="0.5"/>
-    </irr-label>
-    <irr-label text="the energy cost depends on the energy of the soon-to-be-destroyed tree" coordinate="relative">
-      <position hpos="0.5" vpos="0.8"/>
-      <size height="0.1" width="0.5"/>
-    </irr-label>
-
-
-    <set-value linked-to="biolite.game.end" value="null"/>
-  </still-state>
-
-  <game-state name="tutorial-9"
-     goto-state-victory="score-win" goto-state-defeat="score-lose"
-     linked-to="biolite.game.end" logic="tutorial-destroy.xml"
-     victory-on="victory" defeat-on="defeat">
-    <set-value linked-to="biolite.music.current" value="play"/>
-    <!-- camera type fixed or arcball -->
-    <set-value linked-to="biolite.camera" value="arcball"/>
-    <!-- witch mouse key is linked to the arcball mouvement (right by default) -->
-    <set-value linked-to="biolite.camera.arcball.mouse" value="right"/>
-
-    <set-value linked-to="biolite.ai.difficulty" value="easy"/>
-    <set-value linked-to="biolite.ai.number" value="1"/>
-    
-    <image coordinate="relative">
-      <position hpos="0.195" vpos="0.295"/>
-      <size height="0.6" width="0.4"/>
-      <location>arc.png</location>
-    </image>
-    <image coordinate="relative">
-      <position hpos="0.236" vpos="0.054"/>
-      <size height="0.075" width="0.05"/>
-      <location>plant-icon-green.png</location>
-    </image>
-    <irr-label linked-to="biolite.player0.plant.size" coordinate="relative" color="green">
-      <position hpos="0.236" vpos="0.054"/>
-      <size height="0.05" width="0.06"/>
-    </irr-label>
-    <image coordinate="relative">
-      <position hpos="0.05" vpos="0.075"/>
-      <size height="0.15" width="0.10"/>
-      <location>energyred.png</location>
-    </image>
-    <irr-label linked-to="biolite.player0.energy" coordinate="relative" color="orange">
-      <position hpos="0.09" vpos="0.135"/>
-      <size height="0.15" width="0.10"/>
-    </irr-label>
-    <image coordinate="relative">
-      <position hpos="0.152" vpos="0.126"/>
-      <size height="0.075" width="0.05"/>
-      <location>plant-icon-red.png</location>
-    </image>
-    <irr-label linked-to="biolite.player1.plant.size" coordinate="relative" color="red">
-      <position hpos="0.152" vpos="0.126"/>
-      <size height="0.05" width="0.06"/>
-    </irr-label>
-    <image coordinate="relative">
-      <position hpos="0.084" vpos="0.228"/>
-      <size height="0.075" width="0.05"/>
-      <location>plant-icon-blue.png</location>
-    </image>
-    <irr-label linked-to="biolite.player2.plant.size" coordinate="relative" color="blue">
-      <position hpos="0.084" vpos="0.228"/>
-      <size height="0.05" width="0.06"/>
-    </irr-label>
-    <image coordinate="relative">
-      <position hpos="0.036" vpos="0.354"/>
-      <size height="0.075" width="0.05"/>
-      <location>plant-icon-yellow.png</location>
-    </image>
-    <irr-label linked-to="biolite.player3.plant.size" coordinate="relative" color="yellow">
-      <position hpos="0.036" vpos="0.354"/>
-      <size height="0.05" width="0.06"/>
-    </irr-label>
-    <image coordinate="relative">
-      <position hpos="0.805" vpos="0.705"/>
-      <size height="0.6" width="0.4"/>
-      <location>arc2.png</location>
-    </image>
-    <!-- plant -->
-    <toggle-button linked-to="biolite.action.type" value="plant" coordinate="relative">
-      <position hpos="0.88" vpos="0.82"/>
-      <size height="0.15" width="0.10"/>
-      <image-up>plant1_inactive_status.png</image-up>
-      <image-down>plant1_default_status.png</image-down>
-      <image-up-flyby>plant1_inactive_over_status.png</image-up-flyby>
-      <image-down-flyby>plant1_default_over_status.png</image-down-flyby>
-    </toggle-button>
-    <irr-label linked-to="biolite.plant.cost" coordinate="relative" color="yellow">
-      <position hpos="0.9" vpos="0.82"/>
-      <size height="0.05" width="0.06"/>
-    </irr-label>
-    <!-- fruit -->
-    <toggle-button linked-to="biolite.action.type" value="fruit" coordinate="relative">
-      <position hpos="0.96" vpos="0.63"/>
-      <size height="0.15" width="0.10"/>
-      <image-up>fruit1_inactive_status.png</image-up>
-      <image-down>fruit1_default_status.png</image-down>
-      <image-up-flyby>fruit1_inactive_over_status.png</image-up-flyby>
-      <image-down-flyby>fruit1_default_over_status.png</image-down-flyby>
-    </toggle-button>
-    <irr-label linked-to="biolite.fruit.cost" coordinate="relative" color="yellow">
-      <position hpos="0.98" vpos="0.63"/>
-      <size height="0.05" width="0.06"/>
-    </irr-label>
-    <toggle-button linked-to="biolite.action.type" value="destroy" coordinate="relative">
-      <position hpos="0.752" vpos="0.952"/>
-      <size height="0.15" width="0.10"/>
-      <image-up>destroy_inactive_status.png</image-up>
-      <image-down>destroy_default_status.png</image-down>
-      <image-up-flyby>destroy_inactive_over_status.png</image-up-flyby>
-      <image-down-flyby>destroy_default_over_status.png</image-down-flyby>
-    </toggle-button>
-    <irr-label linked-to="biolite.destroy.cost" coordinate="relative" color="yellow">
-      <position hpos="0.752" vpos="0.952"/>
-      <size height="0.05" width="0.06"/>
-    </irr-label>
-
-
-
-    <irr-label text="Red Mama Tree dare to challenge you! Destroy it!" coordinate="relative">
-      <position hpos="0.5" vpos="0.9"/>
-      <size height="0.1" width="1.0"/>
-    </irr-label>
-    
-  </game-state>
   
 	<!-- CREDITS -->
 	<still-state name="credits" goto-state="end" timeout="30.0">
@@ -1293,7 +824,13 @@
 
 		<image coordinate="relative">
 			<position hpos="0.5" vpos="0.5"/>
-			<size height="0.9" width="0.9"/>
+            <size height="1" width="1"/>
+			<location>Filter_Background.png</location>
+		</image>
+
+		<image coordinate="relative">
+			<position hpos="0.5" vpos="0.5"/>
+			<size height="1" width="1"/>
 			<location>credits.png</location>
 		</image>
 
