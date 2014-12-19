@@ -50,8 +50,6 @@ game::game(irr::IrrlichtDevice* pdevice, const std::string& xmlFile) {
 	sound::instance(pdevice);
 	
 	// get screen size
-	irr::video::IVideoDriver* pvideo = pdevice->getVideoDriver();
-	irr::core::dimension2d<irr::u32> screen_size = pvideo->getScreenSize();
 	irr::gui::IGUIEnvironment* penv = pdevice->getGUIEnvironment();
 
 	// XML loading

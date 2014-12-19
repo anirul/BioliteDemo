@@ -30,7 +30,12 @@
 
 //! easy ai
 //! try to click once per tick
-void easy_ai::tick(int player_id) {
+void easy_ai::tick(int player_id, int plant_count) {
+	if (m_had_plant[player_id]) {
+		if (plant_count == 0) return;
+	} else {
+		if (plant_count > 0) m_had_plant[player_id] = true;
+	}
 	irr::core::line3df ray;
 	irr::core::vector3df hit;
 	ray.start = irr::core::vector3df(
@@ -43,22 +48,26 @@ void easy_ai::tick(int player_id) {
 		click_desc cd;
 		cd.m_position = hit;
 		cd.m_player_id = player_id;
-		auto val = rand() % 10;
-		if (val < 6)
-			cd.m_click_t = click_desc::ct_harvester;
-		if (val < 9)
+		cd.m_click_t = click_desc::ct_harvester;
+		if (!(rand() % 6))
 			cd.m_click_t = click_desc::ct_damager;
-		if (val == 9)
+		if (!(rand() % 10))
 			cd.m_click_t = click_desc::ct_dryad;
 		m_gl->planetClick(cd);
 		cd.m_click_t = click_desc::ct_fetch;
 		m_gl->planetClick(cd);
 	}
+	std::cout << "miss" << std::endl;
 }
 
 //! medium ai
 //! try # for a successfull click once per tick
-void medium_ai::tick(int player_id) {
+void medium_ai::tick(int player_id, int plant_count) {
+	if (m_had_plant[player_id]) {
+		if (plant_count == 0) return;
+	} else {
+		if (plant_count > 0) m_had_plant[player_id] = true;
+	}
 	irr::core::line3df ray;
 	irr::core::vector3df hit;
 	for (int i = 0; i < 5; ++i) {
@@ -73,12 +82,10 @@ void medium_ai::tick(int player_id) {
 	click_desc cd;
 	cd.m_position = hit;
 	cd.m_player_id = player_id;
-	auto val = rand() % 10;
-	if (val < 6)
-		cd.m_click_t = click_desc::ct_harvester;
-	if (val < 9)
+	cd.m_click_t = click_desc::ct_harvester;
+	if (!(rand() % 6))
 		cd.m_click_t = click_desc::ct_damager;
-	if (val == 9)
+	if (!(rand() % 10))
 		cd.m_click_t = click_desc::ct_dryad;
 	m_gl->planetClick(cd);
 	cd.m_click_t = click_desc::ct_fetch;
@@ -88,7 +95,12 @@ void medium_ai::tick(int player_id) {
 //! hard ai
 //! try # for a successfull click once per tick
 //! TODO do better probably
-void hard_ai::tick(int player_id) {
+void hard_ai::tick(int player_id, int plant_count) {
+	if (m_had_plant[player_id]) {
+		if (plant_count == 0) return;
+	} else {
+		if (plant_count > 0) m_had_plant[player_id] = true;
+	}
 	irr::core::line3df ray;
 	irr::core::vector3df hit;
 	for (int i = 0; i < 10; ++i) {
@@ -103,12 +115,10 @@ void hard_ai::tick(int player_id) {
 	click_desc cd;
 	cd.m_position = hit;
 	cd.m_player_id = player_id;
-	auto val = rand() % 10;
-	if (val < 6)
-		cd.m_click_t = click_desc::ct_harvester;
-	if (val < 9)
+	cd.m_click_t = click_desc::ct_harvester;
+	if (!(rand() % 3))
 		cd.m_click_t = click_desc::ct_damager;
-	if (val == 9)
+	if (!(rand() % 6))
 		cd.m_click_t = click_desc::ct_dryad;
 	m_gl->planetClick(cd);
 	cd.m_click_t = click_desc::ct_fetch;

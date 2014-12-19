@@ -61,4 +61,4 @@ public :
 	void save(const std::string& file);
 };
 
-#endif BIOLITE_XML_PLANET_HEADER_DEFINED
+#endif // BIOLITE_XML_PLANET_HEADER_DEFINED

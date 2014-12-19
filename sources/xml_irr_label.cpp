@@ -136,11 +136,11 @@ xml_irr_label::xml_irr_label(
 	const std::string& linked_to,
 	xml_misc::coordinate_type ct)
 	:	m_statictext(NULL),
+		m_color(color),
 		m_position(position),
 		m_size(size),
 		m_ct(ct),
 		m_text(text),
-		m_color(color),
 		m_linked_to(linked_to)
 {
 	irr::video::IVideoDriver* pvideo = pdevice->getVideoDriver();

@@ -388,7 +388,9 @@ void plant::add(
 	mat.buildRotateFromTo(from, to);
 	m_plant_node->setRotation(mat.getRotationDegrees());
 	m_plant_node->setPosition((m_position * deltaY));
-	if (m_plant_mesh_t == harvester_fruit) {
+	if ((m_plant_mesh_t == harvester_fruit) &&
+		(m_player_id == 0))
+	{
 		m_plant_node->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 	}
 	if ((m_plant_mesh_t == ghost_red) ||

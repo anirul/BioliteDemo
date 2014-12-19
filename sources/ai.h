@@ -36,31 +36,35 @@ class ai {
 protected :
 	world* m_pw;
 	game_logic* m_gl;
+	bool m_had_plant[MAX_CLIENT];
 public :
-	ai(game_logic* gl, world* pw) : m_pw(pw), m_gl(gl) {}
+	ai(game_logic* gl, world* pw) : m_pw(pw), m_gl(gl) {
+		for (int i = 0; i < MAX_CLIENT; ++i)
+			m_had_plant[i] = false;
+	}
 	virtual ~ai() {}
-	virtual void tick(int player_id) = 0;
+	virtual void tick(int player_id, int plant_count) = 0;
 };
 
 class easy_ai : public ai {
 public :
 	easy_ai(game_logic* gl, world* pw) : ai(gl, pw) {}
 	virtual ~easy_ai() {}
-	virtual void tick(int player_id);
+	virtual void tick(int player_id, int plant_count);
 };
 
 class medium_ai : public ai {
 public :
 	medium_ai(game_logic* gl, world* pw) : ai(gl, pw) {}
 	virtual ~medium_ai() {}
-	virtual void tick(int player_id);
+	virtual void tick(int player_id, int plant_count);
 };
 
 class hard_ai : public ai {
 public :
 	hard_ai(game_logic* gl, world* pw) : ai(gl, pw) {}
 	virtual ~hard_ai() {}
-	virtual void tick(int player_id);
+	virtual void tick(int player_id, int plant_count);
 };
 
 #endif // BIOLITE_AI_HEADER_DEFINED

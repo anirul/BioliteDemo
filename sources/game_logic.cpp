@@ -119,12 +119,12 @@ void game_logic::tickAi() {
 	for (int i = 0; i < number; ++i) {
 		if (ai_difficulty == std::string("easy")) {
 			if (m_ai_easy) {
-				m_ai_easy->tick(i + 1);
+				m_ai_easy->tick(i + 1, m_player_plant_map[i + 1]);
 			}
 		}
 		if (ai_difficulty == std::string("medium")) {
 			if (m_ai_medium) {
-				m_ai_medium->tick(i + 1);
+				m_ai_medium->tick(i + 1, m_player_plant_map[i + 1]);
 				// help the AI cheeting a little bit
 				if (m_player_energy.at(i + 1))
 					m_player_energy.at(i + 1) += 0.01;
@@ -132,7 +132,7 @@ void game_logic::tickAi() {
 		}
 		if (ai_difficulty == std::string("hard")) {
 			if (m_ai_hard) {
-				m_ai_hard->tick(i + 1);
+				m_ai_hard->tick(i + 1, m_player_plant_map[i + 1]);
 				// help the AI cheeting a lot
 				if (m_player_energy.at(i + 1))
 					m_player_energy.at(i + 1) += 0.1;
@@ -458,9 +458,25 @@ void game_logic::tickDisplay() {
 void game_logic::tickEnd() {
 	int count_player = 0;
 	int count_enemy = 0;
-	if (m_counter++ < 100)
+	// first 2 min ~
+	if (m_counter++ < 120)
 		return;
 	std::list<plant>::iterator ite;
+	// remove dead players
+	bool has_dryad[MAX_CLIENT];
+	for (int i = 0 ; i < MAX_CLIENT; ++i)
+		has_dryad[i] = false;
+	for (auto& p : m_plant_list) {
+		if (p.m_plant_t == plant::dryad)
+			has_dryad[p.m_player_id] = true;
+	}
+	for (auto& p : m_plant_list) {
+		if (!has_dryad[p.m_player_id])
+			p.m_hit = true;
+	}
+	for (int i = 0; i < MAX_CLIENT; ++i) {
+		if (!has_dryad[i]) m_player_energy[i] = 0.0f;
+	}
 	for (ite = m_plant_list.begin(); ite != m_plant_list.end(); ++ite) {
 		if (ite->m_player_id == 0) {
 			count_player++;
@@ -596,8 +612,7 @@ bool game_logic::checkPlant(const irr::core::vector3df& hit, int player_id) {
 
 bool game_logic::checkEnemy(const irr::core::vector3df& hit, int player_id) {
 	float closest = 1.0f;
-	float closest_mine = 1.0f;
-	int current_count = 0;
+	float closest_enemy = 1.0f;
 	// check you are in range of one of your dryad
 	if (!checkDryad(hit, player_id)) return false;
 	// check distance
@@ -607,13 +622,11 @@ bool game_logic::checkEnemy(const irr::core::vector3df& hit, int player_id) {
 		if (distance < closest) {
 			closest = distance;
 			if (p.m_player_id != player_id)
-				closest_mine = distance;
+				closest_enemy = distance;
 		}
-		if (p.m_player_id != player_id) current_count++;
 	}
-	if (current_count)
-		if (closest_mine < m_max_dist)
-			return true;
+	if (closest_enemy < m_max_dist)
+		return true;
 	return false;
 }
 
@@ -673,6 +686,9 @@ bool game_logic::addPlant(const plant& pl) {
 		return false;
 	irr::core::vector3df tp = pl.m_position;
 	if (!checkPlant(tp, pl.m_player_id)) return false;
+	if ((!m_player_plant_map[pl.m_player_id]) &&
+		(pl.m_plant_t != plant::dryad))
+		return false;
 	m_plant_list.push_back(pl);
 	return true;
 }

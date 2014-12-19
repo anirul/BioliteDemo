@@ -91,7 +91,6 @@ world::world(irr::IrrlichtDevice* pdevice, const std::string& planet_file) {
 		pdevice->getSceneManager(), 
 		std::string("water"),
 		irr::video::SColor(0x7f00007f)); // blue
-	auto* ps = parameter_set::instance();
 	m_pwater->remove();
 	for (int i = 0; i < NBSUB; ++i) 
 		m_pwater->subdivide();
