@@ -35,6 +35,7 @@ std::map<plant::plant_mesh_type, irr::scene::IMesh*> plant::s_plant_mesh;
 std::map<int, irr::video::ITexture*> plant::s_texture_damager_map;
 std::map<int, irr::video::ITexture*> plant::s_texture_harvester_map;
 std::map<int, irr::video::ITexture*> plant::s_texture_dryad_map;
+std::map<int, irr::video::ITexture*> plant::s_texture_die_map;
 irr::video::ITexture* plant::s_texture_red = nullptr;
 irr::video::ITexture* plant::s_texture_green = nullptr;
 irr::video::ITexture* plant::s_texture_yellow = nullptr;
@@ -104,6 +105,22 @@ void plant::addDamagerTexture(
 	s_texture_damager_map.insert(std::make_pair(player, texture));
 }
 
+void plant::addDieTexture(
+	irr::IrrlichtDevice* pdevice,
+	int player,
+	const std::string& file)
+{
+	auto* texture =
+		pdevice->getVideoDriver()->getTexture(
+			getPathOfMedia(file.c_str()).c_str());
+	if (!texture) {
+		std::string error("PLANT ERROR : cannot load die texture : ");
+		error.append(file);
+		throw std::runtime_error(error);
+	}
+	s_texture_die_map.insert(std::make_pair(player, texture));
+}
+
 void plant::addHarvesterTexture(
 	irr::IrrlichtDevice* pdevice,
 	int player,
@@ -113,7 +130,7 @@ void plant::addHarvesterTexture(
 		pdevice->getVideoDriver()->getTexture(
 			getPathOfMedia(file.c_str()).c_str());
 	if (!texture) {
-		std::string error("PLANT ERROR : cannot load plant texture : ");
+		std::string error("PLANT ERROR : cannot load harvester texture : ");
 		error.append(file);
 		throw std::runtime_error(error);
 	}
@@ -276,6 +293,23 @@ void plant::init(irr::IrrlichtDevice* pdevice) {
 		pdevice,
 		3,
 		ps->getValue(std::string("biolite.damager.texture.player3")));
+	// load die textures
+	plant::addDieTexture(
+		pdevice,
+		0,
+		ps->getValue(std::string("biolite.die.texture.player0")));
+	plant::addDieTexture(
+		pdevice,
+		1,
+		ps->getValue(std::string("biolite.die.texture.player1")));
+	plant::addDieTexture(
+		pdevice,
+		2,
+		ps->getValue(std::string("biolite.die.texture.player2")));
+	plant::addDieTexture(
+		pdevice,
+		3,
+		ps->getValue(std::string("biolite.die.texture.player3")));
 	// ghost textures
 	s_texture_red = plant::addTexture(
 		pdevice, 
@@ -354,6 +388,9 @@ void plant::add(
 	mat.buildRotateFromTo(from, to);
 	m_plant_node->setRotation(mat.getRotationDegrees());
 	m_plant_node->setPosition((m_position * deltaY));
+	if (m_plant_mesh_t == harvester_fruit) {
+		m_plant_node->setMaterialFlag(irr::video::EMF_LIGHTING, false);
+	}
 	if ((m_plant_mesh_t == ghost_red) ||
 		(m_plant_mesh_t == sphere_red) ||
 		(m_plant_mesh_t == big_sphere_red) ||
@@ -417,6 +454,14 @@ void plant::add(
 	}
 	if (m_plant_mesh_t == damager_plant) {
 		m_plant_node->setMaterialTexture(0, s_texture_damager_map[m_player_id]);
+		return;
+	}
+	if ((m_plant_mesh_t == plant_die_1) ||
+		(m_plant_mesh_t == plant_die_2) ||
+		(m_plant_mesh_t == plant_die_3)
+		)
+	{
+		m_plant_node->setMaterialTexture(0, s_texture_die_map[m_player_id]);
 		return;
 	}
 	throw std::runtime_error(std::string("PLANT ERROR : no texture!"));

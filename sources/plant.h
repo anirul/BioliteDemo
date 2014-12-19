@@ -121,6 +121,7 @@ public :
 	static std::map<int, irr::video::ITexture*> s_texture_damager_map;
 	static std::map<int, irr::video::ITexture*> s_texture_harvester_map;
 	static std::map<int, irr::video::ITexture*> s_texture_dryad_map;
+	static std::map<int, irr::video::ITexture*> s_texture_die_map;
 	static irr::video::ITexture* s_texture_red;
 	static irr::video::ITexture* s_texture_green;
 	static irr::video::ITexture* s_texture_yellow;
