@@ -60,14 +60,17 @@ public :
 		sphere_red = -21,
 		ghost_red = -20,
 		null = -1,
-		plant_grow_1 = 0,
-		plant_grow_2 = 1,
-		plant_grow_3 = 2,
-		plant_die_1 = 10,
-		plant_die_2 = 11,
-		plant_die_3 = 12,
-		fruit_tree = 32,
-		mama_tree = 42
+		dryad_grow_1 = 1,
+		dryad_grow_2 = 2,
+		dryad_grow_3 = 3,
+		harvester_grow_1 = 11,
+		harvester_grow_2 = 12,
+		harvester_grow_3 = 13,
+		harvester_fruit = 14,
+		damager_plant = 20,
+		plant_die_1 = 30,
+		plant_die_2 = 31,
+		plant_die_3 = 32,
 	};
 	enum plant_type {
 		fence = -10,
@@ -91,11 +94,19 @@ protected :
 		plant_mesh_type pmt,
 		float radius,
 		float length);
-	static void addPlantTexture(
+	static void addDieTexture(
 		irr::IrrlichtDevice* pdevice,
 		int player,
 		const std::string& file);
-	static void addFruitTexture(
+	static void addDamagerTexture(
+		irr::IrrlichtDevice* pdevice,
+		int player,
+		const std::string& file);
+	static void addHarvesterTexture(
+		irr::IrrlichtDevice* pdevice,
+		int player,
+		const std::string& file);
+	static void addDryadTexture(
 		irr::IrrlichtDevice* pdevice,
 		int player,
 		const std::string& file);
@@ -107,8 +118,9 @@ public :
 	static std::map<plant_mesh_type, irr::scene::IMesh*>
 		s_plant_mesh;
 	//! alternate texture 1 map (per player)
-	static std::map<int, irr::video::ITexture*> s_texture_plant_map;
-	static std::map<int, irr::video::ITexture*> s_texture_fruit_map;
+	static std::map<int, irr::video::ITexture*> s_texture_damager_map;
+	static std::map<int, irr::video::ITexture*> s_texture_harvester_map;
+	static std::map<int, irr::video::ITexture*> s_texture_dryad_map;
 	static irr::video::ITexture* s_texture_red;
 	static irr::video::ITexture* s_texture_green;
 	static irr::video::ITexture* s_texture_yellow;

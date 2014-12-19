@@ -32,8 +32,9 @@
 
 std::map<plant::plant_mesh_type, irr::scene::IMesh*> plant::s_plant_mesh;
 
-std::map<int, irr::video::ITexture*> plant::s_texture_plant_map;
-std::map<int, irr::video::ITexture*> plant::s_texture_fruit_map;
+std::map<int, irr::video::ITexture*> plant::s_texture_damager_map;
+std::map<int, irr::video::ITexture*> plant::s_texture_harvester_map;
+std::map<int, irr::video::ITexture*> plant::s_texture_dryad_map;
 irr::video::ITexture* plant::s_texture_red = nullptr;
 irr::video::ITexture* plant::s_texture_green = nullptr;
 irr::video::ITexture* plant::s_texture_yellow = nullptr;
@@ -88,8 +89,22 @@ void plant::addCylinder(
 	s_plant_mesh.insert(std::make_pair(pmt, mesh));
 }
 
+void plant::addDamagerTexture(
+	irr::IrrlichtDevice* pdevice,
+	int player,
+	const std::string& file)
+{
+	auto* texture = pdevice->getVideoDriver()->getTexture(
+		getPathOfMedia(file.c_str()).c_str());
+	if (!texture) {
+		std::string error("PLANT ERROR : cannot load damager texture : ");
+		error.append(file);
+		throw std::runtime_error(error);
+	}
+	s_texture_damager_map.insert(std::make_pair(player, texture));
+}
 
-void plant::addPlantTexture(
+void plant::addHarvesterTexture(
 	irr::IrrlichtDevice* pdevice,
 	int player,
 	const std::string& file)
@@ -102,10 +117,10 @@ void plant::addPlantTexture(
 		error.append(file);
 		throw std::runtime_error(error);
 	}
-	s_texture_plant_map.insert(std::make_pair(player, texture));
+	s_texture_harvester_map.insert(std::make_pair(player, texture));
 }
 
-void plant::addFruitTexture(
+void plant::addDryadTexture(
 	irr::IrrlichtDevice* pdevice,
 	int player,
 	const std::string& file)
@@ -118,7 +133,7 @@ void plant::addFruitTexture(
 		error.append(file);
 		throw std::runtime_error(error);
 	}
-	s_texture_fruit_map.insert(std::make_pair(player, texture));
+	s_texture_dryad_map.insert(std::make_pair(player, texture));
 }
 
 irr::video::ITexture* plant::addTexture(
@@ -171,16 +186,16 @@ void plant::init(irr::IrrlichtDevice* pdevice) {
 		ps->getValue(std::string("biolite.ghost.mesh.blue")));
 	plant::addMesh(
 		mgr, 
-		plant::plant_grow_1, 
-		ps->getValue(std::string("biolite.plant.mesh.grow1")));
+		plant::dryad_grow_1,
+		ps->getValue(std::string("biolite.dryad.mesh.grow1")));
 	plant::addMesh(
 		mgr, 
-		plant::plant_grow_2, 
-		ps->getValue(std::string("biolite.plant.mesh.grow2")));
+		plant::dryad_grow_2,
+		ps->getValue(std::string("biolite.dryad.mesh.grow2")));
 	plant::addMesh(
 		mgr, 
-		plant::plant_grow_3, 
-		ps->getValue(std::string("biolite.plant.mesh.grow3")));
+		plant::dryad_grow_3,
+		ps->getValue(std::string("biolite.dryad.mesh.grow3")));
 	plant::addMesh(
 		mgr, 
 		plant::plant_die_1, 
@@ -196,46 +211,71 @@ void plant::init(irr::IrrlichtDevice* pdevice) {
 	// load fruit meshes
 	plant::addMesh(
 		mgr,
-		plant::fruit_tree,
-		ps->getValue(std::string("biolite.fruit.mesh")));
+		plant::harvester_grow_1,
+		ps->getValue(std::string("biolite.harvester.mesh.grow1")));
 	plant::addMesh(
 		mgr,
-		plant::mama_tree,
-		ps->getValue(std::string("biolite.mama.mesh")));
+		plant::harvester_grow_2,
+		ps->getValue(std::string("biolite.harvester.mesh.grow2")));
+	plant::addMesh(
+		mgr,
+		plant::harvester_grow_3,
+		ps->getValue(std::string("biolite.harvester.mesh.grow3")));
+	plant::addMesh(
+		mgr,
+		plant::harvester_fruit,
+		ps->getValue(std::string("biolite.fruit.mesh")));
 	// load plant textures
-	plant::addPlantTexture(
+	plant::addHarvesterTexture(
 		pdevice,
 		0,
-		ps->getValue(std::string("biolite.plant.texture.player0")));
-	plant::addPlantTexture(
+		ps->getValue(std::string("biolite.harvester.texture.player0")));
+	plant::addHarvesterTexture(
 		pdevice,
 		1,
-		ps->getValue(std::string("biolite.plant.texture.player1")));
-	plant::addPlantTexture(
+		ps->getValue(std::string("biolite.harvester.texture.player1")));
+	plant::addHarvesterTexture(
 		pdevice,
 		2,
-		ps->getValue(std::string("biolite.plant.texture.player2")));
-	plant::addPlantTexture(
+		ps->getValue(std::string("biolite.harvester.texture.player2")));
+	plant::addHarvesterTexture(
 		pdevice,
 		3,
-		ps->getValue(std::string("biolite.plant.texture.player3")));
+		ps->getValue(std::string("biolite.harvester.texture.player3")));
 	// load fruit textures
-	plant::addFruitTexture(
+	plant::addDryadTexture(
 		pdevice,
 		0,
-		ps->getValue(std::string("biolite.fruit.texture.player0")));
-	plant::addFruitTexture(
+		ps->getValue(std::string("biolite.dryad.texture.player0")));
+	plant::addDryadTexture(
 		pdevice,
 		1,
-		ps->getValue(std::string("biolite.fruit.texture.player1")));
-	plant::addFruitTexture(
+		ps->getValue(std::string("biolite.dryad.texture.player1")));
+	plant::addDryadTexture(
 		pdevice,
 		2,
-		ps->getValue(std::string("biolite.fruit.texture.player2")));
-	plant::addFruitTexture(
+		ps->getValue(std::string("biolite.dryad.texture.player2")));
+	plant::addDryadTexture(
 		pdevice,
 		3,
-		ps->getValue(std::string("biolite.fruit.texture.player3")));
+		ps->getValue(std::string("biolite.dryad.texture.player3")));
+	// load damager textures
+	plant::addDamagerTexture(
+		pdevice,
+		0,
+		ps->getValue(std::string("biolite.damager.texture.player0")));
+	plant::addDamagerTexture(
+		pdevice,
+		1,
+		ps->getValue(std::string("biolite.damager.texture.player1")));
+	plant::addDamagerTexture(
+		pdevice,
+		2,
+		ps->getValue(std::string("biolite.damager.texture.player2")));
+	plant::addDamagerTexture(
+		pdevice,
+		3,
+		ps->getValue(std::string("biolite.damager.texture.player3")));
 	// ghost textures
 	s_texture_red = plant::addTexture(
 		pdevice, 
@@ -356,10 +396,28 @@ void plant::add(
 		m_plant_node->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 		m_plant_node->setMaterialType(irr::video::EMT_TRANSPARENT_ALPHA_CHANNEL);
 		m_plant_node->setMaterialTexture(0, s_texture_blue);
-	}
-	if (m_plant_mesh_t == fruit_tree) {
-		m_plant_node->setMaterialTexture(0, s_texture_fruit_map[m_player_id]);
 		return;
-	} 
-	m_plant_node->setMaterialTexture(0, s_texture_plant_map[m_player_id]);
+	}
+	if ((m_plant_mesh_t == dryad_grow_2) ||
+		(m_plant_mesh_t == dryad_grow_3)
+		)
+	{
+		m_plant_node->setMaterialTexture(0, s_texture_dryad_map[m_player_id]);
+		return;
+	}
+	if ((m_plant_mesh_t == dryad_grow_1) ||
+		(m_plant_mesh_t == harvester_grow_1) ||
+		(m_plant_mesh_t == harvester_grow_2) ||
+		(m_plant_mesh_t == harvester_grow_3) ||
+		(m_plant_mesh_t == harvester_fruit)
+		)
+	{
+		m_plant_node->setMaterialTexture(0, s_texture_harvester_map[m_player_id]);
+		return;
+	}
+	if (m_plant_mesh_t == damager_plant) {
+		m_plant_node->setMaterialTexture(0, s_texture_damager_map[m_player_id]);
+		return;
+	}
+	throw std::runtime_error(std::string("PLANT ERROR : no texture!"));
 }

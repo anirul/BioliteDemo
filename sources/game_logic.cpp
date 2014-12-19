@@ -313,7 +313,7 @@ void game_logic::tickPlant() {
 			continue;
 		// dying plant
 		if (p.m_hit)
-			p.m_energy -= 0.1f;
+			p.m_energy -= 0.3f;
 		// remove dead plants
 		if (p.m_energy <= 0.0f) {
 			p.remove();
@@ -323,12 +323,12 @@ void game_logic::tickPlant() {
 		// first plant of current player (mama_tree)
 		if (nb_plant == 0) {
 			p.m_energy = m_dryad_life;
-			p.add(plant::mama_tree, m_parent, m_mgr);
+			p.add(plant::dryad_grow_2, m_parent, m_mgr);
 			continue;
 		}
-		if ((!p.m_hit) && (p.m_plant_mesh_t == plant::mama_tree)) {
+		if ((!p.m_hit) && (p.m_plant_mesh_t == plant::dryad_grow_3)) {
 			p.m_energy = m_dryad_life;
-			p.add(plant::mama_tree, m_parent, m_mgr);
+			p.add(plant::dryad_grow_3, m_parent, m_mgr);
 			// mama tree also increase energy
 			m_player_energy.at(p.m_player_id) += 0.01;
 			continue;
@@ -336,16 +336,24 @@ void game_logic::tickPlant() {
 		if ((exposure > 0.0f) && (!p.m_hit)) // grow during day
 			p.m_energy += exposure * m_plant_speed;
 		if ((p.m_energy <= m_nrj_1) && (p.m_energy > 0.0f)) {
-			if (p.m_hit)
+			if (p.m_hit) {
 				p.add(plant::plant_die_1, m_parent, m_mgr);
-			else
-				p.add(plant::plant_grow_1, m_parent, m_mgr);
+			} else {
+				if (p.m_plant_t == plant::harvester)
+					p.add(plant::harvester_grow_1, m_parent, m_mgr);
+				if (p.m_plant_t == plant::dryad)
+					p.add(plant::dryad_grow_2, m_parent, m_mgr);
+			}
 		}
 		if ((p.m_energy > m_nrj_1) && (p.m_energy < m_nrj_2)) {
-			if (p.m_hit)
+			if (p.m_hit) {
 				p.add(plant::plant_die_2, m_parent, m_mgr);
-			else
-				p.add(plant::plant_grow_2, m_parent, m_mgr);
+			} else {
+				if (p.m_plant_t == plant::harvester)
+					p.add(plant::harvester_grow_2, m_parent, m_mgr);
+				if (p.m_plant_t == plant::dryad)
+					p.add(plant::dryad_grow_2, m_parent, m_mgr);
+			}
 		}
 		// in case max size
 		if (p.m_energy >= m_nrj_2) {
@@ -362,20 +370,20 @@ void game_logic::tickPlant() {
 						p.m_fruit))
 					{
 						p.m_fruit = true;
-						p.add(plant::fruit_tree, m_parent, m_mgr);
+						p.add(plant::harvester_fruit, m_parent, m_mgr);
 					}
 					break;
 				}
 				case plant::dryad:
 				{
 					p.m_energy = m_nrj_2;
-					p.add(plant::mama_tree, m_parent, m_mgr);
+					p.add(plant::dryad_grow_3, m_parent, m_mgr);
 					break;
 				}
 				case plant::damager:
 				{
 					p.m_energy = m_nrj_2;
-					p.add(plant::plant_grow_3, m_parent, m_mgr);
+					p.add(plant::harvester_grow_3, m_parent, m_mgr);
 					break;
 				}
 				default:
@@ -571,9 +579,9 @@ bool game_logic::checkPlant(const irr::core::vector3df& hit, int player_id) {
 		if (distance < closest) {
 			closest = distance;
 			if (ite->m_player_id == player_id)
-				if ((ite->m_plant_mesh_t == plant::mama_tree) ||
-					(ite->m_plant_mesh_t == plant::fruit_tree) ||
-					(ite->m_plant_mesh_t == plant::plant_grow_3))
+				if ((ite->m_plant_mesh_t == plant::dryad_grow_3) ||
+					(ite->m_plant_mesh_t == plant::harvester_fruit) ||
+					(ite->m_plant_mesh_t == plant::harvester_grow_3))
 					closest_mine = distance;
 		}
 		if (ite->m_player_id == player_id) current_count++;
@@ -620,7 +628,7 @@ bool game_logic::checkDryad(const irr::core::vector3df& hit, int player_id) {
 		if (distance < closest) {
 			closest = distance;
 			if (p.m_player_id == player_id)
-				if (p.m_plant_mesh_t == plant::mama_tree)
+				if (p.m_plant_mesh_t == plant::dryad_grow_3)
 					closest_mine = distance;
 		}
 		if (p.m_player_id == player_id) current_count++;
@@ -648,7 +656,7 @@ bool game_logic::checkFruit(const irr::core::vector3df& hit, int player_id) {
 		if (distance < closest) {
 			closest = distance;
 			if (p.m_player_id == player_id)
-				if (p.m_plant_mesh_t == plant::fruit_tree)
+				if (p.m_plant_mesh_t == plant::harvester_fruit)
 					closest_mine = distance;
 		}
 		if (p.m_player_id == player_id) current_count++;

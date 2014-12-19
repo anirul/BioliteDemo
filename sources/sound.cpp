@@ -95,15 +95,16 @@ bool sound::isStreamFile(const std::string& file) const {
 #endif // USE_GORILLA
 
 void sound::operator()(const std::string& name, const std::string& value) {
-	if (name == std::string("biolite.music.title")) {
+	if (name == std::string("biolite.music.title"))
 		load(value, "title");
-	}
-	if (name == std::string("biolite.music.play")) {
+	if (name == std::string("biolite.music.play"))
 		load(value, "play");
-	}
-	if (name == std::string("biolite.music.edit")) {
+	if (name == std::string("biolite.music.edit"))
 		load(value, "edit");
-	}
+	if (name == std::string("biolite.music.credits"))
+		load(value, "credits");
+	if (name == std::string("biolite.music.menu"))
+		load(value, "menu");
 	if (name == std::string("biolite.music.current")) {
 		if (value != m_current_music) {
 #ifdef USE_IRRKLANG
@@ -140,7 +141,7 @@ bool sound::isLoaded(const std::string& name) {
 void sound::load(const std::string& file, const std::string& name) {
 #ifdef USE_IRRKLANG
 	irrklang::ISoundSource* source = m_engine->addSoundSourceFromFile(
-																	  getPathOfMedia(file.c_str()).c_str());
+		getPathOfMedia(file.c_str()).c_str());
 	if (source == NULL) {
 		std::string error("ERROR : could not load file : ");
 		error.append(file);
