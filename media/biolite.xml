@@ -89,6 +89,9 @@
     <set-value linked-to="biolite.die.texture.player2" value="HarvesterTreant_Cyan.JPG"/>
     <set-value linked-to="biolite.die.texture.player3" value="HarvesterTreant_Yellow.JPG"/>
 
+	<set-value linked-to="biolite.planet.texture0" value="Grass.jpg"/>
+	<set-value linked-to="biolite.planet.texture1" value="Grass.jpg"/>
+
 	<set-value linked-to="biolite.ghost.texture.red" value="texture-red.png"/>
 	<set-value linked-to="biolite.ghost.texture.green" value="texture-green.png"/>
 	<set-value linked-to="biolite.ghost.texture.blue" value="texture-blue.png"/>

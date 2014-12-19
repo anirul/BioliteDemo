@@ -192,7 +192,7 @@ bool world::render_state(irr::IrrlichtDevice* pdevice) {
 				xml_planet::savePlanet(ofs, *m_planet);
 				ofs.close();
 			}
-		}
+		} 
 		return true;
 	} 
 	return false;

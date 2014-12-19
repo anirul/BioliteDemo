@@ -126,8 +126,6 @@ public:
 	float get_ground_average() const;
 	//! return the mesh with the planet (if calcul is finished)
 	irr::scene::IMesh* get_mesh();
-	//! set the textures
-	void set_textures(const std::string& t0, const std::string& t1);
 };
 
 #endif
