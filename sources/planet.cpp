@@ -444,8 +444,11 @@ void planet::render() {
 			Material.setTexture(1, m_tex1);
 			Material.setFlag(irr::video::EMF_TRILINEAR_FILTER, true);
 		}
-		if (m_tex0 && m_tex1)
-			Material.MaterialType = irr::video::EMT_DETAIL_MAP;
+		if (m_tex0 && m_tex1) {
+			auto* ps = parameter_set::instance();
+			auto i = (int)ps->getValueDouble("biolite.planet.texture.type");
+			Material.MaterialType = (irr::video::E_MATERIAL_TYPE)i;
+		}
 		pvideo->setMaterial(Material);
 		pvideo->setTransform(irr::video::ETS_WORLD, AbsoluteTransformation);
 		pvideo->drawIndexedTriangleList(
