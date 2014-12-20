@@ -50,6 +50,8 @@ planet::planet(
 	 	m_vertex_buffer(NULL),
 	 	m_mesh_buffer(NULL),
 	 	m_mesh(NULL),
+		m_tex0(nullptr),
+		m_tex1(nullptr),
 		m_ga(-1.0),
 		m_gen_done(0),
 		m_gen_step(gen_step),
@@ -181,16 +183,18 @@ unsigned short planet::addvertex(unsigned short i1, unsigned short i2) {
 	norm_vert.Normal = m_vvert[i1].Normal + m_vvert[i2].Normal;
 	norm_vert.Normal.normalize();
 	norm_vert.Color = m_ground;
-	norm_vert.TCoords.Y = (float)(asinf(norm_vert.Normal.Y) / M_PI) + 0.5f;
-	norm_vert.TCoords.X = (float)(asinf(norm_vert.Normal.X) / M_PI) + 0.5f;
+	norm_vert.TCoords.Y = (float)(norm_vert.Normal.Y);
+	norm_vert.TCoords.X =
+		(float)fabs(atan2(norm_vert.Normal.X, norm_vert.Normal.Z) / M_PI);
 	unsigned short temp = addvertex(norm_vert);
 	m_vpm.push_back(temp);
 	return m_vpm[m_vpm.size() - 1];
 }
 
 unsigned short planet::addvertex(irr::video::S3DVertex v) {
-	v.TCoords.Y = (float)(asinf(v.Normal.Y) / M_PI) + 0.5f;
-	v.TCoords.X = (float)(asinf(v.Normal.X) / M_PI) + 0.5f;
+	v.TCoords.Y = (float)(v.Normal.Y);
+	v.TCoords.X = (float)fabs(atan2(v.Normal.X, v.Normal.Z) / M_PI);
+	std::cout << v.TCoords.X << std::endl;
 	m_vvert.push_back(v);
 	Vertices = &m_vvert[0];
 	Box.addInternalPoint(v.Pos);
@@ -408,10 +412,40 @@ irr::scene::IMesh* planet::get_mesh() {
 	return m_mesh;
 }
 
+void planet::set_textures(
+	irr::IrrlichtDevice* pdevice,
+	const std::string& st0,
+	const std::string& st1)
+{
+	auto* pvideo = pdevice->getVideoDriver();
+	if (st0 != std::string("")) {
+		m_tex0 = pvideo->getTexture(st0.c_str());
+	} else {
+		if (m_tex0) m_tex0->drop();
+		m_tex0 = nullptr;
+	}
+	if (st1 != std::string("")) {
+		m_tex1 = pvideo->getTexture(st1.c_str());
+	} else {
+		if (m_tex1) m_tex1->drop();
+		m_tex1 = nullptr;
+	}
+}
+
 // inherited from ISceneNode
 void planet::render() {
 	if (IsVisible) {
 		irr::video::IVideoDriver* pvideo = SceneManager->getVideoDriver();
+		if (m_tex0) {
+			Material.setTexture(0, m_tex0);
+			Material.setFlag(irr::video::EMF_TRILINEAR_FILTER, true);
+		}
+		if (m_tex1) {
+			Material.setTexture(1, m_tex1);
+			Material.setFlag(irr::video::EMF_TRILINEAR_FILTER, true);
+		}
+		if (m_tex0 && m_tex1)
+			Material.MaterialType = irr::video::EMT_DETAIL_MAP;
 		pvideo->setMaterial(Material);
 		pvideo->setTransform(irr::video::ETS_WORLD, AbsoluteTransformation);
 		pvideo->drawIndexedTriangleList(

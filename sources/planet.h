@@ -46,6 +46,8 @@ protected:
 	irr::scene::CVertexBuffer*  m_vertex_buffer;
 	irr::scene::CDynamicMeshBuffer* m_mesh_buffer;
 	irr::scene::SMesh* m_mesh;
+	irr::video::ITexture* m_tex0;
+	irr::video::ITexture* m_tex1;
 	// internal mess
 	std::vector<unsigned short> m_vpm;
 	// private methods
@@ -80,14 +82,14 @@ public:
 public:
 	//! constructor
 	planet(
-		   irr::scene::ISceneNode* parent,
-		   irr::scene::ISceneManager* mgr,
-		   const std::string& seed,
-		   const irr::video::SColor& ground = irr::video::SColor(0xffaaaa00), // yellow
-		   const irr::video::SColor& grass = irr::video::SColor(0xff22aa22), // green
-		   const irr::video::SColor& high = irr::video::SColor(0xffffffff), // white
-		   unsigned int gen_step = GENSTEP,
-		   unsigned int gen_size = NBGEN);
+		irr::scene::ISceneNode* parent,
+		irr::scene::ISceneManager* mgr,
+		const std::string& seed,
+		const irr::video::SColor& ground = irr::video::SColor(0xffaaaa00), // yellow
+		const irr::video::SColor& grass = irr::video::SColor(0xff22aa22), // green
+		const irr::video::SColor& high = irr::video::SColor(0xffffffff), // white
+		unsigned int gen_step = GENSTEP,
+		unsigned int gen_size = NBGEN);
 	//! destructor
 	virtual ~planet();
 	//! from ISceneNode : call on registering
@@ -126,6 +128,11 @@ public:
 	float get_ground_average() const;
 	//! return the mesh with the planet (if calcul is finished)
 	irr::scene::IMesh* get_mesh();
+	//! set the textures
+	void set_textures(
+		irr::IrrlichtDevice* pdevice,
+		const std::string& st0,
+		const std::string& st1 = std::string(""));
 };
 
 #endif

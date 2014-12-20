@@ -80,10 +80,24 @@ world::world(irr::IrrlichtDevice* pdevice, const std::string& planet_file) {
 	m_planet_node = pdevice->getSceneManager()->addEmptySceneNode(
 		pdevice->getSceneManager()->getRootSceneNode());
 	// create the ground
-	m_planet = xml_planet::parsePlanet(
-		planet_file,
-		m_planet_node, 
-		pdevice->getSceneManager());
+	try {
+		m_planet = xml_planet::parsePlanet(
+			planet_file,
+			m_planet_node,
+			pdevice->getSceneManager());
+	} catch (std::exception& ex) {
+		m_planet = new planet(
+			m_planet_node,
+			pscene,
+			std::string("default"));
+		for (int i = 0; i < NBSUB; ++i)
+			m_planet->subdivide();
+	}
+	auto* ps = parameter_set::instance();
+	m_planet->set_textures(
+		pdevice,
+		getPathOfMedia(ps->getValue("biolite.planet.texture0").c_str()),
+		getPathOfMedia(ps->getValue("biolite.planet.texture1").c_str()));
 	m_seed = hash(m_planet->m_seed);
 	// create the water surface
 	m_pwater = new planet(
@@ -204,10 +218,10 @@ void world::render(irr::IrrlichtDevice* pdevice)
 	if (!m_finished) {
 		if (m_mesh_node) {
 			m_mesh_node->remove();
-			m_mesh_node = NULL;
+			m_mesh_node = nullptr;
 		}
 	}
-	m_planet->setVisible(!m_finished);
+//	m_planet->setVisible(!m_finished);
 }
 
 void world::set_seed(long l) {

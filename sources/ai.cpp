@@ -49,15 +49,12 @@ void easy_ai::tick(int player_id, int plant_count) {
 		cd.m_position = hit;
 		cd.m_player_id = player_id;
 		cd.m_click_t = click_desc::ct_harvester;
-		if (!(rand() % 6))
-			cd.m_click_t = click_desc::ct_damager;
 		if (!(rand() % 10))
 			cd.m_click_t = click_desc::ct_dryad;
 		m_gl->planetClick(cd);
 		cd.m_click_t = click_desc::ct_fetch;
 		m_gl->planetClick(cd);
 	}
-	std::cout << "miss" << std::endl;
 }
 
 //! medium ai
@@ -83,6 +80,8 @@ void medium_ai::tick(int player_id, int plant_count) {
 	cd.m_position = hit;
 	cd.m_player_id = player_id;
 	cd.m_click_t = click_desc::ct_harvester;
+	if (!(rand() % 6))
+		cd.m_click_t = click_desc::ct_damager;
 	if (!(rand() % 10))
 		cd.m_click_t = click_desc::ct_dryad;
 	m_gl->planetClick(cd);
