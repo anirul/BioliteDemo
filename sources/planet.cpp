@@ -439,6 +439,7 @@ void planet::render() {
 		if (m_tex0) {
 			Material.setTexture(0, m_tex0);
 			Material.setFlag(irr::video::EMF_TRILINEAR_FILTER, true);
+			Material.MaterialType = irr::video::EMT_SOLID;
 		}
 		if (m_tex1) {
 			Material.setTexture(1, m_tex1);
