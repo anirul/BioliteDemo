@@ -28,7 +28,11 @@
 #ifndef BIOLITE_SOUND_HEADER_DEFINED
 #define BIOLITE_SOUND_HEADER_DEFINED
 
+#ifdef WIN32
+#define USE_IRRKLANG 1
+#else
 #define USE_GORILLA 1
+#endif // WIN32
 
 #include <map>
 #include <string>

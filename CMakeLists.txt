@@ -58,6 +58,7 @@ if(WIN32 OR APPLE)
         /usr/include
         ${PROJECT_SOURCE_DIR}/sources
         ${PROJECT_SOURCE_DIR}/thirdparty/irrlicht-1.8.1/include
+		${PROJECT_SOURCE_DIR}/thirdparty/irrKlang-1.5.0/include
         ${PROJECT_SOURCE_DIR}/Thirdparty/Gorilla/include
     )
 endif(WIN32 OR APPLE)
@@ -175,13 +176,13 @@ if(WIN32)
         ${PROJECT_SOURCE_DIR}/thirdparty/irrlicht-1.8.1/lib/Win32-visualStudio
     )
 
-    find_library(GORILLA_LIBRARY
-        gorilla
-        ${PROJECT_SOURCE_DIR}/thirdparty/Gorilla/lib/win32/Release
-    )
+	find_library(IRRKLANG_LIBRARY
+		IrrKlang
+		${PROJECT_SOURCE_DIR}/thirdparty/irrKlang-1.5.0/lib/Win32-visualStudio
+	)
 
     target_link_libraries(BioliteDemo
         ${IRRLICHT_LIBRARY}
-        ${GORILLA_LIBRARY}
+        ${IRRKLANG_LIBRARY}
     )
 endif(WIN32)
