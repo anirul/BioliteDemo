@@ -25,7 +25,7 @@
 
 	<!-- some rules parameters -->
 	<set-value linked-to="biolite.logic.min-distance" value="0.1"/>
-	<set-value linked-to="biolite.logic.max-distance" value="0.3"/>
+	<set-value linked-to="biolite.logic.max-distance" value="0.45"/>
 	<set-value linked-to="biolite.logic.grow1" value="2.5"/>
 	<set-value linked-to="biolite.logic.grow2" value="5.0"/>
 
@@ -90,7 +90,6 @@
     <set-value linked-to="biolite.die.texture.player3" value="HarvesterTreant_Yellow.JPG"/>
 
 	<set-value linked-to="biolite.planet.texture0" value="Grass.jpg"/>
-	<set-value linked-to="biolite.planet.texture1" value="Grass.png"/>
 
 	<!-- Texture type possible
 	0 -	EMT_SOLID
@@ -959,8 +958,8 @@
 			<size height="0.084" width="0.10"/>
 		</irr-label>
 		<image coordinate="relative">
-			<position hpos="0.07" vpos="0.195"/>
-			<size height="0.22" width="0.14"/>
+			<position hpos="0.07" vpos="0.176"/>
+			<size height="0.188" width="0.107"/>
 			<location>Portrait.png</location>
 		</image>
 
@@ -1017,7 +1016,7 @@
 
   <!-- tutorial -->
 
-  <still-state name="tutorial-1" goto-state="playMenu" timeout="60.0">
+  <still-state name="tutorial-1" goto-state="tutorial-2" timeout="60.0">
     <set-value linked-to="biolite.music.current" value="play"/>
 
     	<image coordinate="relative">
@@ -1038,8 +1037,100 @@
 			<location>Bulle.png</location>
 		</image>
 
+		<image coordinate="relative">
+			<position hpos="0.31" vpos="0.5"/>
+            <size height="1" width="0.62"/>
+			<location>Tutorial_01.png</location>
+		</image>
+
   </still-state>
 
+  <still-state name="tutorial-2" goto-state="tutorial-3" timeout="60.0">
+    <set-value linked-to="biolite.music.current" value="play"/>
+
+    	<image coordinate="relative">
+			<position hpos="0.5" vpos="0.5"/>
+            <size height="1" width="1"/>
+			<location>Filter_Background.png</location>
+		</image>
+
+		<image coordinate="relative">
+			<position hpos="0.5" vpos="0.5"/>
+            <size height="1" width="1"/>
+			<location>DryadeBG.png</location>
+		</image>
+
+		<image coordinate="relative">
+			<position hpos="0.325" vpos="0.5"/>
+            <size height="1" width="0.65"/>
+			<location>Bulle.png</location>
+		</image>
+
+		<image coordinate="relative">
+			<position hpos="0.31" vpos="0.5"/>
+            <size height="1" width="0.62"/>
+			<location>Tutorial_02.png</location>
+		</image>
+
+  </still-state>
+
+    <still-state name="tutorial-3" goto-state="tutorial-4" timeout="60.0">
+    <set-value linked-to="biolite.music.current" value="play"/>
+
+    	<image coordinate="relative">
+			<position hpos="0.5" vpos="0.5"/>
+            <size height="1" width="1"/>
+			<location>Filter_Background.png</location>
+		</image>
+
+		<image coordinate="relative">
+			<position hpos="0.5" vpos="0.5"/>
+            <size height="1" width="1"/>
+			<location>DryadeBG.png</location>
+		</image>
+
+		<image coordinate="relative">
+			<position hpos="0.325" vpos="0.5"/>
+            <size height="1" width="0.65"/>
+			<location>Bulle.png</location>
+		</image>
+
+		<image coordinate="relative">
+			<position hpos="0.31" vpos="0.5"/>
+            <size height="1" width="0.62"/>
+			<location>Tutorial_03.png</location>
+		</image>
+
+  </still-state>
+
+  <still-state name="tutorial-4" goto-state="playMenu" timeout="60.0">
+    <set-value linked-to="biolite.music.current" value="play"/>
+
+    	<image coordinate="relative">
+			<position hpos="0.5" vpos="0.5"/>
+            <size height="1" width="1"/>
+			<location>Filter_Background.png</location>
+		</image>
+
+		<image coordinate="relative">
+			<position hpos="0.5" vpos="0.5"/>
+            <size height="1" width="1"/>
+			<location>DryadeBG.png</location>
+		</image>
+
+		<image coordinate="relative">
+			<position hpos="0.325" vpos="0.5"/>
+            <size height="1" width="0.65"/>
+			<location>Bulle.png</location>
+		</image>
+
+		<image coordinate="relative">
+			<position hpos="0.31" vpos="0.5"/>
+            <size height="1" width="0.62"/>
+			<location>Tutorial_04.png</location>
+		</image>
+
+  </still-state>
 
 	<!-- CREDITS -->
 	<still-state name="credits" goto-state="end" timeout="30.0">
